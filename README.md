@@ -1,6 +1,8 @@
 # jqp 
 
-a TUI playground for exploring jq. 
+a TUI playground for exploring jq.
+
+![demo](https://user-images.githubusercontent.com/23270779/191108270-437420c2-f685-442b-b5ed-0a3f80440dbf.gif)
 
 This application utilizes [itchny's](https://github.com/itchyny) implementation of `jq` written in Go, [`gojq`](https://github.com/itchyny/gojq).
 
@@ -64,9 +66,8 @@ Flags:
 - [Bubbles](https://github.com/charmbracelet/bubbles)
 - [Lipgloss](https://github.com/charmbracelet/lipgloss)
 - [gojq](https://github.com/itchyny/gojq)
-
+- [chroma](https://github.com/alecthomas/chroma)
 
 ## Credits
 
 - [jqq](https://github.com/jcsalterego/jqq) for inspiration
-
