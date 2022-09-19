@@ -8,6 +8,20 @@ This application utilizes [itchny's](https://github.com/itchyny) implementation 
 
 ## Installation
 
+### homebrew
+
+```bash
+brew install noahgorstein/tap/jqp
+```
+
+### Github releases
+
+Download the relevant asset for your operating system from the latest Github release. Unpack it, then move the binary to somewhere accessible in your `PATH`, e.g. `mv ./jqp /usr/local/bin`.
+
+### Build from source
+
+Clone this repo, build from source with `cd jqp && go build`, then move the binary to somewhere accessible in your `PATH`, e.g. `mv ./jqp /usr/local/bin`.
+
 ## Usage
 
 ```
