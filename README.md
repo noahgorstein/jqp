@@ -2,7 +2,7 @@
 
 a TUI playground for exploring jq.
 
-![demo](https://user-images.githubusercontent.com/23270779/191108270-437420c2-f685-442b-b5ed-0a3f80440dbf.gif)
+![jqp](https://user-images.githubusercontent.com/23270779/191256434-05aeda9d-9ee2-4b5e-a23f-6548dac08fdb.gif)
 
 This application utilizes [itchny's](https://github.com/itchyny) implementation of `jq` written in Go, [`gojq`](https://github.com/itchyny/gojq).
 
