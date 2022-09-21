@@ -8,6 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/itchyny/gojq"
+  "github.com/atotto/clipboard"
 )
 
 type successMsg struct {
@@ -24,6 +25,8 @@ type queryResultMsg struct {
 }
 
 type writeToFileMsg struct{}
+
+type copyQueryToClipboardMsg struct{}
 
 func (b *Bubble) executeQuery() tea.Cmd {
 	return func() tea.Msg {
@@ -69,5 +72,17 @@ func (b Bubble) writeOutputToFile() tea.Cmd {
 		}
 		return writeToFileMsg{}
 	}
-
 }
+
+func (b Bubble) copyQueryToClipboard() tea.Cmd {
+  return func() tea.Msg {
+  err := clipboard.WriteAll(b.queryinput.GetInputValue())
+  if err != nil {
+    return errorMsg{
+      error: err,
+    }
+	}
+  return copyQueryToClipboardMsg{}
+}}
+
+
