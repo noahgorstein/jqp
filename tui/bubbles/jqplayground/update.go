@@ -2,7 +2,8 @@ package jqplayground
 
 import (
 	"fmt"
-	"github.com/charmbracelet/bubbletea"
+
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 	"github.com/noahgorstein/jqp/tui/styles"
@@ -68,6 +69,29 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					b.help.SetState(state.Query)
 					b.queryinput.SetBorderColor(styles.BLUE)
 					b.inputdata.SetBorderColor(styles.GREY)
+					b.output.SetBorderColor(styles.GREY)
+				}
+			}
+		case tea.KeyShiftTab.String():
+			if b.state != state.Save {
+				switch b.state {
+				case state.Query:
+					b.state = state.Output
+					b.help.SetState(state.Output)
+					b.queryinput.SetBorderColor(styles.GREY)
+					b.inputdata.SetBorderColor(styles.GREY)
+					b.output.SetBorderColor(styles.BLUE)
+				case state.Input:
+					b.state = state.Query
+					b.help.SetState(state.Query)
+					b.queryinput.SetBorderColor(styles.BLUE)
+					b.inputdata.SetBorderColor(styles.GREY)
+					b.output.SetBorderColor(styles.GREY)
+				case state.Output:
+					b.state = state.Input
+					b.help.SetState(state.Input)
+					b.queryinput.SetBorderColor(styles.GREY)
+					b.inputdata.SetBorderColor(styles.BLUE)
 					b.output.SetBorderColor(styles.GREY)
 				}
 			}
