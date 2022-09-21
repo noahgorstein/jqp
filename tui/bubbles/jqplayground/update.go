@@ -2,8 +2,7 @@ package jqplayground
 
 import (
 	"fmt"
-
-	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 	"github.com/noahgorstein/jqp/tui/styles"
