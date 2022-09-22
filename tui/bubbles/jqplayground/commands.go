@@ -6,9 +6,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/atotto/clipboard"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/itchyny/gojq"
-  "github.com/atotto/clipboard"
 )
 
 type successMsg struct {
@@ -75,14 +75,13 @@ func (b Bubble) writeOutputToFile() tea.Cmd {
 }
 
 func (b Bubble) copyQueryToClipboard() tea.Cmd {
-  return func() tea.Msg {
-  err := clipboard.WriteAll(b.queryinput.GetInputValue())
-  if err != nil {
-    return errorMsg{
-      error: err,
-    }
+	return func() tea.Msg {
+		err := clipboard.WriteAll(b.queryinput.GetInputValue())
+		if err != nil {
+			return errorMsg{
+				error: err,
+			}
+		}
+		return copyQueryToClipboardMsg{}
 	}
-  return copyQueryToClipboardMsg{}
-}}
-
-
+}
