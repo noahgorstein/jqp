@@ -14,6 +14,12 @@ This application utilizes [itchny's](https://github.com/itchyny) implementation 
 brew install noahgorstein/tap/jqp
 ```
 
+### macports
+
+```bash
+sudo port install jqp
+```
+
 ### Github releases
 
 Download the relevant asset for your operating system from the latest Github release. Unpack it, then move the binary to somewhere accessible in your `PATH`, e.g. `mv ./jqp /usr/local/bin`.
