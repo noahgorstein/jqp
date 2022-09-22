@@ -36,9 +36,9 @@ func (b Bubble) collectHelpBindings() []key.Binding {
 	bindings := []key.Binding{}
 	switch b.state {
 	case state.Query:
-		bindings = append(bindings, k.submit, k.section, k.save)
+		bindings = append(bindings, k.submit, k.section, k.copyQuery, k.save)
 	case state.Input, state.Output:
-		bindings = append(bindings, k.section, k.navigate, k.page, k.save)
+		bindings = append(bindings, k.section, k.navigate, k.page, k.copyQuery, k.save)
 	case state.Save:
 		bindings = append(bindings, k.back)
 	}
