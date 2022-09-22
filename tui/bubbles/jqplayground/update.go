@@ -129,9 +129,11 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			b.state = state.Save
 			b.help.SetState(state.Save)
 			b.setAllBordersInactive()
-    case tea.KeyCtrlY.String():
-      cmd = b.copyQueryToClipboard()
-      cmds = append(cmds, cmd)
+		case tea.KeyCtrlY.String():
+			if b.state != state.Save {
+				cmd = b.copyQueryToClipboard()
+				cmds = append(cmds, cmd)
+			}
 		}
 	case queryResultMsg:
 		b.output.ScrollToTop()
@@ -152,8 +154,8 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		b.output.SetSize(
 			int(float64(b.width)*0.5),
 			b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-  case copyQueryToClipboardMsg:
-		cmd = b.statusbar.NewStatusMessage("Successfully copied query to clipboard.", true)
+	case copyQueryToClipboardMsg:
+		cmd = b.statusbar.NewStatusMessage("Successfully copied query to system clipboard.", true)
 		cmds = append(cmds, cmd)
 	case errorMsg:
 		cmd = b.statusbar.NewStatusMessage(msg.error.Error(), false)

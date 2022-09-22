@@ -3,12 +3,13 @@ package help
 import "github.com/charmbracelet/bubbles/key"
 
 type keyMap struct {
-	section  key.Binding
-	back     key.Binding
-	submit   key.Binding
-	navigate key.Binding
-	page     key.Binding
-	save     key.Binding
+	section   key.Binding
+	back      key.Binding
+	submit    key.Binding
+	navigate  key.Binding
+	page      key.Binding
+	save      key.Binding
+	copyQuery key.Binding
 }
 
 var keys = keyMap{
@@ -30,4 +31,7 @@ var keys = keyMap{
 	save: key.NewBinding(
 		key.WithKeys("ctrl+s"),
 		key.WithHelp("ctrl+s", "save output")),
+	copyQuery: key.NewBinding(
+		key.WithKeys("ctrl+y"),
+		key.WithHelp("ctrl+y", "copy query")),
 }
