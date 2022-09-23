@@ -8,6 +8,28 @@ import (
 	"github.com/noahgorstein/jqp/tui/styles"
 )
 
+func (b *Bubble) resizeBubbles(width, height int) {
+	b.queryinput.SetWidth(width)
+	b.statusbar.SetSize(width)
+	b.help.SetWidth(width)
+	b.fileselector.SetSize(width)
+	if b.state == state.Save {
+		b.inputdata.SetSize(
+			int(float64(width)*0.5),
+			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
+		b.output.SetSize(
+			int(float64(width)*0.5),
+			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
+	} else {
+		b.inputdata.SetSize(
+			int(float64(width)*0.5),
+			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
+		b.output.SetSize(
+			int(float64(width)*0.5),
+			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
+	}
+}
+
 func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	var (
@@ -20,30 +42,7 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		b.width = msg.Width
 		b.height = msg.Height
-
-		if b.state == state.Save {
-			b.queryinput.SetWidth(msg.Width)
-			b.inputdata.SetSize(
-				int(float64(msg.Width)*0.5),
-				msg.Height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
-			b.output.SetSize(
-				int(float64(msg.Width)*0.5),
-				msg.Height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
-			b.statusbar.SetSize(msg.Width)
-			b.help.SetWidth(msg.Width)
-			b.fileselector.SetSize(msg.Width)
-		} else {
-			b.queryinput.SetWidth(msg.Width)
-			b.inputdata.SetSize(
-				int(float64(msg.Width)*0.5),
-				msg.Height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-			b.output.SetSize(
-				int(float64(msg.Width)*0.5),
-				msg.Height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-			b.statusbar.SetSize(msg.Width)
-			b.help.SetWidth(msg.Width)
-			b.fileselector.SetSize(msg.Width)
-		}
+		b.resizeBubbles(msg.Width, msg.Height)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case tea.KeyCtrlC.String():
@@ -70,6 +69,8 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					b.inputdata.SetBorderColor(styles.GREY)
 					b.output.SetBorderColor(styles.GREY)
 				}
+				// help menu may overflow when we switch sections so we need resize when active section changed
+				b.resizeBubbles(b.width, b.height)
 			}
 		case tea.KeyShiftTab.String():
 			if b.state != state.Save {
@@ -93,23 +94,15 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					b.inputdata.SetBorderColor(styles.BLUE)
 					b.output.SetBorderColor(styles.GREY)
 				}
+				// help menu may overflow when we switch sections so we need resize when active section changed
+				b.resizeBubbles(b.width, b.height)
 			}
 		case tea.KeyEsc.String():
 			if b.state == state.Save {
 				b.state = state.Query
 				b.help.SetState(state.Query)
 				b.queryinput.SetBorderColor(styles.BLUE)
-
-				b.queryinput.SetWidth(b.width)
-				b.inputdata.SetSize(
-					int(float64(b.width)*0.5),
-					b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-				b.output.SetSize(
-					int(float64(b.width)*0.5),
-					b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-				b.statusbar.SetSize(b.width)
-				b.help.SetWidth(b.width)
-				b.fileselector.SetSize(b.width)
+				b.resizeBubbles(b.width, b.height)
 			}
 		case tea.KeyEnter.String():
 			if b.state == state.Save {
@@ -120,14 +113,9 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				cmds = append(cmds, cmd)
 			}
 		case tea.KeyCtrlS.String():
-			b.inputdata.SetSize(
-				int(float64(b.width)*0.5),
-				b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
-			b.output.SetSize(
-				int(float64(b.width)*0.5),
-				b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
 			b.state = state.Save
 			b.help.SetState(state.Save)
+			b.resizeBubbles(b.width, b.height)
 			b.setAllBordersInactive()
 		case tea.KeyCtrlY.String():
 			if b.state != state.Save {
