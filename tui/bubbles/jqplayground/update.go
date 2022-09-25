@@ -2,6 +2,8 @@ package jqplayground
 
 import (
 	"fmt"
+
+	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
@@ -68,6 +70,8 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					b.queryinput.SetBorderColor(styles.BLUE)
 					b.inputdata.SetBorderColor(styles.GREY)
 					b.output.SetBorderColor(styles.GREY)
+
+					cmds = append(cmds, textinput.Blink)
 				}
 				// help menu may overflow when we switch sections so we need resize when active section changed
 				b.resizeBubbles(b.width, b.height)
@@ -87,6 +91,8 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					b.queryinput.SetBorderColor(styles.BLUE)
 					b.inputdata.SetBorderColor(styles.GREY)
 					b.output.SetBorderColor(styles.GREY)
+
+					cmds = append(cmds, textinput.Blink)
 				case state.Output:
 					b.state = state.Input
 					b.help.SetState(state.Input)
@@ -103,6 +109,8 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				b.help.SetState(state.Query)
 				b.queryinput.SetBorderColor(styles.BLUE)
 				b.resizeBubbles(b.width, b.height)
+
+				cmds = append(cmds, textinput.Blink)
 			}
 		case tea.KeyEnter.String():
 			if b.state == state.Save {
@@ -133,8 +141,10 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		b.state = state.Query
 		b.help.SetState(state.Query)
 		b.queryinput.SetBorderColor(styles.BLUE)
+
 		cmd = b.statusbar.NewStatusMessage(fmt.Sprintf("Successfully wrote results to file: %s", b.fileselector.GetInput()), true)
 		cmds = append(cmds, cmd)
+
 		b.fileselector.SetInput(b.workingDirectory)
 		b.inputdata.SetSize(
 			int(float64(b.width)*0.5),
@@ -142,6 +152,9 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		b.output.SetSize(
 			int(float64(b.width)*0.5),
 			b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
+
+		cmds = append(cmds, textinput.Blink)
+
 	case copyQueryToClipboardMsg:
 		cmd = b.statusbar.NewStatusMessage("Successfully copied query to system clipboard.", true)
 		cmds = append(cmds, cmd)

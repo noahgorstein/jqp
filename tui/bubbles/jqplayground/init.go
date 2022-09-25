@@ -5,5 +5,5 @@ import (
 )
 
 func (b Bubble) Init() tea.Cmd {
-	return nil
+	return b.queryinput.Init()
 }
