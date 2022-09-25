@@ -10,7 +10,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Version:      "0.1",
+	Version:      "0.2.0",
 	Use:          "jqp",
 	Short:        "jqp is a TUI to explore jq",
 	Long:         `jqp is a TUI to explore the jq command line utility`,

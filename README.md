@@ -43,7 +43,7 @@ Flags:
   -v, --version       version for jqp
 ```
 
-`jqp` also support input from STDIN. 
+`jqp` also supports input from STDIN. 
 
 ```
 ➜ curl "https://api.github.com/repos/stedolan/jq/issues?per_page=2" | jqp 
@@ -54,6 +54,7 @@ Flags:
 | **Keybinding** | **Action** |
 |:---------------|:-----------|
 | `tab` | switch active section |
+| `ctrl-y` | copy query to system clipboard[^1] |
 | `ctrl-s` | save output to file |
 | `ctrl-c` | quit program |
 
@@ -91,3 +92,7 @@ Flags:
 ## Credits
 
 - [jqq](https://github.com/jcsalterego/jqq) for inspiration
+
+--------
+
+[^1]: `jqp` uses [https://github.com/atotto/clipboard](https://github.com/atotto/clipboard) for clipboard functionality. Things should work as expected with OSX and Windows. Linux, Unix require `xclip` or `xsel` to be installed.
