@@ -37,7 +37,7 @@ func (b Bubble) GetInputValue() string {
 }
 
 func (b Bubble) Init() tea.Cmd {
-	return nil
+	return textinput.Blink
 }
 
 func (b *Bubble) SetWidth(width int) {
