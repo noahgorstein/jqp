@@ -29,6 +29,7 @@ type Bubble struct {
 	statusbar        statusbar.Bubble
 	fileselector     fileselector.Bubble
 	results          string
+	cancel           func()
 }
 
 func New(inputJson []byte, filename string) Bubble {

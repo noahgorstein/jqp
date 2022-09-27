@@ -1,6 +1,7 @@
 package jqplayground
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -28,7 +29,7 @@ type writeToFileMsg struct{}
 
 type copyQueryToClipboardMsg struct{}
 
-func (b *Bubble) executeQuery() tea.Cmd {
+func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 	return func() tea.Msg {
 		query, err := gojq.Parse(b.queryinput.GetInputValue())
 		if err != nil {
@@ -39,7 +40,7 @@ func (b *Bubble) executeQuery() tea.Cmd {
 		var msgTemplate interface{}
 		json.Unmarshal(b.inputdata.GetInputJson(), &msgTemplate)
 		var results strings.Builder
-		iter := query.Run(msgTemplate) // or query.RunWithContext
+		iter := query.RunWithContext(ctx, msgTemplate)
 		for {
 			v, ok := iter.Next()
 			if !ok {

@@ -6,6 +6,7 @@ type keyMap struct {
 	section   key.Binding
 	back      key.Binding
 	submit    key.Binding
+	abort     key.Binding
 	navigate  key.Binding
 	page      key.Binding
 	save      key.Binding
@@ -22,6 +23,9 @@ var keys = keyMap{
 	submit: key.NewBinding(
 		key.WithKeys("enter"),
 		key.WithHelp("enter", "submit query")),
+	abort: key.NewBinding(
+		key.WithKeys("ctrl+c"),
+		key.WithHelp("ctrl+c", "abort running query")),
 	navigate: key.NewBinding(
 		key.WithKeys("↑↓"),
 		key.WithHelp("↑↓", "scroll")),
