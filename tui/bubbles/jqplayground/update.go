@@ -1,6 +1,7 @@
 package jqplayground
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -48,7 +49,16 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case tea.KeyCtrlC.String():
-			return b, tea.Quit
+			if b.state != state.Running {
+				return b, tea.Quit
+			}
+			if b.cancel != nil {
+				b.cancel()
+				b.cancel = nil
+			}
+			b.state = state.Query
+			b.help.SetState(state.Query)
+			cmds = append(cmds, textinput.Blink)
 		case tea.KeyTab.String():
 			if b.state != state.Save {
 				switch b.state {
@@ -116,8 +126,12 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if b.state == state.Save {
 				cmd = b.writeOutputToFile()
 				cmds = append(cmds, cmd)
-			} else {
-				cmd = b.executeQuery()
+			} else if b.state == state.Query {
+				b.state = state.Running
+				b.help.SetState(state.Running)
+				var ctx context.Context
+				ctx, b.cancel = context.WithCancel(context.Background())
+				cmd = b.executeQuery(ctx)
 				cmds = append(cmds, cmd)
 			}
 		case tea.KeyCtrlS.String():
@@ -132,6 +146,8 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		}
 	case queryResultMsg:
+		b.state = state.Query
+		b.help.SetState(state.Query)
 		b.output.ScrollToTop()
 		b.output.SetContent(msg.highlightedResults)
 		b.results = msg.rawResults
@@ -159,6 +175,10 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmd = b.statusbar.NewStatusMessage("Successfully copied query to system clipboard.", true)
 		cmds = append(cmds, cmd)
 	case errorMsg:
+		if b.state == state.Running {
+			b.state = state.Query
+			b.help.SetState(state.Query)
+		}
 		cmd = b.statusbar.NewStatusMessage(msg.error.Error(), false)
 		cmds = append(cmds, cmd)
 
