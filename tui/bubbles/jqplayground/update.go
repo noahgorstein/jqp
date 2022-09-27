@@ -8,7 +8,6 @@ import (
 	"github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
-	"github.com/noahgorstein/jqp/tui/styles"
 )
 
 func totalHeight(bubbles ...interface{ View() string }) int {
@@ -114,7 +113,6 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 	case writeToFileMsg:
 		b.state = state.Query
-
 		cmd = b.statusbar.NewStatusMessage(fmt.Sprintf("Successfully wrote results to file: %s", b.fileselector.GetInput()), true)
 		cmds = append(cmds, cmd)
 		b.fileselector.SetInput(b.workingDirectory)
@@ -133,22 +131,22 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if b.state != prevState {
 		switch b.state {
 		case state.Query:
-			b.queryinput.SetBorderColor(styles.BLUE)
-			b.inputdata.SetBorderColor(styles.GREY)
-			b.output.SetBorderColor(styles.GREY)
+			b.queryinput.SetBorderColor(b.theme.Primary)
+			b.inputdata.SetBorderColor(b.theme.Inactive)
+			b.output.SetBorderColor(b.theme.Inactive)
 			cmds = append(cmds, textinput.Blink)
 		case state.Input:
-			b.queryinput.SetBorderColor(styles.GREY)
-			b.inputdata.SetBorderColor(styles.BLUE)
-			b.output.SetBorderColor(styles.GREY)
+			b.queryinput.SetBorderColor(b.theme.Inactive)
+			b.inputdata.SetBorderColor(b.theme.Primary)
+			b.output.SetBorderColor(b.theme.Inactive)
 		case state.Output:
-			b.queryinput.SetBorderColor(styles.GREY)
-			b.inputdata.SetBorderColor(styles.GREY)
-			b.output.SetBorderColor(styles.BLUE)
+			b.queryinput.SetBorderColor(b.theme.Inactive)
+			b.inputdata.SetBorderColor(b.theme.Inactive)
+			b.output.SetBorderColor(b.theme.Primary)
 		case state.Save:
-			b.queryinput.SetBorderColor(styles.GREY)
-			b.inputdata.SetBorderColor(styles.GREY)
-			b.output.SetBorderColor(styles.GREY)
+			b.queryinput.SetBorderColor(b.theme.Inactive)
+			b.inputdata.SetBorderColor(b.theme.Inactive)
+			b.output.SetBorderColor(b.theme.Inactive)
 		}
 		b.help.SetState(b.state)
 		// Help menu may overflow when we switch sections

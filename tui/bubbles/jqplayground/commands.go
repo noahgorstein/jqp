@@ -55,7 +55,7 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 			results.WriteString(fmt.Sprintf("%s\n", string(r)))
 		}
 
-		highlightedOutput := highlightJson([]byte(results.String()))
+		highlightedOutput := highlightJson([]byte(results.String()), *b.theme.ChromaStyle)
 		return queryResultMsg{
 			rawResults:         results.String(),
 			highlightedResults: highlightedOutput.String(),

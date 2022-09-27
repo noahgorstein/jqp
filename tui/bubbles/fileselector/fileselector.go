@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 type Bubble struct {
@@ -11,12 +12,13 @@ type Bubble struct {
 	textinput textinput.Model
 }
 
-func New() Bubble {
+func New(theme theme.Theme) Bubble {
 
 	s := DefaultStyles()
 	ti := textinput.New()
 	ti.Focus()
-	ti.PromptStyle = s.promptStyle
+	ti.PromptStyle = s.promptStyle.Foreground(theme.Secondary)
+	s.inputLabelStyle.Foreground(theme.Primary)
 
 	return Bubble{
 		Styles:    s,

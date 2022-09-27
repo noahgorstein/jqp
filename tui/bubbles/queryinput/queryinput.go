@@ -4,7 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/noahgorstein/jqp/tui/styles"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 type Bubble struct {
@@ -12,15 +12,16 @@ type Bubble struct {
 	textinput textinput.Model
 }
 
-func New() Bubble {
+func New(theme theme.Theme) Bubble {
 
 	s := DefaultStyles()
+	s.containerStyle.BorderForeground(theme.Primary)
 	ti := textinput.New()
 	ti.Focus()
 	ti.BackgroundStyle.Height(1)
 	ti.PromptStyle.Height(1)
 	ti.TextStyle.Height(1)
-	ti.Prompt = lipgloss.NewStyle().Foreground(styles.PINK).Render("jq > ")
+	ti.Prompt = lipgloss.NewStyle().Bold(true).Foreground(theme.Secondary).Render("jq > ")
 
 	return Bubble{
 		Styles:    s,
@@ -41,8 +42,8 @@ func (b Bubble) Init() tea.Cmd {
 }
 
 func (b *Bubble) SetWidth(width int) {
-	b.textinput.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - lipgloss.Width(b.textinput.Prompt) - b.textinput.BackgroundStyle.GetHorizontalFrameSize() - 1
 	b.Styles.containerStyle.Width(width - b.Styles.containerStyle.GetHorizontalFrameSize())
+	b.textinput.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 1
 }
 
 func (b Bubble) View() string {
