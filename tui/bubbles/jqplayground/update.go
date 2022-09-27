@@ -40,6 +40,8 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds []tea.Cmd
 	)
 
+	prevState := b.state
+
 	switch msg := msg.(type) {
 
 	case tea.WindowSizeMsg:
@@ -57,70 +59,31 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				b.cancel = nil
 			}
 			b.state = state.Query
-			b.help.SetState(state.Query)
-			cmds = append(cmds, textinput.Blink)
 		case tea.KeyTab.String():
 			if b.state != state.Save {
 				switch b.state {
 				case state.Query:
 					b.state = state.Input
-					b.help.SetState(state.Input)
-					b.queryinput.SetBorderColor(styles.GREY)
-					b.inputdata.SetBorderColor(styles.BLUE)
-					b.output.SetBorderColor(styles.GREY)
 				case state.Input:
 					b.state = state.Output
-					b.help.SetState(state.Output)
-					b.queryinput.SetBorderColor(styles.GREY)
-					b.inputdata.SetBorderColor(styles.GREY)
-					b.output.SetBorderColor(styles.BLUE)
 				case state.Output:
 					b.state = state.Query
-					b.help.SetState(state.Query)
-					b.queryinput.SetBorderColor(styles.BLUE)
-					b.inputdata.SetBorderColor(styles.GREY)
-					b.output.SetBorderColor(styles.GREY)
-
-					cmds = append(cmds, textinput.Blink)
 				}
-				// help menu may overflow when we switch sections so we need resize when active section changed
-				b.resizeBubbles(b.width, b.height)
 			}
 		case tea.KeyShiftTab.String():
 			if b.state != state.Save {
 				switch b.state {
 				case state.Query:
 					b.state = state.Output
-					b.help.SetState(state.Output)
-					b.queryinput.SetBorderColor(styles.GREY)
-					b.inputdata.SetBorderColor(styles.GREY)
-					b.output.SetBorderColor(styles.BLUE)
 				case state.Input:
 					b.state = state.Query
-					b.help.SetState(state.Query)
-					b.queryinput.SetBorderColor(styles.BLUE)
-					b.inputdata.SetBorderColor(styles.GREY)
-					b.output.SetBorderColor(styles.GREY)
-
-					cmds = append(cmds, textinput.Blink)
 				case state.Output:
 					b.state = state.Input
-					b.help.SetState(state.Input)
-					b.queryinput.SetBorderColor(styles.GREY)
-					b.inputdata.SetBorderColor(styles.BLUE)
-					b.output.SetBorderColor(styles.GREY)
 				}
-				// help menu may overflow when we switch sections so we need resize when active section changed
-				b.resizeBubbles(b.width, b.height)
 			}
 		case tea.KeyEsc.String():
 			if b.state == state.Save {
 				b.state = state.Query
-				b.help.SetState(state.Query)
-				b.queryinput.SetBorderColor(styles.BLUE)
-				b.resizeBubbles(b.width, b.height)
-
-				cmds = append(cmds, textinput.Blink)
 			}
 		case tea.KeyEnter.String():
 			if b.state == state.Save {
@@ -128,7 +91,6 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				cmds = append(cmds, cmd)
 			} else if b.state == state.Query {
 				b.state = state.Running
-				b.help.SetState(state.Running)
 				var ctx context.Context
 				ctx, b.cancel = context.WithCancel(context.Background())
 				cmd = b.executeQuery(ctx)
@@ -136,9 +98,6 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case tea.KeyCtrlS.String():
 			b.state = state.Save
-			b.help.SetState(state.Save)
-			b.resizeBubbles(b.width, b.height)
-			b.setAllBordersInactive()
 		case tea.KeyCtrlY.String():
 			if b.state != state.Save {
 				cmd = b.copyQueryToClipboard()
@@ -147,7 +106,6 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case queryResultMsg:
 		b.state = state.Query
-		b.help.SetState(state.Query)
 		b.output.ScrollToTop()
 		b.output.SetContent(msg.highlightedResults)
 		b.results = msg.rawResults
@@ -155,8 +113,6 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, cmd)
 	case writeToFileMsg:
 		b.state = state.Query
-		b.help.SetState(state.Query)
-		b.queryinput.SetBorderColor(styles.BLUE)
 
 		cmd = b.statusbar.NewStatusMessage(fmt.Sprintf("Successfully wrote results to file: %s", b.fileselector.GetInput()), true)
 		cmds = append(cmds, cmd)
@@ -169,19 +125,42 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			int(float64(b.width)*0.5),
 			b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
 
-		cmds = append(cmds, textinput.Blink)
-
 	case copyQueryToClipboardMsg:
 		cmd = b.statusbar.NewStatusMessage("Successfully copied query to system clipboard.", true)
 		cmds = append(cmds, cmd)
 	case errorMsg:
 		if b.state == state.Running {
 			b.state = state.Query
-			b.help.SetState(state.Query)
 		}
 		cmd = b.statusbar.NewStatusMessage(msg.error.Error(), false)
 		cmds = append(cmds, cmd)
 
+	}
+
+	if b.state != prevState {
+		switch b.state {
+		case state.Query:
+			b.queryinput.SetBorderColor(styles.BLUE)
+			b.inputdata.SetBorderColor(styles.GREY)
+			b.output.SetBorderColor(styles.GREY)
+			cmds = append(cmds, textinput.Blink)
+		case state.Input:
+			b.queryinput.SetBorderColor(styles.GREY)
+			b.inputdata.SetBorderColor(styles.BLUE)
+			b.output.SetBorderColor(styles.GREY)
+		case state.Output:
+			b.queryinput.SetBorderColor(styles.GREY)
+			b.inputdata.SetBorderColor(styles.GREY)
+			b.output.SetBorderColor(styles.BLUE)
+		case state.Save:
+			b.queryinput.SetBorderColor(styles.GREY)
+			b.inputdata.SetBorderColor(styles.GREY)
+			b.output.SetBorderColor(styles.GREY)
+		}
+		b.help.SetState(b.state)
+		// help menu may overflow when we switch sections
+		// so we need resize when active section changed
+		b.resizeBubbles(b.width, b.height)
 	}
 
 	switch b.state {

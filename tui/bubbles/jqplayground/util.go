@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 
 	"github.com/alecthomas/chroma/quick"
-	"github.com/noahgorstein/jqp/tui/styles"
 	"github.com/noahgorstein/jqp/tui/utils"
 )
 
@@ -28,10 +27,4 @@ func highlightJson(input []byte) *bytes.Buffer {
 	buf := new(bytes.Buffer)
 	quick.Highlight(buf, string(input), "json", "terminal16", utils.GetChromaTheme())
 	return buf
-}
-
-func (b *Bubble) setAllBordersInactive() {
-	b.queryinput.SetBorderColor(styles.GREY)
-	b.inputdata.SetBorderColor(styles.GREY)
-	b.output.SetBorderColor(styles.GREY)
 }
