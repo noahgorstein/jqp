@@ -11,26 +11,27 @@ import (
 	"github.com/noahgorstein/jqp/tui/styles"
 )
 
-func (b *Bubble) resizeBubbles(width, height int) {
-	b.queryinput.SetWidth(width)
-	b.statusbar.SetSize(width)
-	b.help.SetWidth(width)
-	b.fileselector.SetSize(width)
-	if b.state == state.Save {
-		b.inputdata.SetSize(
-			int(float64(width)*0.5),
-			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
-		b.output.SetSize(
-			int(float64(width)*0.5),
-			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View())-lipgloss.Height(b.fileselector.View()))
-	} else {
-		b.inputdata.SetSize(
-			int(float64(width)*0.5),
-			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-		b.output.SetSize(
-			int(float64(width)*0.5),
-			height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
+func totalHeight(bubbles ...interface{ View() string }) int {
+	var height int
+	for _, bubble := range bubbles {
+		height += lipgloss.Height(bubble.View())
 	}
+	return height
+}
+
+func (b *Bubble) resizeBubbles() {
+	b.queryinput.SetWidth(b.width)
+	b.statusbar.SetSize(b.width)
+	b.help.SetWidth(b.width)
+	height := b.height
+	if b.state == state.Save {
+		b.fileselector.SetSize(b.width)
+		height -= totalHeight(b.help, b.queryinput, b.statusbar, b.fileselector)
+	} else {
+		height -= totalHeight(b.help, b.queryinput, b.statusbar)
+	}
+	b.inputdata.SetSize(b.width/2, height)
+	b.output.SetSize(b.width/2, height)
 }
 
 func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -47,7 +48,7 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		b.width = msg.Width
 		b.height = msg.Height
-		b.resizeBubbles(msg.Width, msg.Height)
+		b.resizeBubbles()
 	case tea.KeyMsg:
 		switch msg.String() {
 		case tea.KeyCtrlC.String():
@@ -116,15 +117,7 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		cmd = b.statusbar.NewStatusMessage(fmt.Sprintf("Successfully wrote results to file: %s", b.fileselector.GetInput()), true)
 		cmds = append(cmds, cmd)
-
 		b.fileselector.SetInput(b.workingDirectory)
-		b.inputdata.SetSize(
-			int(float64(b.width)*0.5),
-			b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-		b.output.SetSize(
-			int(float64(b.width)*0.5),
-			b.height-lipgloss.Height(b.help.View())-lipgloss.Height(b.queryinput.View())-lipgloss.Height(b.statusbar.View()))
-
 	case copyQueryToClipboardMsg:
 		cmd = b.statusbar.NewStatusMessage("Successfully copied query to system clipboard.", true)
 		cmds = append(cmds, cmd)
@@ -158,9 +151,10 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			b.output.SetBorderColor(styles.GREY)
 		}
 		b.help.SetState(b.state)
-		// help menu may overflow when we switch sections
-		// so we need resize when active section changed
-		b.resizeBubbles(b.width, b.height)
+		// Help menu may overflow when we switch sections
+		// so we need resize when active section changed.
+		// We also need to resize when file selector (dis)appears.
+		b.resizeBubbles()
 	}
 
 	switch b.state {
