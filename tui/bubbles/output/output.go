@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 type Bubble struct {
@@ -18,8 +19,10 @@ type Bubble struct {
 	width    int
 }
 
-func New() Bubble {
+func New(theme theme.Theme) Bubble {
 	styles := DefaultStyles()
+	styles.containerStyle = styles.containerStyle.BorderForeground(theme.Inactive)
+	styles.infoStyle = styles.infoStyle.BorderForeground(theme.Inactive)
 	v := viewport.New(1, 1)
 	b := Bubble{
 		Styles:   styles,

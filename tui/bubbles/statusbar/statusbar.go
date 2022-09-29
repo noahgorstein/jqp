@@ -1,8 +1,10 @@
 package statusbar
 
 import (
-	tea "github.com/charmbracelet/bubbletea"
 	"time"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 type Bubble struct {
@@ -45,8 +47,10 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 
 }
 
-func New() Bubble {
+func New(theme theme.Theme) Bubble {
 	styles := defaultStyles()
+	styles.successMessageStyle = styles.successMessageStyle.Foreground(theme.Success)
+	styles.errorMessageStyle = styles.errorMessageStyle.Foreground(theme.Error)
 	b := Bubble{
 		styles: styles,
 	}

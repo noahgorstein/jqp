@@ -1,22 +1,22 @@
 package utils
 
 import (
-	"github.com/alecthomas/chroma/styles"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/termenv"
 )
 
-var (
-	Vim          = styles.Vim.Name
-	ParaisoLight = styles.ParaisoLight.Name
-	ParaisoDark  = styles.ParaisoDark.Name
-	MonakiDark   = styles.Monokai.Name
-	MonkaiLight  = styles.MonokaiLight.Name
-)
-
-func GetChromaTheme() string {
-
-	if lipgloss.HasDarkBackground() {
-		return Vim
+// returns a string used for chroma syntax highlighting
+func GetTerminalColorSupport() string {
+	switch lipgloss.ColorProfile() {
+	case termenv.Ascii:
+		return "terminal"
+	case termenv.ANSI:
+		return "terminal16"
+	case termenv.ANSI256:
+		return "terminal256"
+	case termenv.TrueColor:
+		return "terminal16m"
+	default:
+		return "terminal"
 	}
-	return ParaisoLight
 }

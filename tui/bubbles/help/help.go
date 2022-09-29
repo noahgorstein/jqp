@@ -5,6 +5,7 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbletea"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 type Bubble struct {
@@ -15,13 +16,13 @@ type Bubble struct {
 	Styles Styles
 }
 
-func New() Bubble {
+func New(theme theme.Theme) Bubble {
 
 	styles := DefaultStyles()
 	help := help.NewModel()
-	help.Styles.ShortKey = styles.helpKeyStyle
-	help.Styles.ShortDesc = styles.helpTextStyle
-	help.Styles.ShortSeparator = styles.helpSeparatorStyle
+	help.Styles.ShortKey = styles.helpKeyStyle.Foreground(theme.Primary)
+	help.Styles.ShortDesc = styles.helpTextStyle.Foreground(theme.Secondary)
+	help.Styles.ShortSeparator = styles.helpSeparatorStyle.Foreground(theme.Inactive)
 
 	return Bubble{
 		state:  state.Query,

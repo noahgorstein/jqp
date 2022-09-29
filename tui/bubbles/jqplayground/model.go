@@ -11,6 +11,7 @@ import (
 	"github.com/noahgorstein/jqp/tui/bubbles/queryinput"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 	"github.com/noahgorstein/jqp/tui/bubbles/statusbar"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 func (b Bubble) GetState() state.State {
@@ -30,27 +31,29 @@ type Bubble struct {
 	fileselector     fileselector.Bubble
 	results          string
 	cancel           func()
+	theme            theme.Theme
 }
 
-func New(inputJson []byte, filename string) Bubble {
+func New(inputJson []byte, filename string, theme theme.Theme) Bubble {
 
 	workingDirectory, _ := os.Getwd()
 
-	sb := statusbar.New()
+	sb := statusbar.New(theme)
 	sb.StatusMessageLifetime = time.Second * 10
-	fs := fileselector.New()
+	fs := fileselector.New(theme)
 
 	fs.SetInput(workingDirectory)
 
 	b := Bubble{
 		workingDirectory: workingDirectory,
 		state:            state.Query,
-		queryinput:       queryinput.New(),
-		inputdata:        inputdata.New(inputJson, filename),
-		output:           output.New(),
-		help:             help.New(),
+		queryinput:       queryinput.New(theme),
+		inputdata:        inputdata.New(inputJson, filename, theme),
+		output:           output.New(theme),
+		help:             help.New(theme),
 		statusbar:        sb,
 		fileselector:     fs,
+		theme:            theme,
 	}
 	return b
 }

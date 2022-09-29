@@ -2,11 +2,15 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"os"
 
 	"github.com/charmbracelet/bubbletea"
 	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
+	"github.com/noahgorstein/jqp/tui/theme"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 var rootCmd = &cobra.Command{
@@ -17,6 +21,14 @@ var rootCmd = &cobra.Command{
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
+		cmd.Flags().VisitAll(func(f *pflag.Flag) {
+			// Apply the viper config value to the flag when the flag is not set and viper has a value
+			if !f.Changed && viper.IsSet(f.Name) {
+				val := viper.Get(f.Name)
+				cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val))
+			}
+		})
+
 		if isInputFromPipe() {
 			stdin := streamToBytes(os.Stdin)
 
@@ -25,7 +37,7 @@ var rootCmd = &cobra.Command{
 				return errors.New("JSON is not valid")
 			}
 
-			bubble := jqplayground.New(stdin, "STDIN")
+			bubble := jqplayground.New(stdin, "STDIN", theme.GetTheme(flags.theme))
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 			if err := p.Start(); err != nil {
 				return err
@@ -57,7 +69,7 @@ var rootCmd = &cobra.Command{
 				return err
 			}
 
-			bubble := jqplayground.New(data, fi.Name())
+			bubble := jqplayground.New(data, fi.Name(), theme.GetTheme(flags.theme))
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 
 			if err := p.Start(); err != nil {
@@ -69,22 +81,62 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+func initConfig() {
+	if cfgFile != "" {
+		// Use config file from the flag.
+		viper.SetConfigFile(cfgFile)
+	} else {
+		// Find home directory.
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+
+		// Search config in home directory with name ".jqp" (without extension).
+		viper.AddConfigPath(home)
+		viper.SetConfigType("yaml")
+		viper.SetConfigName(".jqp")
+	}
+
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Println("Config file:", viper.ConfigFileUsed(), "was used.")
+	}
+}
+
 var flags struct {
 	filepath string
+	theme    string
 }
 
 var flagsName = struct {
-	file, fileShort string
+	file       string
+	fileShort  string
+	theme      string
+	themeShort string
 }{
-	"file", "f",
+	file:       "file",
+	fileShort:  "f",
+	theme:      "theme",
+	themeShort: "t",
 }
 
+var cfgFile string
+
 func Execute() {
+
+	cobra.OnInitialize(initConfig)
+
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jqp.yaml)")
+
 	rootCmd.Flags().StringVarP(
 		&flags.filepath,
 		flagsName.file,
 		flagsName.fileShort,
 		"", "path to the input JSON file")
+
+	rootCmd.Flags().StringVarP(
+		&flags.theme,
+		flagsName.theme,
+		flagsName.themeShort,
+		"", "jqp theme [\"default\", \"dracula\",\"nord\", \"monokai\", \"monokailight\", \"autumn\"]")
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
