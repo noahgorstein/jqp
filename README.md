@@ -92,9 +92,9 @@ Flags:
 ➜ jqp --config ~/my_jqp_config.yaml < data.json
 ```
 
-If a configuration option is present in both the configuration file used and on the command line, the command line option takes precedence. For example, if a theme is specified in the configuration file and via `-t/--theme flag`, the command line flag will take precedence.
+If a configuration option is present in both the configuration file and the command line, the command line option takes precedence. For example, if a theme is specified in the configuration file and via `-t/--theme flag`, the command line flag will take precedence.
 
-### Available Configuration
+### Available Configuration Options
 
 ```yaml
 theme: "nord" # controls the color scheme
@@ -106,10 +106,12 @@ file: "/path/to/input/file.json" # stdin takes precedence over command line flag
 Themes can be specified on the command line via the `-t/--theme <themeName>` flag. You can also set a theme in your [configuration file](#configuration). 
 
 ```yaml
-theme: "monakai"
+theme: "monokai"
 ```
 
-Themes are broken up into "light" and "dark" themes below. Light themes work best in terminals with a light background and dark themes work best in a terminal with a dark background. If no theme is specified or non-existant theme is provided, the default theme is used, which was created to work with both terminals with a light and dark background. 
+<img width="1624" alt="Screen Shot 2022-10-02 at 5 31 40 PM" src="https://user-images.githubusercontent.com/23270779/193477383-db5ca769-12bf-4fd0-b826-b1fd4086eac3.png">
+
+Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes. Light themes work best in terminals with a light background and dark themes work best in a terminal with a dark background. If no theme is specified or a non-existant theme is provided, the default theme is used, which was created to work with both terminals with a light and dark background. 
 
 ### Light Themes
 
@@ -160,6 +162,7 @@ Themes are broken up into "light" and "dark" themes below. Light themes work bes
 - `swapoff`
 - `vim`
 - `witchhazel`
+- `xcode-dark`
 
 ## Built with:
 
