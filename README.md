@@ -38,9 +38,11 @@ Usage:
   jqp [flags]
 
 Flags:
-  -f, --file string   path to the input JSON file
-  -h, --help          help for jqp
-  -v, --version       version for jqp
+      --config string   config file (default is $HOME/.jqp.yaml)
+  -f, --file string     path to the input JSON file
+  -h, --help            help for jqp
+  -t, --theme string    jqp theme
+  -v, --version         version for jqp
 ```
 
 `jqp` also supports input from STDIN. 
@@ -57,7 +59,7 @@ Flags:
 | `shift-tab` | cycle through sections in reverse |
 | `ctrl-y` | copy query to system clipboard[^1] |
 | `ctrl-s` | save output to file |
-| `ctrl-c` | quit program |
+| `ctrl-c` | quit program / kill long running query |
 
 ### Query Mode
 
@@ -82,10 +84,34 @@ Flags:
 | `ctrl-u` | page up |
 | `ctrl-d` | page down |
 
+## Configuration
+
+`jqp` can be configured with a configuration file. By default, `jqp` will search your home directory for a YAML file named `.jqp.yaml`. A path to a YAML configuration file can also be provided to the `--config` command line flag. 
+
+```bash
+➜ jqp --config ~/my_jqp_config.yaml < data.json
+```
+
+If a configuration option is present in both the configuration file used and on the command line, the command line option takes precedence. For example, if a theme is specified in the configuration file and via `-t/--theme flag`, the command line flag will take precedence.
+
+### Available Configuration
+
+```yaml
+theme: "nord" # controls the color scheme
+file: "/path/to/input/file.json" # stdin takes precedence over command line flag and this option
+```
 
 ## Themes
 
-### Light
+Themes can be specified on the command line via the `-t/--theme <themeName>` flag. You can also set a theme in your [configuration file](#configuration). 
+
+```yaml
+theme: "monakai"
+```
+
+Themes are broken up into "light" and "dark" themes below. Light themes work best in terminals with a light background and dark themes work best in a terminal with a dark background. If no theme is specified or non-existant theme is provided, the default theme is used, which was created to work with both terminals with a light and dark background. 
+
+### Light Themes
 
 - `abap`
 - `algol`
@@ -115,7 +141,7 @@ Flags:
 - `vulcan`
 - `xcode`
 
-### Dark
+### Dark Themes
 
 - `average`
 - `base16snazzy`
