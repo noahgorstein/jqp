@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/alecthomas/chroma"
-	"github.com/alecthomas/chroma/quick"
+	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v2/quick"
 	"github.com/noahgorstein/jqp/tui/utils"
 )
 

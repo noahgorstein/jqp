@@ -3,7 +3,7 @@ module github.com/noahgorstein/jqp
 go 1.18
 
 require (
-	github.com/alecthomas/chroma v0.10.0
+	github.com/alecthomas/chroma/v2 v2.3.0
 	github.com/atotto/clipboard v0.1.4
 	github.com/charmbracelet/bubbles v0.14.1-0.20220915145142-72d87e451304
 	github.com/charmbracelet/bubbletea v0.22.2-0.20220926195852-5c4218e5f6f1

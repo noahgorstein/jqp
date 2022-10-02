@@ -82,6 +82,40 @@ Flags:
 | `ctrl-u` | page up |
 | `ctrl-d` | page down |
 
+
+## Themes
+
+### Light
+
+- `abap`
+- `algol`
+- `arduino`
+- `autumn`
+- `borland`
+- `colorful`
+- `emacs`
+- `friendly`
+- `github`
+- `gruvbox-light`
+- `hrdark`
+- `igor`
+- `lovelace`
+- `paradaiso-light`
+- `pygments`
+
+
+### Dark
+
+- `average`
+- `base16snazzy`
+- `doom-one` 
+- `doom-one2` 
+- `dracula`
+- `fruity`
+- `github-dark`
+- `gruvbox`
+- `paradaiso-dark`
+
 ## Built with:
 
 - [Bubbletea](https://github.com/charmbracelet/bubbletea)
