@@ -90,10 +90,15 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".jqp" (without extension).
+		// Search config in home directory
 		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
+
+    // register the config file
 		viper.SetConfigName(".jqp")
+
+    //only read from yaml files
+		viper.SetConfigType("yaml")
+
 	}
 
 	if err := viper.ReadInConfig(); err == nil {
@@ -124,7 +129,7 @@ func Execute() {
 
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jqp.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "path to config file (default is $HOME/.jqp.yaml)")
 
 	rootCmd.Flags().StringVarP(
 		&flags.filepath,
@@ -136,7 +141,7 @@ func Execute() {
 		&flags.theme,
 		flagsName.theme,
 		flagsName.themeShort,
-		"", "jqp theme [\"default\", \"dracula\",\"nord\", \"monokai\", \"monokailight\", \"autumn\"]")
+		"", "jqp theme")
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)

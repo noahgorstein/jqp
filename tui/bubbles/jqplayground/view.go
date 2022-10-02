@@ -7,7 +7,7 @@ import (
 
 func (b Bubble) View() string {
 	inputoutput := []string{b.inputdata.View()}
-	if b.width % 2 != 0 {
+	if b.width%2 != 0 {
 		inputoutput = append(inputoutput, " ")
 	}
 	inputoutput = append(inputoutput, b.output.View())
