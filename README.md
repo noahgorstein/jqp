@@ -100,9 +100,20 @@ Flags:
 - `hrdark`
 - `igor`
 - `lovelace`
+- `manni`
+- `monokai-light`
+- `murphy`
+- `onesenterprise`
 - `paradaiso-light`
+- `pastie`
+- `perldoc`
 - `pygments`
-
+- `solarized-light`
+- `tango`
+- `trac`
+- `visual_studio`
+- `vulcan`
+- `xcode`
 
 ### Dark
 
@@ -114,7 +125,15 @@ Flags:
 - `fruity`
 - `github-dark`
 - `gruvbox`
+- `monokai`
+- `native`
 - `paradaiso-dark`
+- `rrt`
+- `solarized-dark`
+- `solarized-dark256`
+- `swapoff`
+- `vim`
+- `witchhazel`
 
 ## Built with:
 
