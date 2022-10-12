@@ -45,7 +45,7 @@ Flags:
   -v, --version         version for jqp
 ```
 
-`jqp` also supports input from STDIN. 
+`jqp` also supports input from STDIN. STDIN takes precedence over the command line flag.
 
 ```
 ➜ curl "https://api.github.com/repos/stedolan/jq/issues?per_page=2" | jqp 
@@ -97,8 +97,10 @@ If a configuration option is present in both the configuration file and the comm
 ### Available Configuration Options
 
 ```yaml
-theme: "nord" # controls the color scheme
-file: "/path/to/input/file.json" # stdin takes precedence over command line flag and this option
+theme:
+  name: "nord" # controls the color scheme
+  chromaStyleOverrides: # override parts of the chroma style
+    kc: "#009900 underline" # keys use the chroma short names
 ```
 
 ## Themes
@@ -106,10 +108,24 @@ file: "/path/to/input/file.json" # stdin takes precedence over command line flag
 Themes can be specified on the command line via the `-t/--theme <themeName>` flag. You can also set a theme in your [configuration file](#configuration). 
 
 ```yaml
-theme: "monokai"
+theme:
+  name: "monokai"
 ```
 
 <img width="1624" alt="Screen Shot 2022-10-02 at 5 31 40 PM" src="https://user-images.githubusercontent.com/23270779/193477383-db5ca769-12bf-4fd0-b826-b1fd4086eac3.png">
+
+### Chroma Style Overrides
+
+Overrides to the chroma styles used for a theme can be configured in your [configuration file](#configuration). 
+
+For the list of short keys, see [`chroma.StandardTypes`](https://github.com/alecthomas/chroma/blob/d38b87110b078027006bc34aa27a065fa22295a1/types.go#L210-L308). To see which token to use for a value, see the [JSON lexer](https://github.com/alecthomas/chroma/blob/master/lexers/embedded/json.xml) (look for `<token>` tags). To see the color and what's used in the style you're using, look for your style in the chroma [styles directory](https://github.com/alecthomas/chroma/tree/master/styles).
+
+```yaml
+theme:
+  name: "monokai" # name is required to know which theme to override
+  chromaStyleOverrides:
+    kc: "#009900 underline"
+```
 
 Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes. Light themes work best in terminals with a light background and dark themes work best in a terminal with a dark background. If no theme is specified or a non-existant theme is provided, the default theme is used, which was created to work with both terminals with a light and dark background. 
 

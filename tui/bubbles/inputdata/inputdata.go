@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/quick"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -34,7 +33,7 @@ func New(inputJson []byte, filename string, theme theme.Theme) Bubble {
 		Styles:          styles,
 		viewport:        v,
 		inputJson:       inputJson,
-		highlightedJson: highlightInputJson(inputJson, *theme.ChromaStyle),
+		highlightedJson: highlightInputJson(inputJson, theme.ChromaStyle),
 		filename:        filename,
 	}
 	return b
@@ -45,7 +44,7 @@ func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
 	b.Styles.infoStyle.BorderForeground(color)
 }
 
-func highlightInputJson(inputJson []byte, chromaStyle chroma.Style) *bytes.Buffer {
+func highlightInputJson(inputJson []byte, chromaStyle *chroma.Style) *bytes.Buffer {
 	var f interface{}
 	// TODO: error handling
 	json.Unmarshal(inputJson, &f)
@@ -55,7 +54,7 @@ func highlightInputJson(inputJson []byte, chromaStyle chroma.Style) *bytes.Buffe
 	json.Indent(&prettyJSON, []byte(inputJson), "", "    ")
 
 	buf := new(bytes.Buffer)
-	quick.Highlight(buf, prettyJSON.String(), "json", utils.GetTerminalColorSupport(), chromaStyle.Name)
+	utils.HighlightJson(buf, prettyJSON.String(), chromaStyle)
 
 	return buf
 }

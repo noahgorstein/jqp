@@ -427,11 +427,12 @@ var themeMap = map[string]Theme{
 	},
 }
 
-func GetTheme(theme string) Theme {
+// returns a theme by name, and true if default theme was returned
+func GetTheme(theme string) (Theme, bool) {
 	lowercasedTheme := strings.ToLower(strings.TrimSpace(theme))
 	if value, ok := themeMap[lowercasedTheme]; ok {
-		return value
+		return value, false
 	} else {
-		return getDefaultTheme()
+		return getDefaultTheme(), true
 	}
 }
