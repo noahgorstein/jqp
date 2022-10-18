@@ -90,6 +90,7 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				cmd = b.writeOutputToFile()
 				cmds = append(cmds, cmd)
 			} else if b.state == state.Query {
+				b.queryinput.RotateHistory()
 				b.state = state.Running
 				var ctx context.Context
 				ctx, b.cancel = context.WithCancel(context.Background())

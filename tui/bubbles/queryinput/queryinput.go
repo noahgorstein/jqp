@@ -1,6 +1,7 @@
 package queryinput
 
 import (
+	"container/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -10,6 +11,10 @@ import (
 type Bubble struct {
 	Styles    Styles
 	textinput textinput.Model
+
+	history         *list.List
+	historyMaxLen   int
+	historySelected *list.Element
 }
 
 func New(theme theme.Theme) Bubble {
@@ -26,6 +31,9 @@ func New(theme theme.Theme) Bubble {
 	return Bubble{
 		Styles:    s,
 		textinput: ti,
+
+		history:       list.New(),
+		historyMaxLen: 512,
 	}
 }
 
@@ -35,6 +43,14 @@ func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
 
 func (b Bubble) GetInputValue() string {
 	return b.textinput.Value()
+}
+
+func (b *Bubble) RotateHistory() {
+	b.history.PushFront(b.textinput.Value())
+	b.historySelected = b.history.Front()
+	if b.history.Len() > b.historyMaxLen {
+		b.history.Remove(b.history.Back())
+	}
 }
 
 func (b Bubble) Init() tea.Cmd {
@@ -51,6 +67,32 @@ func (b Bubble) View() string {
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
+	if msg, ok := msg.(tea.KeyMsg); ok {
+		switch msg.Type {
+		case tea.KeyUp:
+			if b.history.Len() == 0 {
+				break
+			}
+			n := b.historySelected.Next()
+			if n != nil {
+				b.textinput.SetValue(n.Value.(string))
+				b.textinput.CursorEnd()
+				b.historySelected = n
+			}
+		case tea.KeyDown:
+			if b.history.Len() == 0 {
+				break
+			}
+			p := b.historySelected.Prev()
+			if p != nil {
+				b.textinput.SetValue(p.Value.(string))
+				b.textinput.CursorEnd()
+				b.historySelected = p
+			}
+		case tea.KeyEnter:
+			b.RotateHistory()
+		}
+	}
 
 	var (
 		cmd  tea.Cmd
