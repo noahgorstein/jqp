@@ -20,6 +20,12 @@ brew install noahgorstein/tap/jqp
 sudo port install jqp
 ```
 
+### Arch Linux
+Available through the Arch User Repository as [jqp-bin](https://aur.archlinux.org/packages/jqp-bin).
+```bash
+yay -S jqp-bin
+```
+
 ### Github releases
 
 Download the relevant asset for your operating system from the latest Github release. Unpack it, then move the binary to somewhere accessible in your `PATH`, e.g. `mv ./jqp /usr/local/bin`.
