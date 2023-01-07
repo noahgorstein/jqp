@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/alecthomas/chroma/v2"
 	"github.com/charmbracelet/bubbletea"
 	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
 	"github.com/noahgorstein/jqp/tui/theme"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -20,14 +20,33 @@ var rootCmd = &cobra.Command{
 	Long:         `jqp is a TUI to explore the jq command line utility`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		configTheme := viper.GetString(configKeysName.themeName)
+		if !cmd.Flags().Changed(flagsName.theme) {
+			flags.theme = configTheme
+		}
+		themeOverrides := viper.GetStringMapString(configKeysName.themeOverrides)
 
-		cmd.Flags().VisitAll(func(f *pflag.Flag) {
-			// Apply the viper config value to the flag when the flag is not set and viper has a value
-			if !f.Changed && viper.IsSet(f.Name) {
-				val := viper.Get(f.Name)
-				cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val))
+		jqtheme, defaultTheme := theme.GetTheme(flags.theme)
+		// If not using the default theme, 
+		// and if theme specified is the same as in the config,
+		// which happens if the theme flag was used,
+		// apply chroma style overrides.
+		if !defaultTheme && configTheme == flags.theme && len(themeOverrides) > 0 {
+			// Reverse chroma.StandardTypes to be keyed by short string
+			chromaTypes := make(map[string]chroma.TokenType)
+			for tokenType, short := range chroma.StandardTypes {
+				chromaTypes[short] = tokenType
 			}
-		})
+
+			builder := jqtheme.ChromaStyle.Builder()
+			for k, v := range themeOverrides {
+				builder.Add(chromaTypes[k], v)
+			}
+			style, err := builder.Build()
+			if err == nil {
+				jqtheme.ChromaStyle = style
+			}
+		}
 
 		if isInputFromPipe() {
 			stdin := streamToBytes(os.Stdin)
@@ -37,7 +56,7 @@ var rootCmd = &cobra.Command{
 				return errors.New("JSON is not valid")
 			}
 
-			bubble := jqplayground.New(stdin, "STDIN", theme.GetTheme(flags.theme))
+			bubble := jqplayground.New(stdin, "STDIN", jqtheme)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 			if err := p.Start(); err != nil {
 				return err
@@ -69,7 +88,7 @@ var rootCmd = &cobra.Command{
 				return err
 			}
 
-			bubble := jqplayground.New(data, fi.Name(), theme.GetTheme(flags.theme))
+			bubble := jqplayground.New(data, fi.Name(), jqtheme)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 
 			if err := p.Start(); err != nil {
@@ -107,20 +126,23 @@ func initConfig() {
 }
 
 var flags struct {
-	filepath string
-	theme    string
+	filepath, theme string
 }
 
 var flagsName = struct {
-	file       string
-	fileShort  string
-	theme      string
-	themeShort string
+	file, fileShort, theme, themeShort string
 }{
 	file:       "file",
 	fileShort:  "f",
 	theme:      "theme",
 	themeShort: "t",
+}
+
+var configKeysName = struct {
+	themeName, themeOverrides string
+}{
+	themeName:      "theme.name",
+	themeOverrides: "theme.chromaStyleOverrides",
 }
 
 var cfgFile string

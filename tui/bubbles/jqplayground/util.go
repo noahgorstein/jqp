@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 
 	"github.com/alecthomas/chroma/v2"
-	"github.com/alecthomas/chroma/v2/quick"
 	"github.com/noahgorstein/jqp/tui/utils"
 )
 
@@ -14,7 +13,7 @@ func isValidJson(input []byte) bool {
 	return json.Unmarshal(input, &js) == nil
 }
 
-func highlightJson(input []byte, chromaStyle chroma.Style) *bytes.Buffer {
+func highlightJson(input []byte, chromaStyle *chroma.Style) *bytes.Buffer {
 
 	if isValidJson(input) {
 		var f interface{}
@@ -22,10 +21,10 @@ func highlightJson(input []byte, chromaStyle chroma.Style) *bytes.Buffer {
 		var prettyJSON bytes.Buffer
 		json.Indent(&prettyJSON, []byte(input), "", "    ")
 		buf := new(bytes.Buffer)
-		quick.Highlight(buf, prettyJSON.String(), "json", utils.GetTerminalColorSupport(), chromaStyle.Name)
+		utils.HighlightJson(buf, prettyJSON.String(), chromaStyle)
 		return buf
 	}
 	buf := new(bytes.Buffer)
-	quick.Highlight(buf, string(input), "json", utils.GetTerminalColorSupport(), chromaStyle.Name)
+	utils.HighlightJson(buf, string(input), chromaStyle)
 	return buf
 }
