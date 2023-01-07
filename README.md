@@ -72,6 +72,7 @@ Flags:
 | **Keybinding** | **Action** |
 |:---------------|:-----------|
 | `enter` | execute query |
+| `↑`/`↓` | cycle through query history |
 | `ctrl-a` | go to beginning of line |
 | `ctrl-e` | go to end of line |
 | `←`/`ctrl-b` | move cursor one character to left |
