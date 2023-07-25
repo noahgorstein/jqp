@@ -8,6 +8,22 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+type CustomTheme struct {
+	Primary   string
+	Secondary string
+	Inactive  string
+	Success   string
+	Error     string
+}
+
+var CustomThemeKeys = CustomTheme{
+	Primary:   "primary",
+	Secondary: "secondary",
+	Success:   "success",
+	Inactive:  "inactive",
+	Error:     "error",
+}
+
 const (
 	BLUE  = lipgloss.Color("69")
 	PINK  = lipgloss.Color("#F25D94")
@@ -428,11 +444,36 @@ var themeMap = map[string]Theme{
 }
 
 // returns a theme by name, and true if default theme was returned
-func GetTheme(theme string) (Theme, bool) {
-	lowercasedTheme := strings.ToLower(strings.TrimSpace(theme))
+func GetTheme(themeName string, styleOverrides map[string]string) (Theme, bool) {
+	lowercasedTheme := strings.ToLower(strings.TrimSpace(themeName))
+
+	var isDefault bool
+	var theme Theme
 	if value, ok := themeMap[lowercasedTheme]; ok {
-		return value, false
+		theme = value
+		isDefault = false
 	} else {
-		return getDefaultTheme(), true
+		theme = getDefaultTheme()
+		isDefault = true
 	}
+
+	theme.SetOverrides(styleOverrides)
+
+	return theme, isDefault && len(styleOverrides) == 0
+}
+
+func (t *Theme) SetOverrides(overrides map[string]string) {
+	t.Primary = customColorOrDefault(overrides[CustomThemeKeys.Primary], t.Primary)
+	t.Secondary = customColorOrDefault(overrides[CustomThemeKeys.Secondary], t.Secondary)
+	t.Inactive = customColorOrDefault(overrides[CustomThemeKeys.Inactive], t.Inactive)
+	t.Success = customColorOrDefault(overrides[CustomThemeKeys.Success], t.Success)
+	t.Error = customColorOrDefault(overrides[CustomThemeKeys.Error], t.Error)
+}
+
+func customColorOrDefault(color string, def lipgloss.Color) lipgloss.Color {
+	if color == "" {
+		return def
+	}
+
+	return lipgloss.Color(color)
 }
