@@ -134,6 +134,17 @@ theme:
     kc: "#009900 underline"
 ```
 
+You can change non-syntax colors using the `styleOverrides` key:
+```yaml
+theme:
+  styleOverrides:
+    primary: "#c4b28a"
+    secondary: "#8992a7"
+    error: "#c4746e"
+    inactive: "#a6a69c"
+    success: "#87a987"
+```
+
 Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes. Light themes work best in terminals with a light background and dark themes work best in a terminal with a dark background. If no theme is specified or a non-existant theme is provided, the default theme is used, which was created to work with both terminals with a light and dark background. 
 
 ### Light Themes
