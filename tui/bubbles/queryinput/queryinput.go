@@ -23,7 +23,6 @@ func New(theme theme.Theme) Bubble {
 	s.containerStyle.BorderForeground(theme.Primary)
 	ti := textinput.New()
 	ti.Focus()
-	ti.BackgroundStyle.Height(1)
 	ti.PromptStyle.Height(1)
 	ti.TextStyle.Height(1)
 	ti.Prompt = lipgloss.NewStyle().Bold(true).Foreground(theme.Secondary).Render("jq > ")
