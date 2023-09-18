@@ -12,12 +12,13 @@ builds:
       - windows
       - darwin
 archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+  - id: default
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -32,7 +33,7 @@ brews:
   - homepage: https://github.com/noahgorstein/jqp
     description: "a TUI playground to experiment and play with jq"
     folder: Formula
-    tap:
+    repository:
       owner: noahgorstein
       name: homebrew-tap
       branch: main
