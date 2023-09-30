@@ -90,12 +90,20 @@ func updateHistoryFile(filename string, history *list.List) {
 	}
 	defer file.Close()
 
+	// remove duplicates from history
+	seen := make(map[string]bool)
+
 	writer := bufio.NewWriter(file)
 	for e := history.Front(); e != nil; e = e.Next() {
-		writer.WriteString(e.Value.(string) + "\n")
+		value, ok := e.Value.(string)
+		if ok && !seen[value] {
+			writer.WriteString(value + "\n")
+			seen[value] = true
+		}
 	}
 	writer.Flush()
 }
+
 
 func (b Bubble) Init() tea.Cmd {
 	return textinput.Blink
