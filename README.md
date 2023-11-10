@@ -64,7 +64,7 @@ Flags:
 | `tab` | cycle through sections |
 | `shift-tab` | cycle through sections in reverse |
 | `ctrl-y` | copy query to system clipboard[^1] |
-| `ctrl-s` | save output to file |
+| `ctrl-s` | save output to file (copy to clipboard if file not specified) |
 | `ctrl-c` | quit program / kill long running query |
 
 ### Query Mode

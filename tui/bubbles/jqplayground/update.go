@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/textinput"
-	"github.com/charmbracelet/bubbletea"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 )
@@ -87,7 +87,7 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case tea.KeyEnter.String():
 			if b.state == state.Save {
-				cmd = b.writeOutputToFile()
+				cmd = b.saveOutput()
 				cmds = append(cmds, cmd)
 			} else if b.state == state.Query {
 				b.queryinput.RotateHistory()
@@ -117,6 +117,10 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmd = b.statusbar.NewStatusMessage(fmt.Sprintf("Successfully wrote results to file: %s", b.fileselector.GetInput()), true)
 		cmds = append(cmds, cmd)
 		b.fileselector.SetInput(b.workingDirectory)
+	case copyResultsToClipboardMsg:
+		b.state = state.Query
+		cmd = b.statusbar.NewStatusMessage("Successfully copied results to system clipboard.", true)
+		cmds = append(cmds, cmd)
 	case copyQueryToClipboardMsg:
 		cmd = b.statusbar.NewStatusMessage("Successfully copied query to system clipboard.", true)
 		cmds = append(cmds, cmd)
