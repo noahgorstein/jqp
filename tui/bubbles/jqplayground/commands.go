@@ -29,6 +29,8 @@ type writeToFileMsg struct{}
 
 type copyQueryToClipboardMsg struct{}
 
+type copyResultsToClipboardMsg struct{}
+
 func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 	return func() tea.Msg {
 		query, err := gojq.Parse(b.queryinput.GetInputValue())
@@ -60,6 +62,25 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 			rawResults:         results.String(),
 			highlightedResults: highlightedOutput.String(),
 		}
+	}
+}
+
+func (b Bubble) saveOutput() tea.Cmd {
+	if b.fileselector.GetInput() == "" {
+		return b.copyOutputToClipboard()
+	}
+	return b.writeOutputToFile()
+}
+
+func (b Bubble) copyOutputToClipboard() tea.Cmd {
+	return func() tea.Msg {
+		err := clipboard.WriteAll(b.results)
+		if err != nil {
+			return errorMsg{
+				error: err,
+			}
+		}
+		return copyResultsToClipboardMsg{}
 	}
 }
 

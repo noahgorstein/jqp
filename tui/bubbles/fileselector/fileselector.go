@@ -43,7 +43,7 @@ func (b Bubble) View() string {
 	return b.Styles.containerStyle.Render(
 		lipgloss.JoinVertical(
 			lipgloss.Left,
-			b.Styles.inputLabelStyle.Render("Save output to file: "),
+			b.Styles.inputLabelStyle.Render("Save output to file (leave empty to copy to clipboard): "),
 			b.textinput.View()))
 }
 
