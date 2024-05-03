@@ -9,6 +9,7 @@ import (
 	"github.com/charmbracelet/bubbletea"
 	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
 	"github.com/noahgorstein/jqp/tui/theme"
+	utils "github.com/noahgorstein/jqp/tui/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -53,12 +54,14 @@ var rootCmd = &cobra.Command{
 		if isInputFromPipe() {
 			stdin := streamToBytes(os.Stdin)
 
-			isValidJson := isValidJson(stdin)
-			if !isValidJson {
-				return errors.New("JSON is not valid")
+			isValidJson := utils.IsValidJson(stdin)
+			isValidJsonLines := utils.IsValidJsonLines(stdin)
+			if !isValidJson && !isValidJsonLines {
+				return errors.New("Data is not valid JSON or LDJSON")
 			}
 
-			bubble := jqplayground.New(stdin, "STDIN", jqtheme)
+			jsonLines := !isValidJson && isValidJsonLines
+			bubble := jqplayground.New(stdin, "STDIN", jqtheme, jsonLines)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 			if err := p.Start(); err != nil {
 				return err
@@ -79,10 +82,13 @@ var rootCmd = &cobra.Command{
 				return err
 			}
 
-			isValidJson := isValidJson(data)
-			if !isValidJson {
-				return errors.New("JSON is not valid")
+			isValidJson := utils.IsValidJson(data)
+			isValidJsonLines := utils.IsValidJsonLines(data)
+			if !isValidJson && !isValidJsonLines {
+				return errors.New("Data is not valid JSON or LDJSON")
 			}
+
+			jsonLines := !isValidJson && isValidJsonLines
 
 			// get file info so we can get the filename
 			fi, err := os.Stat(flags.filepath)
@@ -90,7 +96,7 @@ var rootCmd = &cobra.Command{
 				return err
 			}
 
-			bubble := jqplayground.New(data, fi.Name(), jqtheme)
+			bubble := jqplayground.New(data, fi.Name(), jqtheme, jsonLines)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 
 			if err := p.Start(); err != nil {

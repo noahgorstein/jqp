@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -40,9 +39,4 @@ func fileExists(filepath string) bool {
 		return false
 	}
 	return !info.IsDir()
-}
-
-func isValidJson(input []byte) bool {
-	var js json.RawMessage
-	return json.Unmarshal(input, &js) == nil
 }

@@ -1,6 +1,8 @@
 package jqplayground
 
 import (
+	"bufio"
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -10,6 +12,7 @@ import (
 	"github.com/atotto/clipboard"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/itchyny/gojq"
+	utils "github.com/noahgorstein/jqp/tui/utils"
 )
 
 type successMsg struct {
@@ -31,33 +34,60 @@ type copyQueryToClipboardMsg struct{}
 
 type copyResultsToClipboardMsg struct{}
 
+// executeQuery executes a query using the provided query input and input data,
+// returning a command that produces a message containing the results of the query.
+// It parses the query input, processes the input data according to whether it's in JSON
+// lines format or not, and then iterates over the results of the query, formatting them
+// and returning them as a message. If an error occurs during parsing, processing, or
+// iterating over the results, an error message is returned instead.
 func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 	return func() tea.Msg {
+		var results strings.Builder
 		query, err := gojq.Parse(b.queryinput.GetInputValue())
 		if err != nil {
-			return errorMsg{
-				error: err,
-			}
-		}
-		var msgTemplate interface{}
-		json.Unmarshal(b.inputdata.GetInputJson(), &msgTemplate)
-		var results strings.Builder
-		iter := query.RunWithContext(ctx, msgTemplate)
-		for {
-			v, ok := iter.Next()
-			if !ok {
-				break
-			}
-			if err, ok := v.(error); ok {
-				return errorMsg{
-					error: err,
-				}
-			}
-			r, _ := gojq.Marshal(v)
-			results.WriteString(fmt.Sprintf("%s\n", string(r)))
+			return errorMsg{error: err}
 		}
 
-		highlightedOutput := highlightJson([]byte(results.String()), b.theme.ChromaStyle)
+		processInput := func(data []byte) error {
+			var obj interface{}
+			if err := json.Unmarshal(data, &obj); err != nil {
+				fmt.Printf("%v", err)
+				return err
+			}
+
+			iter := query.RunWithContext(ctx, obj)
+			for {
+				v, ok := iter.Next()
+				if !ok {
+					break
+				}
+				if err, ok := v.(error); ok {
+					return err
+				}
+				r, err := gojq.Marshal(v)
+				if err != nil {
+					continue
+				}
+				results.WriteString(fmt.Sprintf("%s\n", string(r)))
+			}
+			return nil
+		}
+
+		if b.isJsonLines {
+			scanner := bufio.NewScanner(bytes.NewReader(b.inputdata.GetInputJson()))
+			for scanner.Scan() {
+				line := scanner.Bytes()
+				if err := processInput(line); err != nil {
+					return errorMsg{error: err}
+				}
+			}
+		} else {
+			if err := processInput(b.inputdata.GetInputJson()); err != nil {
+				return errorMsg{error: err}
+			}
+		}
+
+		highlightedOutput := utils.Prettify([]byte(results.String()), b.theme.ChromaStyle, true)
 		return queryResultMsg{
 			rawResults:         results.String(),
 			highlightedResults: highlightedOutput.String(),

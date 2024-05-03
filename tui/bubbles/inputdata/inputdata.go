@@ -2,11 +2,9 @@ package inputdata
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"strings"
 
-	"github.com/alecthomas/chroma/v2"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -22,9 +20,10 @@ type Bubble struct {
 	inputJson       []byte
 	highlightedJson *bytes.Buffer
 	filename        string
+	isJsonLines     bool
 }
 
-func New(inputJson []byte, filename string, theme theme.Theme) Bubble {
+func New(inputJson []byte, filename string, theme theme.Theme, isJsonLines bool) Bubble {
 	styles := DefaultStyles()
 	styles.containerStyle = styles.containerStyle.BorderForeground(theme.Inactive)
 	styles.infoStyle = styles.infoStyle.BorderForeground(theme.Inactive)
@@ -33,8 +32,9 @@ func New(inputJson []byte, filename string, theme theme.Theme) Bubble {
 		Styles:          styles,
 		viewport:        v,
 		inputJson:       inputJson,
-		highlightedJson: highlightInputJson(inputJson, theme.ChromaStyle),
+		highlightedJson: utils.Prettify(inputJson, theme.ChromaStyle, isJsonLines),
 		filename:        filename,
+		isJsonLines:     isJsonLines,
 	}
 	return b
 }
@@ -42,21 +42,6 @@ func New(inputJson []byte, filename string, theme theme.Theme) Bubble {
 func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
 	b.Styles.containerStyle.BorderForeground(color)
 	b.Styles.infoStyle.BorderForeground(color)
-}
-
-func highlightInputJson(inputJson []byte, chromaStyle *chroma.Style) *bytes.Buffer {
-	var f interface{}
-	// TODO: error handling
-	json.Unmarshal(inputJson, &f)
-
-	var prettyJSON bytes.Buffer
-	// TODO: error handling
-	json.Indent(&prettyJSON, []byte(inputJson), "", "    ")
-
-	buf := new(bytes.Buffer)
-	utils.HighlightJson(buf, prettyJSON.String(), chromaStyle)
-
-	return buf
 }
 
 func (b Bubble) GetInputJson() []byte {
