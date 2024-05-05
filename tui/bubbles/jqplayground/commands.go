@@ -51,7 +51,6 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 		processInput := func(data []byte) error {
 			var obj interface{}
 			if err := json.Unmarshal(data, &obj); err != nil {
-				fmt.Printf("%v", err)
 				return err
 			}
 
