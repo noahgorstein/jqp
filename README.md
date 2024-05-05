@@ -57,6 +57,9 @@ Flags:
 ➜ curl "https://api.github.com/repos/stedolan/jq/issues?per_page=2" | jqp 
 ```
 
+> [!NOTE]
+> Valid JSON or NDJSON [(newline-delimted JSON)](https://jsonlines.org/) can be provided as input to `jqp`.
+
 ## Keybindings 
 
 | **Keybinding** | **Action** |
@@ -154,6 +157,7 @@ Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes
 - `arduino`
 - `autumn`
 - `borland`
+- `catppuccin-latte`
 - `colorful`
 - `emacs`
 - `friendly`
@@ -181,6 +185,9 @@ Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes
 
 - `average`
 - `base16snazzy`
+- `catppuccin-frappe`
+- `catppuccin-macchiato`
+- `catppuccin-mocha`
 - `doom-one` 
 - `doom-one2` 
 - `dracula`
