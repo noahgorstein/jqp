@@ -104,24 +104,31 @@ func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory
-		viper.AddConfigPath(home)
-
-		// register the config file
-		viper.SetConfigName(".jqp")
-
-		//only read from yaml files
-		viper.SetConfigType("yaml")
-
+		if err := viper.ReadInConfig(); err != nil {
+			fmt.Fprintf(os.Stderr, "Config file %s was unable to be read: %v\n", viper.ConfigFileUsed(), err)
+		}
+		return
 	}
+	// Find home directory.
+	home, err := os.UserHomeDir()
+	cobra.CheckErr(err)
 
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Config file:", viper.ConfigFileUsed(), "was used.")
+	// Search config in home directory
+	viper.AddConfigPath(home)
+
+	// register the config file
+	viper.SetConfigName(".jqp")
+
+	//only read from yaml files
+	viper.SetConfigType("yaml")
+
+	// Try to read the default config file
+	if err := viper.ReadInConfig(); err != nil {
+		// Check if the error is due to the file not existing
+		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+			// For errors other than file not found, print the error message
+			fmt.Fprintf(os.Stderr, "Default config file %s was unable to be read: %v\n", viper.ConfigFileUsed(), err)
+		}
 	}
 }
 
