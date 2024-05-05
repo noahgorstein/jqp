@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -9,7 +8,6 @@ import (
 	"github.com/charmbracelet/bubbletea"
 	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
 	"github.com/noahgorstein/jqp/tui/theme"
-	utils "github.com/noahgorstein/jqp/tui/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -54,56 +52,50 @@ var rootCmd = &cobra.Command{
 		if isInputFromPipe() {
 			stdin := streamToBytes(os.Stdin)
 
-			isValidJson := utils.IsValidJson(stdin)
-			isValidJsonLines := utils.IsValidJsonLines(stdin)
-			if !isValidJson && !isValidJsonLines {
-				return errors.New("Data is not valid JSON or LDJSON")
-			}
-
-			jsonLines := !isValidJson && isValidJsonLines
-			bubble := jqplayground.New(stdin, "STDIN", jqtheme, jsonLines)
-			p := tea.NewProgram(bubble, tea.WithAltScreen())
-			if err := p.Start(); err != nil {
-				return err
-			}
-			return nil
-		} else {
-
-			// get the file
-			file, e := getFile()
-			if e != nil {
-				return e
-			}
-			defer file.Close()
-
-			// read the file
-			data, err := os.ReadFile(flags.filepath)
+			_, isJsonLines, err := isValidInput(stdin)
 			if err != nil {
 				return err
 			}
 
-			isValidJson := utils.IsValidJson(data)
-			isValidJsonLines := utils.IsValidJsonLines(data)
-			if !isValidJson && !isValidJsonLines {
-				return errors.New("Data is not valid JSON or LDJSON")
-			}
-
-			jsonLines := !isValidJson && isValidJsonLines
-
-			// get file info so we can get the filename
-			fi, err := os.Stat(flags.filepath)
-			if err != nil {
-				return err
-			}
-
-			bubble := jqplayground.New(data, fi.Name(), jqtheme, jsonLines)
+			bubble := jqplayground.New(stdin, "STDIN", jqtheme, isJsonLines)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
-
 			if err := p.Start(); err != nil {
 				return err
 			}
 			return nil
 		}
+
+		// get the file
+		file, e := getFile()
+		if e != nil {
+			return e
+		}
+		defer file.Close()
+
+		// read the file
+		data, err := os.ReadFile(flags.filepath)
+		if err != nil {
+			return err
+		}
+
+		_, isJsonLines, err := isValidInput(data)
+		if err != nil {
+			return err
+		}
+
+		// get file info so we can get the filename
+		fi, err := os.Stat(flags.filepath)
+		if err != nil {
+			return err
+		}
+
+		bubble := jqplayground.New(data, fi.Name(), jqtheme, isJsonLines)
+		p := tea.NewProgram(bubble, tea.WithAltScreen())
+
+		if err := p.Start(); err != nil {
+			return err
+		}
+		return nil
 
 	},
 }

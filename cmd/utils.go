@@ -4,9 +4,23 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	utils "github.com/noahgorstein/jqp/tui/utils"
 	"io"
 	"os"
 )
+
+// isValidInput checks the validity of input data as JSON or JSON lines.
+// It takes a byte slice 'data' and returns two boolean values indicating
+// whether the data is valid JSON and valid JSON lines, along with an error
+// if the data is not valid in either format.
+func isValidInput(data []byte) (bool, bool, error) {
+	isValidJson := utils.IsValidJson(data)
+	isValidJsonLines := utils.IsValidJsonLines(data)
+	if !isValidJson && !isValidJsonLines {
+		return false, false, errors.New("Data is not valid JSON or LDJSON")
+	}
+	return isValidJson, isValidJsonLines, nil
+}
 
 func streamToBytes(stream io.Reader) []byte {
 	buf := new(bytes.Buffer)
