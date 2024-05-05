@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -53,51 +52,50 @@ var rootCmd = &cobra.Command{
 		if isInputFromPipe() {
 			stdin := streamToBytes(os.Stdin)
 
-			isValidJson := isValidJson(stdin)
-			if !isValidJson {
-				return errors.New("JSON is not valid")
-			}
-
-			bubble := jqplayground.New(stdin, "STDIN", jqtheme)
-			p := tea.NewProgram(bubble, tea.WithAltScreen())
-			if err := p.Start(); err != nil {
-				return err
-			}
-			return nil
-		} else {
-
-			// get the file
-			file, e := getFile()
-			if e != nil {
-				return e
-			}
-			defer file.Close()
-
-			// read the file
-			data, err := os.ReadFile(flags.filepath)
+			_, isJsonLines, err := isValidInput(stdin)
 			if err != nil {
 				return err
 			}
 
-			isValidJson := isValidJson(data)
-			if !isValidJson {
-				return errors.New("JSON is not valid")
-			}
-
-			// get file info so we can get the filename
-			fi, err := os.Stat(flags.filepath)
-			if err != nil {
-				return err
-			}
-
-			bubble := jqplayground.New(data, fi.Name(), jqtheme)
+			bubble := jqplayground.New(stdin, "STDIN", jqtheme, isJsonLines)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
-
 			if err := p.Start(); err != nil {
 				return err
 			}
 			return nil
 		}
+
+		// get the file
+		file, e := getFile()
+		if e != nil {
+			return e
+		}
+		defer file.Close()
+
+		// read the file
+		data, err := os.ReadFile(flags.filepath)
+		if err != nil {
+			return err
+		}
+
+		_, isJsonLines, err := isValidInput(data)
+		if err != nil {
+			return err
+		}
+
+		// get file info so we can get the filename
+		fi, err := os.Stat(flags.filepath)
+		if err != nil {
+			return err
+		}
+
+		bubble := jqplayground.New(data, fi.Name(), jqtheme, isJsonLines)
+		p := tea.NewProgram(bubble, tea.WithAltScreen())
+
+		if err := p.Start(); err != nil {
+			return err
+		}
+		return nil
 
 	},
 }
