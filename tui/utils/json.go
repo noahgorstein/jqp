@@ -44,6 +44,10 @@ func IsValidJson(input []byte) bool {
 }
 
 func IsValidJsonLines(input []byte) bool {
+	if len(input) == 0 {
+		return false
+	}
+
 	reader := bytes.NewReader(input)
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
