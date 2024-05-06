@@ -1,4 +1,4 @@
-# jqp 
+# jqp
 
 a TUI playground for exploring jq.
 
@@ -54,13 +54,13 @@ Flags:
 `jqp` also supports input from STDIN. STDIN takes precedence over the command line flag.
 
 ```
-➜ curl "https://api.github.com/repos/stedolan/jq/issues?per_page=2" | jqp 
+➜ curl "https://api.github.com/repos/stedolan/jq/issues?per_page=2" | jqp
 ```
 
 > [!NOTE]
 > Valid JSON or NDJSON [(newline-delimted JSON)](https://jsonlines.org/) can be provided as input to `jqp`.
 
-## Keybindings 
+## Keybindings
 
 | **Keybinding** | **Action** |
 |:---------------|:-----------|
@@ -96,7 +96,7 @@ Flags:
 
 ## Configuration
 
-`jqp` can be configured with a configuration file. By default, `jqp` will search your home directory for a YAML file named `.jqp.yaml`. A path to a YAML configuration file can also be provided to the `--config` command line flag. 
+`jqp` can be configured with a configuration file. By default, `jqp` will search your home directory for a YAML file named `.jqp.yaml`. A path to a YAML configuration file can also be provided to the `--config` command line flag.
 
 ```bash
 ➜ jqp --config ~/my_jqp_config.yaml < data.json
@@ -115,7 +115,7 @@ theme:
 
 ## Themes
 
-Themes can be specified on the command line via the `-t/--theme <themeName>` flag. You can also set a theme in your [configuration file](#configuration). 
+Themes can be specified on the command line via the `-t/--theme <themeName>` flag. You can also set a theme in your [configuration file](#configuration).
 
 ```yaml
 theme:
@@ -126,7 +126,7 @@ theme:
 
 ### Chroma Style Overrides
 
-Overrides to the chroma styles used for a theme can be configured in your [configuration file](#configuration). 
+Overrides to the chroma styles used for a theme can be configured in your [configuration file](#configuration).
 
 For the list of short keys, see [`chroma.StandardTypes`](https://github.com/alecthomas/chroma/blob/d38b87110b078027006bc34aa27a065fa22295a1/types.go#L210-L308). To see which token to use for a value, see the [JSON lexer](https://github.com/alecthomas/chroma/blob/master/lexers/embedded/json.xml) (look for `<token>` tags). To see the color and what's used in the style you're using, look for your style in the chroma [styles directory](https://github.com/alecthomas/chroma/tree/master/styles).
 
@@ -148,7 +148,7 @@ theme:
     success: "#87a987"
 ```
 
-Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes. Light themes work best in terminals with a light background and dark themes work best in a terminal with a dark background. If no theme is specified or a non-existant theme is provided, the default theme is used, which was created to work with both terminals with a light and dark background. 
+Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes. Light themes work best in terminals with a light background and dark themes work best in a terminal with a dark background. If no theme is specified or a non-existant theme is provided, the default theme is used, which was created to work with both terminals with a light and dark background.
 
 ### Light Themes
 
@@ -188,8 +188,8 @@ Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes
 - `catppuccin-frappe`
 - `catppuccin-macchiato`
 - `catppuccin-mocha`
-- `doom-one` 
-- `doom-one2` 
+- `doom-one`
+- `doom-one2`
 - `dracula`
 - `fruity`
 - `github-dark`
