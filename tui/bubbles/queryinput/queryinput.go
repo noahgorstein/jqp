@@ -53,7 +53,7 @@ func (b *Bubble) RotateHistory() {
 	}
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return textinput.Blink
 }
 

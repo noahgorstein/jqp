@@ -11,7 +11,6 @@ import (
 
 type Bubble struct {
 	state  state.State
-	width  int
 	help   help.Model
 	keys   keyMap
 	Styles Styles
@@ -53,7 +52,7 @@ func (b *Bubble) SetWidth(width int) {
 	b.Styles.helpbarStyle.Width(width - 1)
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return nil
 }
 

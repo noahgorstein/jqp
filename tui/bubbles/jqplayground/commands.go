@@ -16,10 +16,6 @@ import (
 	"github.com/noahgorstein/jqp/tui/utils"
 )
 
-type successMsg struct {
-	message string
-}
-
 type errorMsg struct {
 	error error
 }
@@ -50,7 +46,7 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 		}
 
 		processInput := func(data []byte) error {
-			var obj interface{}
+			var obj any
 			if err := json.Unmarshal(data, &obj); err != nil {
 				return err
 			}

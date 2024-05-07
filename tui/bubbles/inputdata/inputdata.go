@@ -84,7 +84,7 @@ func (b Bubble) View() string {
 	return b.Styles.containerStyle.Render(content)
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return nil
 }
 

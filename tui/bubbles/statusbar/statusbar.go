@@ -15,7 +15,7 @@ type Bubble struct {
 	statusMessageTimer    *time.Timer
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return nil
 }
 
