@@ -19,7 +19,7 @@ var rootCmd = &cobra.Command{
 	Short:        "jqp is a TUI to explore jq",
 	Long:         `jqp is a TUI to explore the jq command line utility`,
 	SilenceUsage: true,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cmd *cobra.Command, _ []string) error {
 		configTheme := viper.GetString(configKeysName.themeName)
 		if !cmd.Flags().Changed(flagsName.theme) {
 			flags.theme = configTheme
@@ -127,7 +127,8 @@ func initConfig() {
 	// Try to read the default config file
 	if err := viper.ReadInConfig(); err != nil {
 		// Check if the error is due to the file not existing
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+		var errFileNotFound viper.ConfigFileNotFoundError
+		if !errors.As(err, &errFileNotFound) {
 			// For errors other than file not found, print the error message
 			fmt.Fprintf(os.Stderr, "Default config file %s was unable to be read: %v\n", viper.ConfigFileUsed(), err)
 		}
@@ -159,7 +160,7 @@ var configKeysName = struct {
 
 var cfgFile string
 
-func Execute() {
+func Execute() error {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "path to config file (default is $HOME/.jqp.yaml)")
@@ -176,7 +177,5 @@ func Execute() {
 		flagsName.themeShort,
 		"", "jqp theme")
 
-	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
-	}
+	return rootCmd.Execute()
 }
