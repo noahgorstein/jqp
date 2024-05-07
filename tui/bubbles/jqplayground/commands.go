@@ -12,7 +12,8 @@ import (
 	"github.com/atotto/clipboard"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/itchyny/gojq"
-	utils "github.com/noahgorstein/jqp/tui/utils"
+
+	"github.com/noahgorstein/jqp/tui/utils"
 )
 
 type successMsg struct {

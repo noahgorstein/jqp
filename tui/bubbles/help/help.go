@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbletea"
+
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 	"github.com/noahgorstein/jqp/tui/theme"
 )

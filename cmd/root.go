@@ -6,10 +6,11 @@ import (
 
 	"github.com/alecthomas/chroma/v2"
 	"github.com/charmbracelet/bubbletea"
-	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
-	"github.com/noahgorstein/jqp/tui/theme"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 var rootCmd = &cobra.Command{
