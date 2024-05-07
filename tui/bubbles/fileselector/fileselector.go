@@ -13,7 +13,6 @@ type Bubble struct {
 }
 
 func New(theme theme.Theme) Bubble {
-
 	s := DefaultStyles()
 	ti := textinput.New()
 	ti.Focus()
@@ -24,7 +23,6 @@ func New(theme theme.Theme) Bubble {
 		Styles:    s,
 		textinput: ti,
 	}
-
 }
 
 func (b Bubble) GetInput() string {
@@ -48,7 +46,6 @@ func (b Bubble) View() string {
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
-
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd

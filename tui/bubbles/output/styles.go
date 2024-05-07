@@ -14,5 +14,4 @@ func DefaultStyles() (s Styles) {
 	s.containerStyle = lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).Padding(1)
 
 	return s
-
 }

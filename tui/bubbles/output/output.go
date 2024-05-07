@@ -49,7 +49,6 @@ func (b *Bubble) SetSize(width, height int) {
 	b.viewport.Height = height - b.Styles.containerStyle.GetVerticalFrameSize() - 3
 
 	b.SetContent(b.content)
-
 }
 
 func (b *Bubble) GetContent() string {
@@ -75,7 +74,6 @@ func (b *Bubble) ScrollToTop() {
 }
 
 func (b Bubble) View() string {
-
 	scrollPercent := fmt.Sprintf("%3.f%%", b.viewport.ScrollPercent()*100)
 
 	info := b.Styles.infoStyle.Render(fmt.Sprintf("%s | %s", lipgloss.NewStyle().Italic(true).Render("output"), scrollPercent))
@@ -92,7 +90,6 @@ func (b Bubble) Init() tea.Cmd {
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
-
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd

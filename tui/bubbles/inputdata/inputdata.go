@@ -88,7 +88,6 @@ func (b Bubble) Init() tea.Cmd {
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
-
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd

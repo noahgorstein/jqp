@@ -11,11 +11,9 @@ type styles struct {
 }
 
 func defaultStyles() (s styles) {
-
 	s.containerStyle = lipgloss.NewStyle().PaddingLeft(1)
 	s.errorMessageStyle = lipgloss.NewStyle()
 	s.successMessageStyle = lipgloss.NewStyle()
 
 	return s
-
 }

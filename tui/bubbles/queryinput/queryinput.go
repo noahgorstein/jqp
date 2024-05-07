@@ -2,6 +2,7 @@ package queryinput
 
 import (
 	"container/list"
+
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -18,7 +19,6 @@ type Bubble struct {
 }
 
 func New(theme theme.Theme) Bubble {
-
 	s := DefaultStyles()
 	s.containerStyle.BorderForeground(theme.Primary)
 	ti := textinput.New()
@@ -102,5 +102,4 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 	cmds = append(cmds, cmd)
 
 	return b, tea.Batch(cmds...)
-
 }

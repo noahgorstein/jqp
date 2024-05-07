@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	utils "github.com/noahgorstein/jqp/tui/utils"
 	"io"
 	"os"
+
+	utils "github.com/noahgorstein/jqp/tui/utils"
 )
 
 // isValidInput checks the validity of input data as JSON or JSON lines.

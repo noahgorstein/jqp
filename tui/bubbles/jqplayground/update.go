@@ -34,7 +34,6 @@ func (b *Bubble) resizeBubbles() {
 }
 
 func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd

@@ -9,7 +9,6 @@ type Styles struct {
 }
 
 func DefaultStyles() (s Styles) {
-
 	s.containerStyle = lipgloss.NewStyle().Border(lipgloss.RoundedBorder())
 	return s
 }

@@ -115,7 +115,7 @@ func (b Bubble) copyOutputToClipboard() tea.Cmd {
 
 func (b Bubble) writeOutputToFile() tea.Cmd {
 	return func() tea.Msg {
-		err := os.WriteFile(b.fileselector.GetInput(), []byte(b.results), 0644)
+		err := os.WriteFile(b.fileselector.GetInput(), []byte(b.results), 0o644)
 		if err != nil {
 			return errorMsg{
 				error: err,

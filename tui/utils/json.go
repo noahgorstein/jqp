@@ -1,12 +1,12 @@
 package utils
 
 import (
-	"io"
-
 	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
 	"github.com/alecthomas/chroma/v2/lexers"
@@ -60,7 +60,6 @@ func IsValidJsonLines(input []byte) bool {
 }
 
 func prettifyJson(input []byte, chromaStyle *chroma.Style) *bytes.Buffer {
-
 	var buf bytes.Buffer
 	if IsValidJson(input) {
 		json.Indent(&buf, []byte(input), "", FourSpaces)

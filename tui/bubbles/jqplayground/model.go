@@ -36,7 +36,6 @@ type Bubble struct {
 }
 
 func New(inputJson []byte, filename string, theme theme.Theme, isJsonLines bool) Bubble {
-
 	workingDirectory, _ := os.Getwd()
 
 	sb := statusbar.New(theme)

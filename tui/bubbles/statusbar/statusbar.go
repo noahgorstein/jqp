@@ -24,7 +24,6 @@ func (b Bubble) View() string {
 
 func (b *Bubble) SetSize(width int) {
 	b.styles.containerStyle.Width(width)
-
 }
 
 func (b *Bubble) hideStatusMessage() {
@@ -44,7 +43,6 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 		b.SetSize(msg.Width)
 	}
 	return b, tea.Batch(cmd)
-
 }
 
 func New(theme theme.Theme) Bubble {
@@ -60,7 +58,6 @@ func New(theme theme.Theme) Bubble {
 type statusMessageTimeoutMsg struct{}
 
 func (b *Bubble) NewStatusMessage(s string, success bool) tea.Cmd {
-
 	if success {
 		b.statusMessage = b.styles.successMessageStyle.Render(s)
 	} else {

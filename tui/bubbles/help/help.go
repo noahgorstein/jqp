@@ -17,7 +17,6 @@ type Bubble struct {
 }
 
 func New(theme theme.Theme) Bubble {
-
 	styles := DefaultStyles()
 	help := help.NewModel()
 	help.Styles.ShortKey = styles.helpKeyStyle.Foreground(theme.Primary)
@@ -58,9 +57,7 @@ func (b Bubble) Init() tea.Cmd {
 }
 
 func (b Bubble) View() string {
-
 	return b.Styles.helpbarStyle.Render(b.help.ShortHelpView(b.collectHelpBindings()))
-
 }
 
 func (b *Bubble) SetState(mode state.State) {
@@ -68,7 +65,6 @@ func (b *Bubble) SetState(mode state.State) {
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
-
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {

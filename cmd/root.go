@@ -96,7 +96,6 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 		return nil
-
 	},
 }
 
@@ -119,7 +118,7 @@ func initConfig() {
 	// register the config file
 	viper.SetConfigName(".jqp")
 
-	//only read from yaml files
+	// only read from yaml files
 	viper.SetConfigType("yaml")
 
 	// Try to read the default config file
@@ -158,7 +157,6 @@ var configKeysName = struct {
 var cfgFile string
 
 func Execute() {
-
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "path to config file (default is $HOME/.jqp.yaml)")
