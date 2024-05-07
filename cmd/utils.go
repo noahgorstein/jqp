@@ -23,10 +23,14 @@ func isValidInput(data []byte) (bool, bool, error) {
 	return isValidJSON, isValidJSONLines, nil
 }
 
-func streamToBytes(stream io.Reader) []byte {
+func streamToBytes(stream io.Reader) ([]byte, error) {
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(stream)
-	return buf.Bytes()
+	_, err := buf.ReadFrom(stream)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
 }
 
 func isInputFromPipe() bool {
@@ -36,14 +40,14 @@ func isInputFromPipe() bool {
 
 func getFile() (*os.File, error) {
 	if flags.filepath == "" {
-		return nil, errors.New("Please provide an input file.")
+		return nil, errors.New("please provide an input file")
 	}
 	if !fileExists(flags.filepath) {
-		return nil, errors.New("The file provided does not exist.")
+		return nil, errors.New("the file provided does not exist")
 	}
 	file, e := os.Open(flags.filepath)
 	if e != nil {
-		return nil, errors.New(fmt.Sprintf("Unable to open file: %s", e))
+		return nil, fmt.Errorf("Unable to open file: %w", e)
 	}
 	return file, nil
 }

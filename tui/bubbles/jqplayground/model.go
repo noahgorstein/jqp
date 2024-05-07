@@ -35,8 +35,11 @@ type Bubble struct {
 	isJSONLines      bool
 }
 
-func New(inputJSON []byte, filename string, jqtheme theme.Theme, isJSONLines bool) Bubble {
-	workingDirectory, _ := os.Getwd()
+func New(inputJSON []byte, filename string, jqtheme theme.Theme, isJSONLines bool) (Bubble, error) {
+	workingDirectory, err := os.Getwd()
+	if err != nil {
+		return Bubble{}, err
+	}
 
 	sb := statusbar.New(jqtheme)
 	sb.StatusMessageLifetime = time.Second * 10
@@ -44,11 +47,16 @@ func New(inputJSON []byte, filename string, jqtheme theme.Theme, isJSONLines boo
 
 	fs.SetInput(workingDirectory)
 
+	inputData, err := inputdata.New(inputJSON, filename, jqtheme, isJSONLines)
+	if err != nil {
+		return Bubble{}, err
+	}
+
 	b := Bubble{
 		workingDirectory: workingDirectory,
 		state:            state.Query,
 		queryinput:       queryinput.New(jqtheme),
-		inputdata:        inputdata.New(inputJSON, filename, jqtheme, isJSONLines),
+		inputdata:        inputData,
 		output:           output.New(jqtheme),
 		help:             help.New(jqtheme),
 		statusbar:        sb,
@@ -56,5 +64,5 @@ func New(inputJSON []byte, filename string, jqtheme theme.Theme, isJSONLines boo
 		theme:            jqtheme,
 		isJSONLines:      isJSONLines,
 	}
-	return b
+	return b, nil
 }

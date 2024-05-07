@@ -83,7 +83,10 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 			}
 		}
 
-		highlightedOutput := utils.Prettify([]byte(results.String()), b.theme.ChromaStyle, true)
+		highlightedOutput, err := utils.Prettify([]byte(results.String()), b.theme.ChromaStyle, true)
+		if err != nil {
+			return errorMsg{error: err}
+		}
 		return queryResultMsg{
 			rawResults:         results.String(),
 			highlightedResults: highlightedOutput.String(),

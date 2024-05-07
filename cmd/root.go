@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -51,14 +52,20 @@ var rootCmd = &cobra.Command{
 		}
 
 		if isInputFromPipe() {
-			stdin := streamToBytes(os.Stdin)
+			stdin, err := streamToBytes(os.Stdin)
+			if err != nil {
+				return err
+			}
 
 			_, isJSONLines, err := isValidInput(stdin)
 			if err != nil {
 				return err
 			}
 
-			bubble := jqplayground.New(stdin, "STDIN", jqtheme, isJSONLines)
+			bubble, err := jqplayground.New(stdin, "STDIN", jqtheme, isJSONLines)
+			if err != nil {
+				return err
+			}
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 			_, err = p.Run()
 			if err != nil {
@@ -91,7 +98,10 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		bubble := jqplayground.New(data, fi.Name(), jqtheme, isJSONLines)
+		bubble, err := jqplayground.New(data, fi.Name(), jqtheme, isJSONLines)
+		if err != nil {
+			return err
+		}
 		p := tea.NewProgram(bubble, tea.WithAltScreen())
 
 		_, err = p.Run()
