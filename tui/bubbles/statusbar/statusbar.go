@@ -46,10 +46,10 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 	return b, tea.Batch(cmd)
 }
 
-func New(theme theme.Theme) Bubble {
+func New(jqtheme theme.Theme) Bubble {
 	styles := defaultStyles()
-	styles.successMessageStyle = styles.successMessageStyle.Foreground(theme.Success)
-	styles.errorMessageStyle = styles.errorMessageStyle.Foreground(theme.Error)
+	styles.successMessageStyle = styles.successMessageStyle.Foreground(jqtheme.Success)
+	styles.errorMessageStyle = styles.errorMessageStyle.Foreground(jqtheme.Error)
 	b := Bubble{
 		styles: styles,
 	}

@@ -24,16 +24,16 @@ type Bubble struct {
 	isJSONLines     bool
 }
 
-func New(inputJSON []byte, filename string, theme theme.Theme, isJSONLines bool) Bubble {
+func New(inputJSON []byte, filename string, jqtheme theme.Theme, isJSONLines bool) Bubble {
 	styles := DefaultStyles()
-	styles.containerStyle = styles.containerStyle.BorderForeground(theme.Inactive)
-	styles.infoStyle = styles.infoStyle.BorderForeground(theme.Inactive)
+	styles.containerStyle = styles.containerStyle.BorderForeground(jqtheme.Inactive)
+	styles.infoStyle = styles.infoStyle.BorderForeground(jqtheme.Inactive)
 	v := viewport.New(0, 0)
 	b := Bubble{
 		Styles:          styles,
 		viewport:        v,
 		inputJSON:       inputJSON,
-		highlightedJSON: utils.Prettify(inputJSON, theme.ChromaStyle, isJSONLines),
+		highlightedJSON: utils.Prettify(inputJSON, jqtheme.ChromaStyle, isJSONLines),
 		filename:        filename,
 		isJSONLines:     isJSONLines,
 	}

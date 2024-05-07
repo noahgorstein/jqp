@@ -17,17 +17,17 @@ type Bubble struct {
 	Styles Styles
 }
 
-func New(theme theme.Theme) Bubble {
+func New(jqtheme theme.Theme) Bubble {
 	styles := DefaultStyles()
-	help := help.New()
-	help.Styles.ShortKey = styles.helpKeyStyle.Foreground(theme.Primary)
-	help.Styles.ShortDesc = styles.helpTextStyle.Foreground(theme.Secondary)
-	help.Styles.ShortSeparator = styles.helpSeparatorStyle.Foreground(theme.Inactive)
+	model := help.New()
+	model.Styles.ShortKey = styles.helpKeyStyle.Foreground(jqtheme.Primary)
+	model.Styles.ShortDesc = styles.helpTextStyle.Foreground(jqtheme.Secondary)
+	model.Styles.ShortSeparator = styles.helpSeparatorStyle.Foreground(jqtheme.Inactive)
 
 	return Bubble{
 		state:  state.Query,
 		Styles: styles,
-		help:   help,
+		help:   model,
 		keys:   keys,
 	}
 }

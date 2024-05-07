@@ -20,10 +20,10 @@ type Bubble struct {
 	width    int
 }
 
-func New(theme theme.Theme) Bubble {
+func New(jqtheme theme.Theme) Bubble {
 	styles := DefaultStyles()
-	styles.containerStyle = styles.containerStyle.BorderForeground(theme.Inactive)
-	styles.infoStyle = styles.infoStyle.BorderForeground(theme.Inactive)
+	styles.containerStyle = styles.containerStyle.BorderForeground(jqtheme.Inactive)
+	styles.infoStyle = styles.infoStyle.BorderForeground(jqtheme.Inactive)
 	v := viewport.New(1, 1)
 	b := Bubble{
 		Styles:   styles,

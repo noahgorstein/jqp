@@ -13,12 +13,12 @@ type Bubble struct {
 	textinput textinput.Model
 }
 
-func New(theme theme.Theme) Bubble {
+func New(jqtheme theme.Theme) Bubble {
 	s := DefaultStyles()
 	ti := textinput.New()
 	ti.Focus()
-	ti.PromptStyle = s.promptStyle.Foreground(theme.Secondary)
-	s.inputLabelStyle.Foreground(theme.Primary)
+	ti.PromptStyle = s.promptStyle.Foreground(jqtheme.Secondary)
+	s.inputLabelStyle.Foreground(jqtheme.Primary)
 
 	return Bubble{
 		Styles:    s,
