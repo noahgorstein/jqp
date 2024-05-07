@@ -60,7 +60,8 @@ var rootCmd = &cobra.Command{
 
 			bubble := jqplayground.New(stdin, "STDIN", jqtheme, isJSONLines)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
-			if err := p.Start(); err != nil {
+			_, err = p.Run()
+			if err != nil {
 				return err
 			}
 			return nil
@@ -93,7 +94,8 @@ var rootCmd = &cobra.Command{
 		bubble := jqplayground.New(data, fi.Name(), jqtheme, isJSONLines)
 		p := tea.NewProgram(bubble, tea.WithAltScreen())
 
-		if err := p.Start(); err != nil {
+		_, err = p.Run()
+		if err != nil {
 			return err
 		}
 		return nil

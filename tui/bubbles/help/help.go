@@ -19,7 +19,7 @@ type Bubble struct {
 
 func New(theme theme.Theme) Bubble {
 	styles := DefaultStyles()
-	help := help.NewModel()
+	help := help.New()
 	help.Styles.ShortKey = styles.helpKeyStyle.Foreground(theme.Primary)
 	help.Styles.ShortDesc = styles.helpTextStyle.Foreground(theme.Secondary)
 	help.Styles.ShortSeparator = styles.helpSeparatorStyle.Foreground(theme.Inactive)
