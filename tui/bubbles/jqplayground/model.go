@@ -32,10 +32,10 @@ type Bubble struct {
 	results          string
 	cancel           func()
 	theme            theme.Theme
-	isJsonLines      bool
+	isJSONLines      bool
 }
 
-func New(inputJson []byte, filename string, theme theme.Theme, isJsonLines bool) Bubble {
+func New(inputJSON []byte, filename string, theme theme.Theme, isJSONLines bool) Bubble {
 	workingDirectory, _ := os.Getwd()
 
 	sb := statusbar.New(theme)
@@ -48,13 +48,13 @@ func New(inputJson []byte, filename string, theme theme.Theme, isJsonLines bool)
 		workingDirectory: workingDirectory,
 		state:            state.Query,
 		queryinput:       queryinput.New(theme),
-		inputdata:        inputdata.New(inputJson, filename, theme, isJsonLines),
+		inputdata:        inputdata.New(inputJSON, filename, theme, isJSONLines),
 		output:           output.New(theme),
 		help:             help.New(theme),
 		statusbar:        sb,
 		fileselector:     fs,
 		theme:            theme,
-		isJsonLines:      isJsonLines,
+		isJSONLines:      isJSONLines,
 	}
 	return b
 }

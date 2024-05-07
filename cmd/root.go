@@ -53,12 +53,12 @@ var rootCmd = &cobra.Command{
 		if isInputFromPipe() {
 			stdin := streamToBytes(os.Stdin)
 
-			_, isJsonLines, err := isValidInput(stdin)
+			_, isJSONLines, err := isValidInput(stdin)
 			if err != nil {
 				return err
 			}
 
-			bubble := jqplayground.New(stdin, "STDIN", jqtheme, isJsonLines)
+			bubble := jqplayground.New(stdin, "STDIN", jqtheme, isJSONLines)
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
 			if err := p.Start(); err != nil {
 				return err
@@ -79,7 +79,7 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		_, isJsonLines, err := isValidInput(data)
+		_, isJSONLines, err := isValidInput(data)
 		if err != nil {
 			return err
 		}
@@ -90,7 +90,7 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		bubble := jqplayground.New(data, fi.Name(), jqtheme, isJsonLines)
+		bubble := jqplayground.New(data, fi.Name(), jqtheme, isJSONLines)
 		p := tea.NewProgram(bubble, tea.WithAltScreen())
 
 		if err := p.Start(); err != nil {

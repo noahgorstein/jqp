@@ -15,12 +15,12 @@ import (
 // whether the data is valid JSON and valid JSON lines, along with an error
 // if the data is not valid in either format.
 func isValidInput(data []byte) (bool, bool, error) {
-	isValidJson := utils.IsValidJson(data)
-	isValidJsonLines := utils.IsValidJsonLines(data)
-	if !isValidJson && !isValidJsonLines {
+	isValidJSON := utils.IsValidJSON(data)
+	isValidJSONLines := utils.IsValidJSONLines(data)
+	if !isValidJSON && !isValidJSONLines {
 		return false, false, errors.New("Data is not valid JSON or LDJSON")
 	}
-	return isValidJson, isValidJsonLines, nil
+	return isValidJSON, isValidJSONLines, nil
 }
 
 func streamToBytes(stream io.Reader) []byte {

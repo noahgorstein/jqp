@@ -73,8 +73,8 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 			return nil
 		}
 
-		if b.isJsonLines {
-			scanner := bufio.NewScanner(bytes.NewReader(b.inputdata.GetInputJson()))
+		if b.isJSONLines {
+			scanner := bufio.NewScanner(bytes.NewReader(b.inputdata.GetInputJSON()))
 			for scanner.Scan() {
 				line := scanner.Bytes()
 				if err := processInput(line); err != nil {
@@ -82,7 +82,7 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 				}
 			}
 		} else {
-			if err := processInput(b.inputdata.GetInputJson()); err != nil {
+			if err := processInput(b.inputdata.GetInputJSON()); err != nil {
 				return errorMsg{error: err}
 			}
 		}

@@ -15,7 +15,7 @@ import (
 
 const FourSpaces = "    "
 
-func highlightJson(w io.Writer, source string, style *chroma.Style) error {
+func highlightJSON(w io.Writer, source string, style *chroma.Style) error {
 	l := lexers.Get("json")
 	if l == nil {
 		l = lexers.Fallback
@@ -38,12 +38,12 @@ func highlightJson(w io.Writer, source string, style *chroma.Style) error {
 	return f.Format(w, style, it)
 }
 
-func IsValidJson(input []byte) bool {
+func IsValidJSON(input []byte) bool {
 	var js json.RawMessage
 	return json.Unmarshal(input, &js) == nil
 }
 
-func IsValidJsonLines(input []byte) bool {
+func IsValidJSONLines(input []byte) bool {
 	if len(input) == 0 {
 		return false
 	}
@@ -52,39 +52,39 @@ func IsValidJsonLines(input []byte) bool {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
-		if !IsValidJson(scanner.Bytes()) {
+		if !IsValidJSON(scanner.Bytes()) {
 			return false
 		}
 	}
 	return true
 }
 
-func prettifyJson(input []byte, chromaStyle *chroma.Style) *bytes.Buffer {
+func prettifyJSON(input []byte, chromaStyle *chroma.Style) *bytes.Buffer {
 	var buf bytes.Buffer
-	if IsValidJson(input) {
+	if IsValidJSON(input) {
 		json.Indent(&buf, []byte(input), "", FourSpaces)
 	}
 	if buf.Len() == 0 {
-		highlightJson(&buf, string(input), chromaStyle)
+		highlightJSON(&buf, string(input), chromaStyle)
 		return &buf
 	}
 	var highlightedBuf bytes.Buffer
-	highlightJson(&highlightedBuf, buf.String(), chromaStyle)
+	highlightJSON(&highlightedBuf, buf.String(), chromaStyle)
 	return &highlightedBuf
 }
 
-func Prettify(inputJson []byte, chromaStyle *chroma.Style, isJsonLines bool) *bytes.Buffer {
-	if isJsonLines {
+func Prettify(inputJSON []byte, chromaStyle *chroma.Style, isJSONLines bool) *bytes.Buffer {
+	if isJSONLines {
 		var buf bytes.Buffer
-		reader := bytes.NewReader(inputJson)
+		reader := bytes.NewReader(inputJSON)
 		scanner := bufio.NewScanner(reader)
 		scanner.Split(bufio.ScanLines)
 		for scanner.Scan() {
 			line := scanner.Bytes()
-			hightlighedLine := prettifyJson(line, chromaStyle)
+			hightlighedLine := prettifyJSON(line, chromaStyle)
 			buf.WriteString(fmt.Sprintf("%v\n", hightlighedLine))
 		}
 		return &buf
 	}
-	return prettifyJson(inputJson, chromaStyle)
+	return prettifyJSON(inputJSON, chromaStyle)
 }

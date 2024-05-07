@@ -18,13 +18,13 @@ type Bubble struct {
 	viewport        viewport.Model
 	height          int
 	width           int
-	inputJson       []byte
-	highlightedJson *bytes.Buffer
+	inputJSON       []byte
+	highlightedJSON *bytes.Buffer
 	filename        string
-	isJsonLines     bool
+	isJSONLines     bool
 }
 
-func New(inputJson []byte, filename string, theme theme.Theme, isJsonLines bool) Bubble {
+func New(inputJSON []byte, filename string, theme theme.Theme, isJSONLines bool) Bubble {
 	styles := DefaultStyles()
 	styles.containerStyle = styles.containerStyle.BorderForeground(theme.Inactive)
 	styles.infoStyle = styles.infoStyle.BorderForeground(theme.Inactive)
@@ -32,10 +32,10 @@ func New(inputJson []byte, filename string, theme theme.Theme, isJsonLines bool)
 	b := Bubble{
 		Styles:          styles,
 		viewport:        v,
-		inputJson:       inputJson,
-		highlightedJson: utils.Prettify(inputJson, theme.ChromaStyle, isJsonLines),
+		inputJSON:       inputJSON,
+		highlightedJSON: utils.Prettify(inputJSON, theme.ChromaStyle, isJSONLines),
 		filename:        filename,
-		isJsonLines:     isJsonLines,
+		isJSONLines:     isJSONLines,
 	}
 	return b
 }
@@ -45,8 +45,8 @@ func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
 	b.Styles.infoStyle.BorderForeground(color)
 }
 
-func (b Bubble) GetInputJson() []byte {
-	return b.inputJson
+func (b Bubble) GetInputJSON() []byte {
+	return b.inputJSON
 }
 
 func (b *Bubble) SetSize(width, height int) {
@@ -60,9 +60,9 @@ func (b *Bubble) SetSize(width, height int) {
 	b.viewport.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 3
 	b.viewport.Height = height - b.Styles.containerStyle.GetVerticalFrameSize() - 3
 
-	renderedJson := lipgloss.NewStyle().Width(b.viewport.Width - 3).Render(b.highlightedJson.String())
+	renderedJSON := lipgloss.NewStyle().Width(b.viewport.Width - 3).Render(b.highlightedJSON.String())
 
-	b.viewport.SetContent(renderedJson)
+	b.viewport.SetContent(renderedJSON)
 }
 
 func max(a, b int) int {
