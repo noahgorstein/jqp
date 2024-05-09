@@ -1,0 +1,227 @@
+---
+# Options for analysis running.
+run:
+  # Timeout for analysis, e.g. 30s, 5m.
+  # Default: 1m
+  timeout: 5m
+
+  # Include test files or not.
+  # Default: true
+  tests: true
+
+issues:
+  # Maximum issues count per one linter.
+  # Set to 0 to disable.
+  # Default: 50
+  max-issues-per-linter: 0
+  # Maximum count of issues with the same text.
+  # Set to 0 to disable.
+  # Default: 3
+  max-same-issues: 0
+
+linters:
+  enable:
+    # check when errors are compared without errors.Is
+    - errorlint
+
+    # check imports order and makes it always deterministic.
+    - gci
+
+    # linter to detect errors invalid key values count
+    - loggercheck
+
+    # Very Basic spell error checker
+    - misspell
+
+    # Forbid some imports
+    - depguard
+
+    # simple security check
+    - gosec
+
+    # Copyloopvar is a linter detects places where loop variables are copied.
+    # this hack was needed before golang 1.22
+    - copyloopvar
+
+    # Fast, configurable, extensible, flexible, and beautiful linter for Go.
+    # Drop-in replacement of golint.
+    - revive
+
+    # Finds sending http request without context.Context
+    - noctx
+
+    # make sure to use t.Helper() when needed
+    - thelper
+
+    # make sure that error are checked after a rows.Next()
+    - rowserrcheck
+
+    #  Checks that sql.Rows, sql.Stmt, sqlx.NamedStmt, pgx.Query are closed.
+    - sqlclosecheck
+
+    # ensure that lint exceptions have explanations. Consider the case below:
+    - nolintlint
+
+    # detect duplicated words in code
+    - dupword
+
+    # detect the possibility to use variables/constants from the Go standard library.
+    - usestdlibvars
+
+    # mirror suggests rewrites to avoid unnecessary []byte/string conversion
+    - mirror
+
+    # testify checks good usage of github.com/stretchr/testify.
+    - testifylint
+
+    # Check whether the function uses a non-inherited context.
+    - contextcheck
+
+    # We already identified we don't want these ones
+    # - gochecknoinit
+    # - goerr113          # errorlint is better
+    # - testpackage
+
+linters-settings:
+  # configure the golang imports we don't want
+  depguard:
+    rules:
+      # Name of a rule.
+      main:
+        # Packages that are not allowed where the value is a suggestion.
+        deny:
+          - pkg: "github.com/pkg/errors"
+            desc: Should be replaced by standard lib errors package
+
+          - pkg: "golang.org/x/net/context"
+            desc: Should be replaced by standard lib context package
+
+
+  loggercheck:  # invalid key values count
+    require-string-key: true
+    # Require printf-like format specifier (%s, %d for example) not present.
+    # Default: false
+    no-printf-like: true
+
+  nolintlint:
+    # Disable to ensure that all nolint directives actually have an effect.
+    # Default: false
+    allow-unused: true
+    # Enable to require an explanation of nonzero length
+    # after each nolint directive.
+    # Default: false
+    require-explanation: true
+    # Enable to require nolint directives to mention the specific
+    # linter being suppressed.
+    # Default: false
+    require-specific: true
+
+  # define the import orders
+  gci:
+    sections:
+      # Standard section: captures all standard packages.
+      - standard
+      # Default section: catchall that is not standard or custom
+      - default
+      # linters that related to local tool, so they should be separated
+      - localmodule
+
+  staticcheck:
+    # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    checks: ["all"]
+
+  revive:
+    enable-all-rules: true
+    rules:
+      # we must provide configuration for linter that requires them
+      # enable-all-rules is OK, but many revive linters expect configuration
+      # and cannot work without them
+
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cognitive-complexity
+      - name: cognitive-complexity
+        severity: warning
+        arguments: [7]
+
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#context-as-argument
+      - name: context-as-argument
+        arguments:
+          - allowTypesBefore: "*testing.T"
+
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cyclomatic
+      - name: cyclomatic
+        arguments: [5] # default 3
+
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#exported
+      - name: exported
+        arguments:
+          # enables checking public methods of private types
+          - "checkPrivateReceivers"
+          # make error messages clearer
+          - "sayRepetitiveInsteadOfStutters"
+
+      # this linter completes errcheck linter, it will report method called without handling the error
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unhandled-error
+      - name: unhandled-error
+        arguments: # here are the exceptions we don't want to be reported
+          - "fmt.Print.*"
+          - "fmt.Fprint.*"
+          - "bytes.Buffer.Write"
+          - "bytes.Buffer.WriteByte"
+          - "bytes.Buffer.WriteString"
+          - "strings.Builder.WriteString"
+          - "strings.Builder.WriteRune"
+
+      # boolean parameters that create a control coupling could be useful
+      # but this one is way too noisy
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#flag-parameter
+      - name: flag-parameter
+        disabled: true
+
+      # depguard linter is easier to configure and more powerful
+      # than revive.imports-blocklist
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#imports-blocklist
+      - name: imports-blocklist
+        disabled: true
+
+      # it's not really a problem for us in term of readability
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#nested-structs
+      - name: nested-structs
+        disabled: true
+
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#add-constant
+      # too noisy
+      - name: add-constant
+        disabled: true
+
+      # too many false positive on jqp code
+      - name: modifies-value-receiver
+        disabled: true
+
+      # disable everything we don't want
+      - name: line-length-limit
+        disabled: true
+      - name: argument-limit
+        disabled: true
+      - name: banned-characters
+        disabled: true
+      - name: max-public-structs
+        disabled: true
+      - name: function-result-limit
+        disabled: true
+      - name: function-length
+        disabled: true
+      - name: file-header
+        disabled: true
+      - name: empty-lines
+        disabled: true
+
+  misspell:
+    locale: "US" # Fix the colour => color, and co
+
+
+output:
+  # Make issues output unique by line.
+  # Default: true
+  # Note: unique in this case means that you can have at most 1 issue per line of code.
+  # one issue with a given line and we want to see them all at once.
+  uniq-by-line: false
