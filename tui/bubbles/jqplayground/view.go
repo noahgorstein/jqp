@@ -2,6 +2,7 @@ package jqplayground
 
 import (
 	"github.com/charmbracelet/lipgloss"
+
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 )
 

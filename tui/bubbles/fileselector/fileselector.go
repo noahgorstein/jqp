@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+
 	"github.com/noahgorstein/jqp/tui/theme"
 )
 
@@ -12,19 +13,17 @@ type Bubble struct {
 	textinput textinput.Model
 }
 
-func New(theme theme.Theme) Bubble {
-
+func New(jqtheme theme.Theme) Bubble {
 	s := DefaultStyles()
 	ti := textinput.New()
 	ti.Focus()
-	ti.PromptStyle = s.promptStyle.Foreground(theme.Secondary)
-	s.inputLabelStyle.Foreground(theme.Primary)
+	ti.PromptStyle = s.promptStyle.Foreground(jqtheme.Secondary)
+	s.inputLabelStyle.Foreground(jqtheme.Primary)
 
 	return Bubble{
 		Styles:    s,
 		textinput: ti,
 	}
-
 }
 
 func (b Bubble) GetInput() string {
@@ -35,7 +34,7 @@ func (b *Bubble) SetInput(input string) {
 	b.textinput.SetValue(input)
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return nil
 }
 
@@ -48,7 +47,6 @@ func (b Bubble) View() string {
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
-
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd

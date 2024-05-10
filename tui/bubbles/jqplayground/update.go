@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 )
 
@@ -34,7 +35,6 @@ func (b *Bubble) resizeBubbles() {
 }
 
 func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd

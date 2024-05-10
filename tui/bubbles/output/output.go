@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+
 	"github.com/noahgorstein/jqp/tui/theme"
 )
 
@@ -19,10 +20,10 @@ type Bubble struct {
 	width    int
 }
 
-func New(theme theme.Theme) Bubble {
+func New(jqtheme theme.Theme) Bubble {
 	styles := DefaultStyles()
-	styles.containerStyle = styles.containerStyle.BorderForeground(theme.Inactive)
-	styles.infoStyle = styles.infoStyle.BorderForeground(theme.Inactive)
+	styles.containerStyle = styles.containerStyle.BorderForeground(jqtheme.Inactive)
+	styles.infoStyle = styles.infoStyle.BorderForeground(jqtheme.Inactive)
 	v := viewport.New(1, 1)
 	b := Bubble{
 		Styles:   styles,
@@ -49,7 +50,6 @@ func (b *Bubble) SetSize(width, height int) {
 	b.viewport.Height = height - b.Styles.containerStyle.GetVerticalFrameSize() - 3
 
 	b.SetContent(b.content)
-
 }
 
 func (b *Bubble) GetContent() string {
@@ -75,7 +75,6 @@ func (b *Bubble) ScrollToTop() {
 }
 
 func (b Bubble) View() string {
-
 	scrollPercent := fmt.Sprintf("%3.f%%", b.viewport.ScrollPercent()*100)
 
 	info := b.Styles.infoStyle.Render(fmt.Sprintf("%s | %s", lipgloss.NewStyle().Italic(true).Render("output"), scrollPercent))
@@ -87,12 +86,11 @@ func (b Bubble) View() string {
 	return b.Styles.containerStyle.Render(content)
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return nil
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
-
 	var (
 		cmd  tea.Cmd
 		cmds []tea.Cmd

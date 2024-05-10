@@ -2,9 +2,11 @@ package queryinput
 
 import (
 	"container/list"
+
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+
 	"github.com/noahgorstein/jqp/tui/theme"
 )
 
@@ -17,15 +19,14 @@ type Bubble struct {
 	historySelected *list.Element
 }
 
-func New(theme theme.Theme) Bubble {
-
+func New(jqtheme theme.Theme) Bubble {
 	s := DefaultStyles()
-	s.containerStyle.BorderForeground(theme.Primary)
+	s.containerStyle.BorderForeground(jqtheme.Primary)
 	ti := textinput.New()
 	ti.Focus()
 	ti.PromptStyle.Height(1)
 	ti.TextStyle.Height(1)
-	ti.Prompt = lipgloss.NewStyle().Bold(true).Foreground(theme.Secondary).Render("jq > ")
+	ti.Prompt = lipgloss.NewStyle().Bold(true).Foreground(jqtheme.Secondary).Render("jq > ")
 
 	return Bubble{
 		Styles:    s,
@@ -52,7 +53,7 @@ func (b *Bubble) RotateHistory() {
 	}
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return textinput.Blink
 }
 
@@ -102,5 +103,4 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 	cmds = append(cmds, cmd)
 
 	return b, tea.Batch(cmds...)
-
 }

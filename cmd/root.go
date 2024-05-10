@@ -1,15 +1,17 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
 	"github.com/alecthomas/chroma/v2"
 	"github.com/charmbracelet/bubbletea"
-	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
-	"github.com/noahgorstein/jqp/tui/theme"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/noahgorstein/jqp/tui/bubbles/jqplayground"
+	"github.com/noahgorstein/jqp/tui/theme"
 )
 
 var rootCmd = &cobra.Command{
@@ -18,7 +20,7 @@ var rootCmd = &cobra.Command{
 	Short:        "jqp is a TUI to explore jq",
 	Long:         `jqp is a TUI to explore the jq command line utility`,
 	SilenceUsage: true,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cmd *cobra.Command, _ []string) error {
 		configTheme := viper.GetString(configKeysName.themeName)
 		if !cmd.Flags().Changed(flagsName.theme) {
 			flags.theme = configTheme
@@ -50,16 +52,23 @@ var rootCmd = &cobra.Command{
 		}
 
 		if isInputFromPipe() {
-			stdin := streamToBytes(os.Stdin)
-
-			_, isJsonLines, err := isValidInput(stdin)
+			stdin, err := streamToBytes(os.Stdin)
 			if err != nil {
 				return err
 			}
 
-			bubble := jqplayground.New(stdin, "STDIN", jqtheme, isJsonLines)
+			_, isJSONLines, err := isValidInput(stdin)
+			if err != nil {
+				return err
+			}
+
+			bubble, err := jqplayground.New(stdin, "STDIN", jqtheme, isJSONLines)
+			if err != nil {
+				return err
+			}
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
-			if err := p.Start(); err != nil {
+			_, err = p.Run()
+			if err != nil {
 				return err
 			}
 			return nil
@@ -78,7 +87,7 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		_, isJsonLines, err := isValidInput(data)
+		_, isJSONLines, err := isValidInput(data)
 		if err != nil {
 			return err
 		}
@@ -89,14 +98,17 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		bubble := jqplayground.New(data, fi.Name(), jqtheme, isJsonLines)
+		bubble, err := jqplayground.New(data, fi.Name(), jqtheme, isJSONLines)
+		if err != nil {
+			return err
+		}
 		p := tea.NewProgram(bubble, tea.WithAltScreen())
 
-		if err := p.Start(); err != nil {
+		_, err = p.Run()
+		if err != nil {
 			return err
 		}
 		return nil
-
 	},
 }
 
@@ -119,13 +131,14 @@ func initConfig() {
 	// register the config file
 	viper.SetConfigName(".jqp")
 
-	//only read from yaml files
+	// only read from yaml files
 	viper.SetConfigType("yaml")
 
 	// Try to read the default config file
 	if err := viper.ReadInConfig(); err != nil {
 		// Check if the error is due to the file not existing
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+		var errFileNotFound viper.ConfigFileNotFoundError
+		if !errors.As(err, &errFileNotFound) {
 			// For errors other than file not found, print the error message
 			fmt.Fprintf(os.Stderr, "Default config file %s was unable to be read: %v\n", viper.ConfigFileUsed(), err)
 		}
@@ -157,8 +170,7 @@ var configKeysName = struct {
 
 var cfgFile string
 
-func Execute() {
-
+func Execute() error {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "path to config file (default is $HOME/.jqp.yaml)")
@@ -175,7 +187,5 @@ func Execute() {
 		flagsName.themeShort,
 		"", "jqp theme")
 
-	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
-	}
+	return rootCmd.Execute()
 }

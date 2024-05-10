@@ -4,6 +4,7 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+
 	"github.com/noahgorstein/jqp/tui/theme"
 )
 
@@ -14,7 +15,7 @@ type Bubble struct {
 	statusMessageTimer    *time.Timer
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return nil
 }
 
@@ -24,7 +25,6 @@ func (b Bubble) View() string {
 
 func (b *Bubble) SetSize(width int) {
 	b.styles.containerStyle.Width(width)
-
 }
 
 func (b *Bubble) hideStatusMessage() {
@@ -44,13 +44,12 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 		b.SetSize(msg.Width)
 	}
 	return b, tea.Batch(cmd)
-
 }
 
-func New(theme theme.Theme) Bubble {
+func New(jqtheme theme.Theme) Bubble {
 	styles := defaultStyles()
-	styles.successMessageStyle = styles.successMessageStyle.Foreground(theme.Success)
-	styles.errorMessageStyle = styles.errorMessageStyle.Foreground(theme.Error)
+	styles.successMessageStyle = styles.successMessageStyle.Foreground(jqtheme.Success)
+	styles.errorMessageStyle = styles.errorMessageStyle.Foreground(jqtheme.Error)
 	b := Bubble{
 		styles: styles,
 	}
@@ -60,7 +59,6 @@ func New(theme theme.Theme) Bubble {
 type statusMessageTimeoutMsg struct{}
 
 func (b *Bubble) NewStatusMessage(s string, success bool) tea.Cmd {
-
 	if success {
 		b.statusMessage = b.styles.successMessageStyle.Render(s)
 	} else {

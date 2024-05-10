@@ -12,12 +12,9 @@ import (
 	"github.com/atotto/clipboard"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/itchyny/gojq"
-	utils "github.com/noahgorstein/jqp/tui/utils"
-)
 
-type successMsg struct {
-	message string
-}
+	"github.com/noahgorstein/jqp/tui/utils"
+)
 
 type errorMsg struct {
 	error error
@@ -49,7 +46,7 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 		}
 
 		processInput := func(data []byte) error {
-			var obj interface{}
+			var obj any
 			if err := json.Unmarshal(data, &obj); err != nil {
 				return err
 			}
@@ -72,8 +69,8 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 			return nil
 		}
 
-		if b.isJsonLines {
-			scanner := bufio.NewScanner(bytes.NewReader(b.inputdata.GetInputJson()))
+		if b.isJSONLines {
+			scanner := bufio.NewScanner(bytes.NewReader(b.inputdata.GetInputJSON()))
 			for scanner.Scan() {
 				line := scanner.Bytes()
 				if err := processInput(line); err != nil {
@@ -81,12 +78,15 @@ func (b *Bubble) executeQuery(ctx context.Context) tea.Cmd {
 				}
 			}
 		} else {
-			if err := processInput(b.inputdata.GetInputJson()); err != nil {
+			if err := processInput(b.inputdata.GetInputJSON()); err != nil {
 				return errorMsg{error: err}
 			}
 		}
 
-		highlightedOutput := utils.Prettify([]byte(results.String()), b.theme.ChromaStyle, true)
+		highlightedOutput, err := utils.Prettify([]byte(results.String()), b.theme.ChromaStyle, true)
+		if err != nil {
+			return errorMsg{error: err}
+		}
 		return queryResultMsg{
 			rawResults:         results.String(),
 			highlightedResults: highlightedOutput.String(),
@@ -115,7 +115,7 @@ func (b Bubble) copyOutputToClipboard() tea.Cmd {
 
 func (b Bubble) writeOutputToFile() tea.Cmd {
 	return func() tea.Msg {
-		err := os.WriteFile(b.fileselector.GetInput(), []byte(b.results), 0644)
+		err := os.WriteFile(b.fileselector.GetInput(), []byte(b.results), 0o644)
 		if err != nil {
 			return errorMsg{
 				error: err,

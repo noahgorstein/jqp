@@ -1,12 +1,12 @@
 package utils
 
 import (
-	"io"
-
 	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
 	"github.com/alecthomas/chroma/v2/lexers"
@@ -15,7 +15,7 @@ import (
 
 const FourSpaces = "    "
 
-func highlightJson(w io.Writer, source string, style *chroma.Style) error {
+func highlightJSON(w io.Writer, source string, style *chroma.Style) error {
 	l := lexers.Get("json")
 	if l == nil {
 		l = lexers.Fallback
@@ -38,12 +38,12 @@ func highlightJson(w io.Writer, source string, style *chroma.Style) error {
 	return f.Format(w, style, it)
 }
 
-func IsValidJson(input []byte) bool {
+func IsValidJSON(input []byte) bool {
 	var js json.RawMessage
 	return json.Unmarshal(input, &js) == nil
 }
 
-func IsValidJsonLines(input []byte) bool {
+func IsValidJSONLines(input []byte) bool {
 	if len(input) == 0 {
 		return false
 	}
@@ -52,40 +52,54 @@ func IsValidJsonLines(input []byte) bool {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
-		if !IsValidJson(scanner.Bytes()) {
+		if !IsValidJSON(scanner.Bytes()) {
 			return false
 		}
 	}
 	return true
 }
 
-func prettifyJson(input []byte, chromaStyle *chroma.Style) *bytes.Buffer {
-
+func prettifyJSON(input []byte, chromaStyle *chroma.Style) (*bytes.Buffer, error) {
 	var buf bytes.Buffer
-	if IsValidJson(input) {
-		json.Indent(&buf, []byte(input), "", FourSpaces)
+	if IsValidJSON(input) {
+		err := json.Indent(&buf, []byte(input), "", FourSpaces)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if buf.Len() == 0 {
-		highlightJson(&buf, string(input), chromaStyle)
-		return &buf
+		err := highlightJSON(&buf, string(input), chromaStyle)
+		if err != nil {
+			return nil, err
+		}
+		return &buf, nil
 	}
 	var highlightedBuf bytes.Buffer
-	highlightJson(&highlightedBuf, buf.String(), chromaStyle)
-	return &highlightedBuf
+	err := highlightJSON(&highlightedBuf, buf.String(), chromaStyle)
+	if err != nil {
+		return nil, err
+	}
+	return &highlightedBuf, nil
 }
 
-func Prettify(inputJson []byte, chromaStyle *chroma.Style, isJsonLines bool) *bytes.Buffer {
-	if isJsonLines {
-		var buf bytes.Buffer
-		reader := bytes.NewReader(inputJson)
-		scanner := bufio.NewScanner(reader)
-		scanner.Split(bufio.ScanLines)
-		for scanner.Scan() {
-			line := scanner.Bytes()
-			hightlighedLine := prettifyJson(line, chromaStyle)
-			buf.WriteString(fmt.Sprintf("%v\n", hightlighedLine))
-		}
-		return &buf
+func Prettify(inputJSON []byte, chromaStyle *chroma.Style, isJSONLines bool) (*bytes.Buffer, error) {
+	if !isJSONLines {
+		return prettifyJSON(inputJSON, chromaStyle)
 	}
-	return prettifyJson(inputJson, chromaStyle)
+	var buf bytes.Buffer
+	reader := bytes.NewReader(inputJSON)
+	scanner := bufio.NewScanner(reader)
+	scanner.Split(bufio.ScanLines)
+	for scanner.Scan() {
+		line := scanner.Bytes()
+		hightlighedLine, err := prettifyJSON(line, chromaStyle)
+		if err != nil {
+			return nil, err
+		}
+		_, err = buf.WriteString(fmt.Sprintf("%v\n", hightlighedLine))
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &buf, nil
 }
