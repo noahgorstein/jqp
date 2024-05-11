@@ -48,10 +48,10 @@ func getDefaultTheme() Theme {
 		Inactive:    GREY,
 		Success:     GREEN,
 		Error:       RED,
-		ChromaStyle: styles.ParaisoLight,
+		ChromaStyle: styles.Get("paradaiso-dark"),
 	}
 	if lipgloss.HasDarkBackground() {
-		theme.ChromaStyle = styles.Vim
+		theme.ChromaStyle = styles.Get("vim")
 	}
 	return theme
 }

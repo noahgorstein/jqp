@@ -14,9 +14,9 @@ import (
 // It takes a byte slice 'data' and returns two boolean values indicating
 // whether the data is valid JSON and valid JSON lines, along with an error
 // if the data is not valid in either format.
-func isValidInput(data []byte) (bool, bool, error) {
-	isValidJSON := utils.IsValidJSON(data)
-	isValidJSONLines := utils.IsValidJSONLines(data)
+func isValidInput(data []byte) (isValidJSON bool, isValidJSONLines bool, err error) {
+	isValidJSON = utils.IsValidJSON(data)
+	isValidJSONLines = utils.IsValidJSONLines(data)
 	if !isValidJSON && !isValidJSONLines {
 		return false, false, errors.New("Data is not valid JSON or LDJSON")
 	}

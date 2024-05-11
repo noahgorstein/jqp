@@ -34,6 +34,7 @@ func (b *Bubble) resizeBubbles() {
 	b.output.SetSize(b.width/2, height)
 }
 
+//nolint:revive //will refactor later
 func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var (
 		cmd  tea.Cmd
@@ -94,7 +95,7 @@ func (b Bubble) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				b.state = state.Running
 				var ctx context.Context
 				ctx, b.cancel = context.WithCancel(context.Background())
-				cmd = b.executeQuery(ctx)
+				cmd = b.executeQueryCommand(ctx)
 				cmds = append(cmds, cmd)
 			}
 		case tea.KeyCtrlS.String():

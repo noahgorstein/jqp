@@ -96,13 +96,6 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 		cmds []tea.Cmd
 	)
 
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.String() {
-		case "a":
-		}
-	}
-
 	b.viewport, cmd = b.viewport.Update(msg)
 	cmds = append(cmds, cmd)
 

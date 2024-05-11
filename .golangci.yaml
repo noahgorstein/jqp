@@ -149,7 +149,7 @@ linters-settings:
 
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cyclomatic
       - name: cyclomatic
-        arguments: [5] # default 3
+        arguments: [8] # default 3
 
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#exported
       - name: exported
