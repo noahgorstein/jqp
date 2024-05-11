@@ -67,9 +67,9 @@ func (b *Bubble) SetState(mode state.State) {
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 	var cmd tea.Cmd
 
-	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
+	if msg, ok := msg.(tea.WindowSizeMsg); ok {
 		b.SetWidth(msg.Width)
 	}
+
 	return b, tea.Batch(cmd)
 }

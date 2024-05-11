@@ -66,6 +66,7 @@ func (b Bubble) View() string {
 	return b.Styles.containerStyle.Render(b.textinput.View())
 }
 
+//nolint:revive //will refactor later
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 	if msg, ok := msg.(tea.KeyMsg); ok {
 		switch msg.Type {
