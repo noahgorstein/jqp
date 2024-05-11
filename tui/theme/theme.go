@@ -48,7 +48,7 @@ func getDefaultTheme() Theme {
 		Inactive:    GREY,
 		Success:     GREEN,
 		Error:       RED,
-		ChromaStyle: styles.Get("paradaiso-dark"),
+		ChromaStyle: styles.Get("paraiso-light"),
 	}
 	if lipgloss.HasDarkBackground() {
 		theme.ChromaStyle = styles.Get("vim")
@@ -337,21 +337,21 @@ var themeMap = map[string]Theme{
 		Error:       lipgloss.Color("#cd5555"),
 		ChromaStyle: styles.Get("perldoc"),
 	},
-	"paradaiso-dark": {
+	"paraiso-dark": {
 		Primary:     lipgloss.Color("#48b685"),
 		Secondary:   lipgloss.Color("#5bc4bf"),
 		Inactive:    GREY,
 		Success:     lipgloss.Color("#48b685"),
 		Error:       lipgloss.Color("#ef6155"),
-		ChromaStyle: styles.Get("paradaiso-dark"),
+		ChromaStyle: styles.Get("paraiso-dark"),
 	},
-	"paradaiso-light": {
+	"paraiso-light": {
 		Primary:     lipgloss.Color("#48b685"),
 		Secondary:   lipgloss.Color("#815ba4"),
 		Inactive:    GREY,
 		Success:     lipgloss.Color("#48b685"),
 		Error:       lipgloss.Color("#ef6155"),
-		ChromaStyle: styles.Get("paradaiso-light"),
+		ChromaStyle: styles.Get("paraiso-light"),
 	},
 	"pygments": {
 		Primary:     lipgloss.Color("#008000"),
