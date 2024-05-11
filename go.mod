@@ -10,7 +10,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/itchyny/gojq v0.12.15
 	github.com/muesli/termenv v0.15.2
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.13.0
 )
 
@@ -20,7 +20,7 @@ require (
 	github.com/dlclark/regexp2 v1.11.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/inconshreveable/mousetrap v1.0.1 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/itchyny/timefmt-go v0.1.5 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
