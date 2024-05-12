@@ -1,6 +1,6 @@
 module github.com/noahgorstein/jqp
 
-go 1.21
+go 1.22
 
 require (
 	github.com/alecthomas/chroma/v2 v2.13.0
