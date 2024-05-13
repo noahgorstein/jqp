@@ -84,14 +84,13 @@ func (b *Bubble) executeQueryOnInput(ctx context.Context) (string, error) {
 		return "", err
 	}
 
-	if !b.isJSONLines {
-		if err := processJSONWithQuery(ctx, &results, query, b.inputdata.GetInputJSON()); err != nil {
-			return "", err
-		}
-	} else {
-		if err := processJSONLinesWithQuery(ctx, &results, query, b.inputdata.GetInputJSON()); err != nil {
-			return "", err
-		}
+	processor := processJSONWithQuery
+
+	if b.isJSONLines {
+		processor = processJSONLinesWithQuery
+	}
+	if err := processor(ctx, &results, query, b.inputdata.GetInputJSON()); err != nil {
+		return "", err
 	}
 	return results.String(), nil
 

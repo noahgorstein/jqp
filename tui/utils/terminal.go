@@ -5,18 +5,17 @@ import (
 	"github.com/muesli/termenv"
 )
 
+var termenvChromaTerminal = map[termenv.Profile]string{
+	termenv.Ascii:     "terminal",
+	termenv.ANSI:      "terminal16",
+	termenv.ANSI256:   "terminal256",
+	termenv.TrueColor: "terminal16m",
+}
+
 // returns a string used for chroma syntax highlighting
 func getTerminalColorSupport() string {
-	switch lipgloss.ColorProfile() {
-	case termenv.Ascii:
-		return "terminal"
-	case termenv.ANSI:
-		return "terminal16"
-	case termenv.ANSI256:
-		return "terminal256"
-	case termenv.TrueColor:
-		return "terminal16m"
-	default:
-		return "terminal"
+	if chroma, ok := termenvChromaTerminal[lipgloss.ColorProfile()]; ok {
+		return chroma
 	}
+	return "terminal"
 }
