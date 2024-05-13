@@ -66,42 +66,55 @@ func (b Bubble) View() string {
 	return b.Styles.containerStyle.Render(b.textinput.View())
 }
 
-//nolint:revive //will refactor later
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
-	if msg, ok := msg.(tea.KeyMsg); ok {
-		switch msg.Type {
-		case tea.KeyUp:
-			if b.history.Len() == 0 {
-				break
-			}
-			n := b.historySelected.Next()
-			if n != nil {
-				b.textinput.SetValue(n.Value.(string))
-				b.textinput.CursorEnd()
-				b.historySelected = n
-			}
-		case tea.KeyDown:
-			if b.history.Len() == 0 {
-				break
-			}
-			p := b.historySelected.Prev()
-			if p != nil {
-				b.textinput.SetValue(p.Value.(string))
-				b.textinput.CursorEnd()
-				b.historySelected = p
-			}
-		case tea.KeyEnter:
-			b.RotateHistory()
-		}
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		return b.updateKeyMsg(msg)
+	default:
+		var cmd tea.Cmd
+		b.textinput, cmd = b.textinput.Update(msg)
+		return b, cmd
 	}
+}
 
-	var (
-		cmd  tea.Cmd
-		cmds []tea.Cmd
-	)
+func (b Bubble) updateKeyMsg(msg tea.KeyMsg) (Bubble, tea.Cmd) {
+	switch msg.Type {
+	case tea.KeyUp:
+		return b.handleKeyUp()
+	case tea.KeyDown:
+		return b.handleKeyDown()
+	case tea.KeyEnter:
+		b.RotateHistory()
+		return b, nil
+	default:
+		var cmd tea.Cmd
+		b.textinput, cmd = b.textinput.Update(msg)
+		return b, cmd
+	}
+}
 
-	b.textinput, cmd = b.textinput.Update(msg)
-	cmds = append(cmds, cmd)
+func (b Bubble) handleKeyUp() (Bubble, tea.Cmd) {
+	if b.history.Len() == 0 {
+		return b, nil
+	}
+	n := b.historySelected.Next()
+	if n != nil {
+		b.textinput.SetValue(n.Value.(string))
+		b.textinput.CursorEnd()
+		b.historySelected = n
+	}
+	return b, nil
+}
 
-	return b, tea.Batch(cmds...)
+func (b Bubble) handleKeyDown() (Bubble, tea.Cmd) {
+	if b.history.Len() == 0 {
+		return b, nil
+	}
+	p := b.historySelected.Prev()
+	if p != nil {
+		b.textinput.SetValue(p.Value.(string))
+		b.textinput.CursorEnd()
+		b.historySelected = p
+	}
+	return b, nil
 }

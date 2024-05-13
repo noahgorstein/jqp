@@ -59,23 +59,31 @@ func IsValidJSONLines(input []byte) bool {
 	return true
 }
 
-func prettifyJSON(input []byte, chromaStyle *chroma.Style) (*bytes.Buffer, error) {
-	var buf bytes.Buffer
-	if IsValidJSON(input) {
-		err := json.Indent(&buf, []byte(input), "", FourSpaces)
+func indentJSON(input *[]byte, output *bytes.Buffer) error {
+	if IsValidJSON(*input) {
+		err := json.Indent(output, []byte(*input), "", FourSpaces)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
-	if buf.Len() == 0 {
-		err := highlightJSON(&buf, string(input), chromaStyle)
+	return nil
+}
+
+func prettifyJSON(input []byte, chromaStyle *chroma.Style) (*bytes.Buffer, error) {
+	var indentedBuf bytes.Buffer
+	err := indentJSON(&input, &indentedBuf)
+	if err != nil {
+		return nil, err
+	}
+	if indentedBuf.Len() == 0 {
+		err := highlightJSON(&indentedBuf, string(input), chromaStyle)
 		if err != nil {
 			return nil, err
 		}
-		return &buf, nil
+		return &indentedBuf, nil
 	}
 	var highlightedBuf bytes.Buffer
-	err := highlightJSON(&highlightedBuf, buf.String(), chromaStyle)
+	err = highlightJSON(&highlightedBuf, indentedBuf.String(), chromaStyle)
 	if err != nil {
 		return nil, err
 	}
