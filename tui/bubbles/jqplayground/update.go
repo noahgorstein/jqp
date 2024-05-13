@@ -45,7 +45,7 @@ func (b *Bubble) resizeBubbles() {
 	b.output.SetSize(b.width/2, height)
 }
 
-//nolint:revive // don't see a more elegant way to handle this switch since types can't be keys in a map
+//nolint:revive // don't see a more elegant way to reduce complexity here since types can't be keys in a map
 func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
