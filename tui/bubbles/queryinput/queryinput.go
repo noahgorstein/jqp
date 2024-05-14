@@ -77,6 +77,10 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 	}
 }
 
+func (b *Bubble) SetQuery(query string) {
+	b.textinput.SetValue(query)
+}
+
 func (b Bubble) updateKeyMsg(msg tea.KeyMsg) (Bubble, tea.Cmd) {
 	switch msg.Type {
 	case tea.KeyUp:

@@ -5,5 +5,10 @@ import (
 )
 
 func (b Bubble) Init() tea.Cmd {
-	return b.queryinput.Init()
+	var cmds []tea.Cmd
+	if b.queryinput.GetInputValue() != "" {
+		b.executeQuery(&cmds)
+	}
+	cmds = append(cmds, b.queryinput.Init())
+	return tea.Batch(cmds...)
 }

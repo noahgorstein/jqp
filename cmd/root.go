@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/alecthomas/chroma/v2"
 	"github.com/charmbracelet/bubbletea"
@@ -15,12 +16,23 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Version:      "0.6.0",
-	Use:          "jqp",
-	Short:        "jqp is a TUI to explore jq",
-	Long:         `jqp is a TUI to explore the jq command line utility`,
+	Version: "0.6.0",
+	Use:     "jqp [query]",
+	Short:   "jqp is a TUI to explore jq",
+	Long: `jqp is a terminal user interface (TUI) for exploring the jq command line utility.
+	
+You can use it to run jq queries interactively. If no query is provided, the interface will prompt you for one.
+
+The command accepts an optional query argument which will be executed against the input JSON. 
+You can provide the input JSON either through a file or via standard input (stdin).`,
+	Args:         cobra.MaximumNArgs(1),
 	SilenceUsage: true,
-	RunE: func(cmd *cobra.Command, _ []string) error {
+	RunE: func(cmd *cobra.Command, args []string) error {
+		query := ""
+		if len(args) == 1 {
+			query = strings.TrimSpace(args[0])
+		}
+
 		configTheme := viper.GetString(configKeysName.themeName)
 		if !cmd.Flags().Changed(flagsName.theme) {
 			flags.theme = configTheme
@@ -62,7 +74,7 @@ var rootCmd = &cobra.Command{
 				return err
 			}
 
-			bubble, err := jqplayground.New(stdin, "STDIN", jqtheme, isJSONLines)
+			bubble, err := jqplayground.New(stdin, "STDIN", query, jqtheme, isJSONLines)
 			if err != nil {
 				return err
 			}
@@ -98,7 +110,7 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		bubble, err := jqplayground.New(data, fi.Name(), jqtheme, isJSONLines)
+		bubble, err := jqplayground.New(data, fi.Name(), query, jqtheme, isJSONLines)
 		if err != nil {
 			return err
 		}

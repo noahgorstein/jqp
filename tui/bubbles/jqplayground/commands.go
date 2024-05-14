@@ -74,7 +74,6 @@ func processJSONLinesWithQuery(ctx context.Context, results *strings.Builder, qu
 		}
 	}
 	return nil
-
 }
 
 func (b *Bubble) executeQueryOnInput(ctx context.Context) (string, error) {
@@ -93,7 +92,6 @@ func (b *Bubble) executeQueryOnInput(ctx context.Context) (string, error) {
 		return "", err
 	}
 	return results.String(), nil
-
 }
 
 func (b *Bubble) executeQueryCommand(ctx context.Context) tea.Cmd {
