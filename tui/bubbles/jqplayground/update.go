@@ -94,6 +94,7 @@ func (b *Bubble) handleErrorMsg(msg errorMsg, cmds *[]tea.Cmd) {
 	}
 	*cmds = append(*cmds, b.statusbar.NewStatusMessage(msg.error.Error(), false))
 }
+
 func (b *Bubble) handleWindowSizeMsg(msg tea.WindowSizeMsg) {
 	b.width = msg.Width
 	b.height = msg.Height
@@ -151,10 +152,19 @@ func (b *Bubble) handleShiftTab() {
 		}
 	}
 }
+
 func (b *Bubble) handleEsc() {
 	if b.state == state.Save {
 		b.state = state.Query
 	}
+}
+
+func (b *Bubble) executeQuery(cmds *[]tea.Cmd) {
+	b.queryinput.RotateHistory()
+	b.state = state.Running
+	var ctx context.Context
+	ctx, b.cancel = context.WithCancel(context.Background())
+	*cmds = append(*cmds, b.executeQueryCommand(ctx))
 }
 
 func (b *Bubble) handleEnter(cmds *[]tea.Cmd) {
@@ -162,11 +172,7 @@ func (b *Bubble) handleEnter(cmds *[]tea.Cmd) {
 		*cmds = append(*cmds, b.saveOutput())
 	}
 	if b.state == state.Query {
-		b.queryinput.RotateHistory()
-		b.state = state.Running
-		var ctx context.Context
-		ctx, b.cancel = context.WithCancel(context.Background())
-		*cmds = append(*cmds, b.executeQueryCommand(ctx))
+		b.executeQuery(cmds)
 	}
 }
 
@@ -179,6 +185,7 @@ func (b *Bubble) handleCtrlY(cmds *[]tea.Cmd) {
 		*cmds = append(*cmds, b.copyQueryToClipboard())
 	}
 }
+
 func (b *Bubble) updateState(prevState state.State, cmds *[]tea.Cmd) {
 	if b.state != prevState {
 		b.updateActiveComponent(cmds)
