@@ -1,0 +1,507 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "jqp settings",
+    "description": "jqp settings",
+    "type": "object",
+    "properties": {
+        "theme": {
+            "title": "theme",
+            "description": "A theme",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "name",
+                    "description": "A theme name",
+                    "type": "string",
+                    "minLength": 1,
+                    "enum": [
+                        "abap",
+                        "algol",
+                        "arduino",
+                        "autumn",
+                        "borland",
+                        "catppuccin-latte",
+                        "colorful",
+                        "emacs",
+                        "friendly",
+                        "github",
+                        "gruvbox-light",
+                        "hrdark",
+                        "igor",
+                        "lovelace",
+                        "manni",
+                        "monokai-light",
+                        "murphy",
+                        "onesenterprise",
+                        "paradaiso-light",
+                        "pastie",
+                        "perldoc",
+                        "pygments",
+                        "solarized-light",
+                        "tango",
+                        "trac",
+                        "visual_studio",
+                        "vulcan",
+                        "xcode",
+                        "average",
+                        "base16snazzy",
+                        "catppuccin-frappe",
+                        "catppuccin-macchiato",
+                        "catppuccin-mocha",
+                        "doom-one",
+                        "doom-one2",
+                        "dracula",
+                        "fruity",
+                        "github-dark",
+                        "gruvbox",
+                        "monokai",
+                        "native",
+                        "paradaiso-dark",
+                        "rrt",
+                        "solarized-dark",
+                        "solarized-dark256",
+                        "swapoff",
+                        "vim",
+                        "witchhazel",
+                        "xcode-dark"
+                    ]
+                },
+                "chromaStyleOverrides": {
+                    "title": "chroma style overrides",
+                    "description": "Chroma style overrides",
+                    "type": "object",
+                    "properties": {
+                        "bg": {
+                            "title": "bg",
+                            "description": "A property which corresponds to Background",
+                            "type": "string"
+                        },
+                        "chroma": {
+                            "title": "chroma",
+                            "description": "A property which corresponds to PreWrapper",
+                            "type": "string"
+                        },
+                        "line": {
+                            "title": "line",
+                            "description": "A property which corresponds to Line",
+                            "type": "string"
+                        },
+                        "ln": {
+                            "title": "ln",
+                            "description": "A property which corresponds to LineNumbers",
+                            "type": "string"
+                        },
+                        "lnt": {
+                            "title": "lnt",
+                            "description": "A property which corresponds to LineNumbersTable",
+                            "type": "string"
+                        },
+                        "hl": {
+                            "title": "hl",
+                            "description": "A property which corresponds to LineHighlight",
+                            "type": "string"
+                        },
+                        "lntable": {
+                            "title": "lntable",
+                            "description": "A property which corresponds to LineTable",
+                            "type": "string"
+                        },
+                        "lntd": {
+                            "title": "lntd",
+                            "description": "A property which corresponds to LineTableTD",
+                            "type": "string"
+                        },
+                        "cl": {
+                            "title": "cl",
+                            "description": "A property which corresponds to CodeLine",
+                            "type": "string"
+                        },
+                        "w": {
+                            "title": "w",
+                            "description": "A property which corresponds to Whitespace",
+                            "type": "string"
+                        },
+                        "err": {
+                            "title": "err",
+                            "description": "A property which corresponds to Error",
+                            "type": "string"
+                        },
+                        "x": {
+                            "title": "x",
+                            "description": "A property which corresponds to Other",
+                            "type": "string"
+                        },
+                        "k": {
+                            "title": "k",
+                            "description": "A property which corresponds to Keyword",
+                            "type": "string"
+                        },
+                        "kc": {
+                            "title": "kc",
+                            "description": "A property which corresponds to KeywordConstant",
+                            "type": "string"
+                        },
+                        "kd": {
+                            "title": "kd",
+                            "description": "A property which corresponds to KeywordDeclaration",
+                            "type": "string"
+                        },
+                        "kn": {
+                            "title": "kn",
+                            "description": "A property which corresponds to KeywordNamespace",
+                            "type": "string"
+                        },
+                        "kp": {
+                            "title": "kp",
+                            "description": "A property which corresponds to KeywordPseudo",
+                            "type": "string"
+                        },
+                        "kr": {
+                            "title": "kr",
+                            "description": "A property which corresponds to KeywordReserved",
+                            "type": "string"
+                        },
+                        "kt": {
+                            "title": "kt",
+                            "description": "A property which corresponds to KeywordType",
+                            "type": "string"
+                        },
+                        "n": {
+                            "title": "n",
+                            "description": "A property which corresponds to Name",
+                            "type": "string"
+                        },
+                        "na": {
+                            "title": "na",
+                            "description": "A property which corresponds to NameAttribute",
+                            "type": "string"
+                        },
+                        "nb": {
+                            "title": "nb",
+                            "description": "A property which corresponds to NameBuiltin",
+                            "type": "string"
+                        },
+                        "bp": {
+                            "title": "bp",
+                            "description": "A property which corresponds to NameBuiltinPseudo",
+                            "type": "string"
+                        },
+                        "nc": {
+                            "title": "nc",
+                            "description": "A property which corresponds to NameClass",
+                            "type": "string"
+                        },
+                        "no": {
+                            "title": "no",
+                            "description": "A property which corresponds to NameConstant",
+                            "type": "string"
+                        },
+                        "nd": {
+                            "title": "nd",
+                            "description": "A property which corresponds to NameDecorator",
+                            "type": "string"
+                        },
+                        "ni": {
+                            "title": "ni",
+                            "description": "A property which corresponds to NameEntity",
+                            "type": "string"
+                        },
+                        "ne": {
+                            "title": "ne",
+                            "description": "A property which corresponds to NameException",
+                            "type": "string"
+                        },
+                        "nf": {
+                            "title": "nf",
+                            "description": "A property which corresponds to NameFunction",
+                            "type": "string"
+                        },
+                        "fm": {
+                            "title": "fm",
+                            "description": "A property which corresponds to NameFunctionMagic",
+                            "type": "string"
+                        },
+                        "py": {
+                            "title": "py",
+                            "description": "A property which corresponds to NameProperty",
+                            "type": "string"
+                        },
+                        "nl": {
+                            "title": "nl",
+                            "description": "A property which corresponds to NameLabel",
+                            "type": "string"
+                        },
+                        "nn": {
+                            "title": "nn",
+                            "description": "A property which corresponds to NameNamespace",
+                            "type": "string"
+                        },
+                        "nx": {
+                            "title": "nx",
+                            "description": "A property which corresponds to NameOther",
+                            "type": "string"
+                        },
+                        "nt": {
+                            "title": "nt",
+                            "description": "A property which corresponds to NameTag",
+                            "type": "string"
+                        },
+                        "nv": {
+                            "title": "nv",
+                            "description": "A property which corresponds to NameVariable",
+                            "type": "string"
+                        },
+                        "vc": {
+                            "title": "vc",
+                            "description": "A property which corresponds to NameVariableClass",
+                            "type": "string"
+                        },
+                        "vg": {
+                            "title": "vg",
+                            "description": "A property which corresponds to NameVariableGlobal",
+                            "type": "string"
+                        },
+                        "vi": {
+                            "title": "vi",
+                            "description": "A property which corresponds to NameVariableInstance",
+                            "type": "string"
+                        },
+                        "vm": {
+                            "title": "vm",
+                            "description": "A property which corresponds to NameVariableMagic",
+                            "type": "string"
+                        },
+                        "l": {
+                            "title": "l",
+                            "description": "A property which corresponds to Literal",
+                            "type": "string"
+                        },
+                        "ld": {
+                            "title": "ld",
+                            "description": "A property which corresponds to LiteralDate",
+                            "type": "string"
+                        },
+                        "s": {
+                            "title": "s",
+                            "description": "A property which corresponds to String",
+                            "type": "string"
+                        },
+                        "sa": {
+                            "title": "sa",
+                            "description": "A property which corresponds to StringAffix",
+                            "type": "string"
+                        },
+                        "sb": {
+                            "title": "sb",
+                            "description": "A property which corresponds to StringBacktick",
+                            "type": "string"
+                        },
+                        "sc": {
+                            "title": "sc",
+                            "description": "A property which corresponds to StringChar",
+                            "type": "string"
+                        },
+                        "dl": {
+                            "title": "dl",
+                            "description": "A property which corresponds to StringDelimiter",
+                            "type": "string"
+                        },
+                        "sd": {
+                            "title": "sd",
+                            "description": "A property which corresponds to StringDoc",
+                            "type": "string"
+                        },
+                        "s2": {
+                            "title": "s2",
+                            "description": "A property which corresponds to StringDouble",
+                            "type": "string"
+                        },
+                        "se": {
+                            "title": "se",
+                            "description": "A property which corresponds to StringEscape",
+                            "type": "string"
+                        },
+                        "sh": {
+                            "title": "sh",
+                            "description": "A property which corresponds to StringHeredoc",
+                            "type": "string"
+                        },
+                        "si": {
+                            "title": "si",
+                            "description": "A property which corresponds to StringInterpol",
+                            "type": "string"
+                        },
+                        "sx": {
+                            "title": "sx",
+                            "description": "A property which corresponds to StringOther",
+                            "type": "string"
+                        },
+                        "sr": {
+                            "title": "sr",
+                            "description": "A property which corresponds to StringRegex",
+                            "type": "string"
+                        },
+                        "s1": {
+                            "title": "s1",
+                            "description": "A property which corresponds to StringSingle",
+                            "type": "string"
+                        },
+                        "ss": {
+                            "title": "ss",
+                            "description": "A property which corresponds to StringSymbol",
+                            "type": "string"
+                        },
+                        "m": {
+                            "title": "m",
+                            "description": "A property which corresponds to Number",
+                            "type": "string"
+                        },
+                        "mb": {
+                            "title": "mb",
+                            "description": "A property which corresponds to NumberBin",
+                            "type": "string"
+                        },
+                        "mf": {
+                            "title": "mf",
+                            "description": "A property which corresponds to NumberFloat",
+                            "type": "string"
+                        },
+                        "mh": {
+                            "title": "mh",
+                            "description": "A property which corresponds to NumberHex",
+                            "type": "string"
+                        },
+                        "mi": {
+                            "title": "mi",
+                            "description": "A property which corresponds to NumberInteger",
+                            "type": "string"
+                        },
+                        "il": {
+                            "title": "il",
+                            "description": "A property which corresponds to NumberIntegerLong",
+                            "type": "string"
+                        },
+                        "mo": {
+                            "title": "mo",
+                            "description": "A property which corresponds to NumberOct",
+                            "type": "string"
+                        },
+                        "o": {
+                            "title": "o",
+                            "description": "A property which corresponds to Operator",
+                            "type": "string"
+                        },
+                        "ow": {
+                            "title": "ow",
+                            "description": "A property which corresponds to OperatorWord",
+                            "type": "string"
+                        },
+                        "p": {
+                            "title": "p",
+                            "description": "A property which corresponds to Punctuation",
+                            "type": "string"
+                        },
+                        "c": {
+                            "title": "c",
+                            "description": "A property which corresponds to Comment",
+                            "type": "string"
+                        },
+                        "ch": {
+                            "title": "ch",
+                            "description": "A property which corresponds to CommentHashbang",
+                            "type": "string"
+                        },
+                        "cm": {
+                            "title": "cm",
+                            "description": "A property which corresponds to CommentMultiline",
+                            "type": "string"
+                        },
+                        "cp": {
+                            "title": "cp",
+                            "description": "A property which corresponds to CommentPreproc",
+                            "type": "string"
+                        },
+                        "cpf": {
+                            "title": "cpf",
+                            "description": "A property which corresponds to CommentPreprocFile",
+                            "type": "string"
+                        },
+                        "c1": {
+                            "title": "c1",
+                            "description": "A property which corresponds to CommentSingle",
+                            "type": "string"
+                        },
+                        "cs": {
+                            "title": "cs",
+                            "description": "A property which corresponds to CommentSpecial",
+                            "type": "string"
+                        },
+                        "g": {
+                            "title": "g",
+                            "description": "A property which corresponds to Generic",
+                            "type": "string"
+                        },
+                        "gd": {
+                            "title": "gd",
+                            "description": "A property which corresponds to GenericDeleted",
+                            "type": "string"
+                        },
+                        "ge": {
+                            "title": "ge",
+                            "description": "A property which corresponds to GenericEmph",
+                            "type": "string"
+                        },
+                        "gr": {
+                            "title": "gr",
+                            "description": "A property which corresponds to GenericError",
+                            "type": "string"
+                        },
+                        "gh": {
+                            "title": "gh",
+                            "description": "A property which corresponds to GenericHeading",
+                            "type": "string"
+                        },
+                        "gi": {
+                            "title": "gi",
+                            "description": "A property which corresponds to GenericInserted",
+                            "type": "string"
+                        },
+                        "go": {
+                            "title": "go",
+                            "description": "A property which corresponds to GenericOutput",
+                            "type": "string"
+                        },
+                        "gp": {
+                            "title": "gp",
+                            "description": "A property which corresponds to GenericPrompt",
+                            "type": "string"
+                        },
+                        "gs": {
+                            "title": "gs",
+                            "description": "A property which corresponds to GenericStrong",
+                            "type": "string"
+                        },
+                        "gu": {
+                            "title": "gu",
+                            "description": "A property which corresponds to GenericSubheading",
+                            "type": "string"
+                        },
+                        "gt": {
+                            "title": "gt",
+                            "description": "A property which corresponds to GenericTraceback",
+                            "type": "string"
+                        },
+                        "gl": {
+                            "title": "gl",
+                            "description": "A property which corresponds to GenericUnderline",
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}
