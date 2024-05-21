@@ -55,6 +55,10 @@ func (b Bubble) GetInputJSON() []byte {
 	return b.inputJSON
 }
 
+func (b Bubble) GetHighlightedInputJSON() []byte {
+	return b.highlightedJSON.Bytes()
+}
+
 func (b *Bubble) SetSize(width, height int) {
 	b.width = width
 	b.height = height
@@ -65,10 +69,6 @@ func (b *Bubble) SetSize(width, height int) {
 
 	b.viewport.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 3
 	b.viewport.Height = height - b.Styles.containerStyle.GetVerticalFrameSize() - 3
-
-	renderedJSON := lipgloss.NewStyle().Width(b.viewport.Width - 3).Render(b.highlightedJSON.String())
-
-	b.viewport.SetContent(renderedJSON)
 }
 
 func max(a, b int) int {
@@ -90,7 +90,12 @@ func (b Bubble) View() string {
 	return b.Styles.containerStyle.Render(content)
 }
 
-func (Bubble) Init() tea.Cmd {
+func (b *Bubble) SetContent(content string) {
+	formattedContent := lipgloss.NewStyle().Width(b.viewport.Width - 3).Render(content)
+	b.viewport.SetContent(formattedContent)
+}
+
+func (b Bubble) Init() tea.Cmd {
 	return nil
 }
 

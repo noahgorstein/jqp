@@ -9,6 +9,8 @@ func (b Bubble) Init() tea.Cmd {
 	if b.queryinput.GetInputValue() != "" {
 		b.executeQuery(&cmds)
 	}
-	cmds = append(cmds, b.queryinput.Init())
+
+	setInputDataContentCmd := b.setInputDataContentCommand(b.inputdata.GetHighlightedInputJSON())
+	cmds = append(cmds, b.queryinput.Init(), setInputDataContentCmd)
 	return tea.Batch(cmds...)
 }

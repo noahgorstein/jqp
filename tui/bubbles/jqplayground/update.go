@@ -52,6 +52,8 @@ func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 		b.handleWindowSizeMsg(msg)
 	case tea.KeyMsg:
 		b.handleKeyMsg(msg, cmds)
+	case setInputDataContentMsg:
+		b.handleSetInputDataContentMsg(msg)
 	case queryResultMsg:
 		b.handleQueryResultMsg(msg, cmds)
 	case writeToFileMsg:
@@ -63,6 +65,10 @@ func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 	case errorMsg:
 		b.handleErrorMsg(msg, cmds)
 	}
+}
+
+func (b *Bubble) handleSetInputDataContentMsg(msg setInputDataContentMsg) {
+	b.inputdata.SetContent(string(msg.content))
 }
 
 func (b *Bubble) handleQueryResultMsg(msg queryResultMsg, cmds *[]tea.Cmd) {

@@ -48,8 +48,6 @@ func (b *Bubble) SetSize(width, height int) {
 
 	b.viewport.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 3
 	b.viewport.Height = height - b.Styles.containerStyle.GetVerticalFrameSize() - 3
-
-	b.SetContent(b.content)
 }
 
 func (b *Bubble) GetContent() string {
