@@ -158,7 +158,7 @@ func (b Bubble) copyQueryToClipboard() tea.Cmd {
 	}
 }
 
-func (b Bubble) setInputDataContentCommand(content []byte) tea.Cmd {
+func (Bubble) setInputDataContentCommand(content []byte) tea.Cmd {
 
 	return func() tea.Msg {
 		return setInputDataContentMsg{

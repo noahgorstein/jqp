@@ -95,7 +95,7 @@ func (b *Bubble) SetContent(content string) {
 	b.viewport.SetContent(formattedContent)
 }
 
-func (b Bubble) Init() tea.Cmd {
+func (Bubble) Init() tea.Cmd {
 	return nil
 }
 
