@@ -65,7 +65,7 @@ func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 		b.handleErrorMsg(msg, cmds)
 	case InvalidInputMsg:
 		b.handleInvalidInput(cmds)
-	case inputdata.InputReadyMsg:
+	case inputdata.ReadyMsg:
 		b.state = state.Query
 	}
 }

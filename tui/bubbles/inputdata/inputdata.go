@@ -21,7 +21,6 @@ type Bubble struct {
 	inputJSON            []byte
 	highlightedJSON      *bytes.Buffer
 	filename             string
-	loading              bool
 	theme                theme.Theme
 	setInitialContentSub chan setPrettifiedContentMsg
 }
@@ -33,8 +32,8 @@ func New(inputJSON []byte, filename string, jqtheme theme.Theme) (Bubble, error)
 
 	v := viewport.New(0, 0)
 	v.SetContent("Loading...")
+
 	b := Bubble{
-		loading:              false,
 		styles:               styles,
 		viewport:             v,
 		inputJSON:            inputJSON,
@@ -94,28 +93,29 @@ func (b *Bubble) SetContent(content string) {
 	b.viewport.SetContent(formattedContent)
 }
 
-// InputReadyMsg signals that the inputdata Bubble has loaded the user's data
+// ReadyMsg signals that the inputdata Bubble has loaded the user's data
 // into the viewport
-type InputReadyMsg struct{}
+type ReadyMsg struct{}
 
+// setPrettifiedContentMsg contains the input data prettified
 type setPrettifiedContentMsg struct {
 	Content *bytes.Buffer
 }
 
-// setPrettifiedContentCmd sends the initial formatted JSON content to the provided channel once.
+// prettifyContentCmd sends the initial prettified content to the provided channel.
 //
-// Prettifying the JSON can be an expensive operation, so it is performed here and
-// sent through the channel to ensure the formatted data is available without blocking other operations.
-func (b Bubble) setInitialContentCmd(sub chan setPrettifiedContentMsg, isJSONLines bool) tea.Cmd {
+// Prettifying the input data can be an expensive operation particularly for large inputs, so it is performed here and
+// sent through the channel to ensure the prettified data is available without blocking other operations.
+func (b Bubble) prettifyContentCmd(sub chan setPrettifiedContentMsg, isJSONLines bool) tea.Cmd {
 	return func() tea.Msg {
-		highlightedJSON, _ := utils.Prettify(b.inputJSON, b.theme.ChromaStyle, isJSONLines)
-		sub <- setPrettifiedContentMsg{Content: highlightedJSON}
+		prettifiedData, _ := utils.Prettify(b.inputJSON, b.theme.ChromaStyle, isJSONLines)
+		sub <- setPrettifiedContentMsg{Content: prettifiedData}
 		return nil
 	}
 }
 
-// A command that waits for the prettified content on a channel.
-func waitForInitialContentReady(sub chan setPrettifiedContentMsg) tea.Cmd {
+// A command that waits for a setPrettifiedContentMsg on a channel.
+func waitForPrettifiedContent(sub chan setPrettifiedContentMsg) tea.Cmd {
 	return func() tea.Msg {
 		return setPrettifiedContentMsg(<-sub)
 	}
@@ -123,8 +123,8 @@ func waitForInitialContentReady(sub chan setPrettifiedContentMsg) tea.Cmd {
 
 func (b Bubble) Init(isJSONLines bool) tea.Cmd {
 	return tea.Batch(
-		b.setInitialContentCmd(b.setInitialContentSub, isJSONLines),
-		waitForInitialContentReady(b.setInitialContentSub))
+		b.prettifyContentCmd(b.setInitialContentSub, isJSONLines),
+		waitForPrettifiedContent(b.setInitialContentSub))
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
@@ -136,9 +136,8 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 	if msg, ok := msg.(setPrettifiedContentMsg); ok {
 		b.highlightedJSON = msg.Content
 		b.SetContent(msg.Content.String())
-		b.loading = false
 		return b, func() tea.Msg {
-			return InputReadyMsg{}
+			return ReadyMsg{}
 		}
 	}
 
