@@ -8,4 +8,5 @@ const (
 	Input
 	Output
 	Save
+	Loading
 )
