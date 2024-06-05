@@ -14,41 +14,39 @@ import (
 )
 
 type Bubble struct {
-	Styles          Styles
-	viewport        viewport.Model
-	height          int
-	width           int
-	inputJSON       []byte
-	highlightedJSON *bytes.Buffer
-	filename        string
-	isJSONLines     bool
+	styles               Styles
+	viewport             viewport.Model
+	height               int
+	width                int
+	inputJSON            []byte
+	highlightedJSON      *bytes.Buffer
+	filename             string
+	theme                theme.Theme
+	setInitialContentSub chan setPrettifiedContentMsg
 }
 
-func New(inputJSON []byte, filename string, jqtheme theme.Theme, isJSONLines bool) (Bubble, error) {
+func New(inputJSON []byte, filename string, jqtheme theme.Theme) (Bubble, error) {
 	styles := DefaultStyles()
 	styles.containerStyle = styles.containerStyle.BorderForeground(jqtheme.Inactive)
 	styles.infoStyle = styles.infoStyle.BorderForeground(jqtheme.Inactive)
 
-	highlightedJSON, err := utils.Prettify(inputJSON, jqtheme.ChromaStyle, isJSONLines)
-	if err != nil {
-		return Bubble{}, err
-	}
-
 	v := viewport.New(0, 0)
+	v.SetContent("Loading...")
+
 	b := Bubble{
-		Styles:          styles,
-		viewport:        v,
-		inputJSON:       inputJSON,
-		highlightedJSON: highlightedJSON,
-		filename:        filename,
-		isJSONLines:     isJSONLines,
+		styles:               styles,
+		viewport:             v,
+		inputJSON:            inputJSON,
+		filename:             filename,
+		theme:                jqtheme,
+		setInitialContentSub: make(chan setPrettifiedContentMsg),
 	}
 	return b, nil
 }
 
 func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
-	b.Styles.containerStyle.BorderForeground(color)
-	b.Styles.infoStyle.BorderForeground(color)
+	b.styles.containerStyle.BorderForeground(color)
+	b.styles.infoStyle.BorderForeground(color)
 }
 
 func (b Bubble) GetInputJSON() []byte {
@@ -63,12 +61,12 @@ func (b *Bubble) SetSize(width, height int) {
 	b.width = width
 	b.height = height
 
-	b.Styles.containerStyle.
-		Width(width - b.Styles.containerStyle.GetHorizontalFrameSize()/2).
-		Height(height - b.Styles.containerStyle.GetVerticalFrameSize())
+	b.styles.containerStyle.
+		Width(width - b.styles.containerStyle.GetHorizontalFrameSize()/2).
+		Height(height - b.styles.containerStyle.GetVerticalFrameSize())
 
-	b.viewport.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 3
-	b.viewport.Height = height - b.Styles.containerStyle.GetVerticalFrameSize() - 3
+	b.viewport.Width = width - b.styles.containerStyle.GetHorizontalFrameSize() - 3
+	b.viewport.Height = height - b.styles.containerStyle.GetVerticalFrameSize() - 3
 }
 
 func max(a, b int) int {
@@ -81,13 +79,13 @@ func max(a, b int) int {
 func (b Bubble) View() string {
 	scrollPercent := fmt.Sprintf("%3.f%%", b.viewport.ScrollPercent()*100)
 
-	info := b.Styles.infoStyle.Render(fmt.Sprintf("%s | %s", lipgloss.NewStyle().Italic(true).Render(b.filename), scrollPercent))
+	info := b.styles.infoStyle.Render(fmt.Sprintf("%s | %s", lipgloss.NewStyle().Italic(true).Render(b.filename), scrollPercent))
 	line := strings.Repeat(" ", max(0, b.viewport.Width-lipgloss.Width(info)))
 
 	footer := lipgloss.JoinHorizontal(lipgloss.Center, line, info)
 	content := lipgloss.JoinVertical(lipgloss.Left, b.viewport.View(), footer)
 
-	return b.Styles.containerStyle.Render(content)
+	return b.styles.containerStyle.Render(content)
 }
 
 func (b *Bubble) SetContent(content string) {
@@ -95,8 +93,38 @@ func (b *Bubble) SetContent(content string) {
 	b.viewport.SetContent(formattedContent)
 }
 
-func (Bubble) Init() tea.Cmd {
-	return nil
+// ReadyMsg signals that the inputdata Bubble has loaded the user's data
+// into the viewport
+type ReadyMsg struct{}
+
+// setPrettifiedContentMsg contains the input data prettified
+type setPrettifiedContentMsg struct {
+	Content *bytes.Buffer
+}
+
+// prettifyContentCmd sends the initial prettified content to the provided channel.
+//
+// Prettifying the input data can be an expensive operation particularly for large inputs, so it is performed here and
+// sent through the channel to ensure the prettified data is available without blocking other operations.
+func (b Bubble) prettifyContentCmd(sub chan setPrettifiedContentMsg, isJSONLines bool) tea.Cmd {
+	return func() tea.Msg {
+		prettifiedData, _ := utils.Prettify(b.inputJSON, b.theme.ChromaStyle, isJSONLines)
+		sub <- setPrettifiedContentMsg{Content: prettifiedData}
+		return nil
+	}
+}
+
+// A command that waits for a setPrettifiedContentMsg on a channel.
+func waitForPrettifiedContent(sub chan setPrettifiedContentMsg) tea.Cmd {
+	return func() tea.Msg {
+		return setPrettifiedContentMsg(<-sub)
+	}
+}
+
+func (b Bubble) Init(isJSONLines bool) tea.Cmd {
+	return tea.Batch(
+		b.prettifyContentCmd(b.setInitialContentSub, isJSONLines),
+		waitForPrettifiedContent(b.setInitialContentSub))
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
@@ -104,6 +132,14 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 		cmd  tea.Cmd
 		cmds []tea.Cmd
 	)
+
+	if msg, ok := msg.(setPrettifiedContentMsg); ok {
+		b.highlightedJSON = msg.Content
+		b.SetContent(msg.Content.String())
+		return b, func() tea.Msg {
+			return ReadyMsg{}
+		}
+	}
 
 	b.viewport, cmd = b.viewport.Update(msg)
 	cmds = append(cmds, cmd)

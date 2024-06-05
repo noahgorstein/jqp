@@ -8,6 +8,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
+	"github.com/noahgorstein/jqp/tui/bubbles/inputdata"
 	"github.com/noahgorstein/jqp/tui/bubbles/state"
 )
 
@@ -52,8 +53,6 @@ func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 		b.handleWindowSizeMsg(msg)
 	case tea.KeyMsg:
 		b.handleKeyMsg(msg, cmds)
-	case setInputDataContentMsg:
-		b.handleSetInputDataContentMsg(msg)
 	case queryResultMsg:
 		b.handleQueryResultMsg(msg, cmds)
 	case writeToFileMsg:
@@ -64,11 +63,11 @@ func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 		b.handleCopyQueryToClipboardMsg(cmds)
 	case errorMsg:
 		b.handleErrorMsg(msg, cmds)
+	case InvalidInputMsg:
+		b.handleInvalidInput(cmds)
+	case inputdata.ReadyMsg:
+		b.state = state.Query
 	}
-}
-
-func (b *Bubble) handleSetInputDataContentMsg(msg setInputDataContentMsg) {
-	b.inputdata.SetContent(string(msg.content))
 }
 
 func (b *Bubble) handleQueryResultMsg(msg queryResultMsg, cmds *[]tea.Cmd) {
@@ -120,6 +119,11 @@ func (b *Bubble) handleKeyMsg(msg tea.KeyMsg, cmds *[]tea.Cmd) {
 	if handler, ok := keyHandlers[msg.Type]; ok {
 		handler()
 	}
+}
+
+func (b *Bubble) handleInvalidInput(cmds *[]tea.Cmd) {
+	b.ExitMessage = "Data is not valid JSON or NDJSON"
+	*cmds = append(*cmds, tea.Quit)
 }
 
 func (b *Bubble) handleCtrlC(cmds *[]tea.Cmd) {
@@ -226,19 +230,32 @@ func (b *Bubble) setComponentBorderColors(query, input, output lipgloss.Color) {
 
 func (b *Bubble) updateComponents(msg tea.Msg, cmds *[]tea.Cmd) {
 	var cmd tea.Cmd
-	switch b.state {
-	case state.Query:
-		b.queryinput, cmd = b.queryinput.Update(msg)
-		*cmds = append(*cmds, cmd)
-	case state.Input:
-		b.inputdata, cmd = b.inputdata.Update(msg)
-		*cmds = append(*cmds, cmd)
-	case state.Output:
-		b.output, cmd = b.output.Update(msg)
-		*cmds = append(*cmds, cmd)
-	case state.Save:
-		b.fileselector, cmd = b.fileselector.Update(msg)
-		*cmds = append(*cmds, cmd)
+	dispatch := map[state.State]func(msg tea.Msg, cmds *[]tea.Cmd){
+		state.Query: func(msg tea.Msg, cmds *[]tea.Cmd) {
+			b.queryinput, cmd = b.queryinput.Update(msg)
+			*cmds = append(*cmds, cmd)
+
+		},
+		state.Input: func(msg tea.Msg, cmds *[]tea.Cmd) {
+			b.inputdata, cmd = b.inputdata.Update(msg)
+			*cmds = append(*cmds, cmd)
+		},
+		state.Output: func(msg tea.Msg, cmds *[]tea.Cmd) {
+			b.output, cmd = b.output.Update(msg)
+			*cmds = append(*cmds, cmd)
+		},
+		state.Save: func(msg tea.Msg, cmds *[]tea.Cmd) {
+			b.fileselector, cmd = b.fileselector.Update(msg)
+			*cmds = append(*cmds, cmd)
+		},
+		state.Loading: func(msg tea.Msg, cmds *[]tea.Cmd) {
+			b.inputdata, cmd = b.inputdata.Update(msg)
+			*cmds = append(*cmds, cmd)
+		},
+	}
+
+	if updateFunc, ok := dispatch[b.state]; ok {
+		updateFunc(msg, cmds)
 	}
 
 	b.statusbar, cmd = b.statusbar.Update(msg)
@@ -246,4 +263,5 @@ func (b *Bubble) updateComponents(msg tea.Msg, cmds *[]tea.Cmd) {
 
 	b.help, cmd = b.help.Update(msg)
 	*cmds = append(*cmds, cmd)
+
 }

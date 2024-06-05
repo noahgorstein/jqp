@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 
@@ -14,6 +15,19 @@ import (
 )
 
 const FourSpaces = "    "
+
+// IsValidInput checks the validity of input data as JSON or JSON lines.
+// It takes a byte slice 'data' and returns two boolean values indicating
+// whether the data is valid JSON and valid JSON lines, along with an error
+// if the data is not valid in either format.
+func IsValidInput(data []byte) (isValidJSON bool, isValidJSONLines bool, err error) {
+	isValidJSON = IsValidJSON(data)
+	isValidJSONLines = IsValidJSONLines(data)
+	if !isValidJSON && !isValidJSONLines {
+		return false, false, errors.New("Data is not valid JSON or NDJSON")
+	}
+	return isValidJSON, isValidJSONLines, nil
+}
 
 func highlightJSON(w io.Writer, source string, style *chroma.Style) error {
 	l := lexers.Get("json")

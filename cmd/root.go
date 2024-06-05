@@ -68,20 +68,17 @@ You can provide the input JSON either through a file or via standard input (stdi
 			if err != nil {
 				return err
 			}
-
-			_, isJSONLines, err := isValidInput(stdin)
-			if err != nil {
-				return err
-			}
-
-			bubble, err := jqplayground.New(stdin, "STDIN", query, jqtheme, isJSONLines)
+			bubble, err := jqplayground.New(stdin, "STDIN", query, jqtheme)
 			if err != nil {
 				return err
 			}
 			p := tea.NewProgram(bubble, tea.WithAltScreen())
-			_, err = p.Run()
+			m, err := p.Run()
 			if err != nil {
 				return err
+			}
+			if m, ok := m.(jqplayground.Bubble); ok && m.ExitMessage != "" {
+				return errors.New(m.ExitMessage)
 			}
 			return nil
 		}
@@ -99,26 +96,24 @@ You can provide the input JSON either through a file or via standard input (stdi
 			return err
 		}
 
-		_, isJSONLines, err := isValidInput(data)
-		if err != nil {
-			return err
-		}
-
 		// get file info so we can get the filename
 		fi, err := os.Stat(flags.filepath)
 		if err != nil {
 			return err
 		}
 
-		bubble, err := jqplayground.New(data, fi.Name(), query, jqtheme, isJSONLines)
+		bubble, err := jqplayground.New(data, fi.Name(), query, jqtheme)
 		if err != nil {
 			return err
 		}
 		p := tea.NewProgram(bubble, tea.WithAltScreen())
 
-		_, err = p.Run()
+		m, err := p.Run()
 		if err != nil {
 			return err
+		}
+		if m, ok := m.(jqplayground.Bubble); ok && m.ExitMessage != "" {
+			return errors.New(m.ExitMessage)
 		}
 		return nil
 	},

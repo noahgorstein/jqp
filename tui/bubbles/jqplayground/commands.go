@@ -31,10 +31,6 @@ type copyQueryToClipboardMsg struct{}
 
 type copyResultsToClipboardMsg struct{}
 
-type setInputDataContentMsg struct {
-	content []byte
-}
-
 // processQueryResults iterates through the results of a gojq query on the provided JSON object
 // and appends the formatted results to the provided string builder.
 func processQueryResults(ctx context.Context, results *strings.Builder, query *gojq.Query, obj any) error {
@@ -155,14 +151,5 @@ func (b Bubble) copyQueryToClipboard() tea.Cmd {
 			}
 		}
 		return copyQueryToClipboardMsg{}
-	}
-}
-
-func (Bubble) setInputDataContentCommand(content []byte) tea.Cmd {
-
-	return func() tea.Msg {
-		return setInputDataContentMsg{
-			content: content,
-		}
 	}
 }
