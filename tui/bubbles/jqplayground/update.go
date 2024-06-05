@@ -49,10 +49,14 @@ func (b *Bubble) resizeBubbles() {
 //nolint:revive // don't see a more elegant way to reduce complexity here since types can't be keys in a map
 func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 	switch msg := msg.(type) {
+	case setupMsg:
+		b.isJSONLines = msg.isJSONLines
 	case tea.WindowSizeMsg:
 		b.handleWindowSizeMsg(msg)
 	case tea.KeyMsg:
 		b.handleKeyMsg(msg, cmds)
+	case initialQueryMsg:
+		b.executeQuery(cmds)
 	case queryResultMsg:
 		b.handleQueryResultMsg(msg, cmds)
 	case writeToFileMsg:
@@ -63,7 +67,7 @@ func (b *Bubble) handleMessage(msg tea.Msg, cmds *[]tea.Cmd) {
 		b.handleCopyQueryToClipboardMsg(cmds)
 	case errorMsg:
 		b.handleErrorMsg(msg, cmds)
-	case InvalidInputMsg:
+	case invalidInputMsg:
 		b.handleInvalidInput(cmds)
 	case inputdata.ReadyMsg:
 		b.state = state.Query
