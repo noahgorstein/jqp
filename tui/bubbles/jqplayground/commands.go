@@ -1,8 +1,6 @@
 package jqplayground
 
 import (
-	"bufio"
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -66,14 +64,13 @@ func processJSONWithQuery(ctx context.Context, results *strings.Builder, query *
 }
 
 func processJSONLinesWithQuery(ctx context.Context, results *strings.Builder, query *gojq.Query, data []byte) error {
-	scanner := bufio.NewScanner(bytes.NewReader(data))
-	for scanner.Scan() {
-		line := scanner.Bytes()
-		if err := processJSONWithQuery(ctx, results, query, line); err != nil {
-			return err
-		}
+	const maxBufferSize = 100 * 1024 * 1024 // 100MB max buffer size
+
+	processLine := func(line []byte) error {
+		return processJSONWithQuery(ctx, results, query, line)
 	}
-	return nil
+
+	return utils.ScanLinesWithDynamicBufferSize(data, maxBufferSize, processLine)
 }
 
 func (b *Bubble) executeQueryOnInput(ctx context.Context) (string, error) {

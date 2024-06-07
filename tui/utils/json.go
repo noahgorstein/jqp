@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -21,11 +20,19 @@ const FourSpaces = "    "
 // whether the data is valid JSON and valid JSON lines, along with an error
 // if the data is not valid in either format.
 func IsValidInput(data []byte) (isValidJSON bool, isValidJSONLines bool, err error) {
-	isValidJSON = IsValidJSON(data)
-	isValidJSONLines = IsValidJSONLines(data)
-	if !isValidJSON && !isValidJSONLines {
-		return false, false, errors.New("Data is not valid JSON or NDJSON")
+	if len(data) == 0 {
+		err = errors.New("Data is not valid JSON or NDJSON")
+		return false, false, err
 	}
+
+	isValidJSON = IsValidJSON(data) == nil
+	isValidJSONLines = IsValidJSONLines(data) == nil
+
+	if !isValidJSON && !isValidJSONLines {
+		err = errors.New("Data is not valid JSON or NDJSON")
+		return false, false, err
+	}
+
 	return isValidJSON, isValidJSONLines, nil
 }
 
@@ -52,33 +59,28 @@ func highlightJSON(w io.Writer, source string, style *chroma.Style) error {
 	return f.Format(w, style, it)
 }
 
-func IsValidJSON(input []byte) bool {
+func IsValidJSON(input []byte) error {
 	var js json.RawMessage
-	return json.Unmarshal(input, &js) == nil
+	return json.Unmarshal(input, &js)
 }
 
-func IsValidJSONLines(input []byte) bool {
-	if len(input) == 0 {
-		return false
+func IsValidJSONLines(input []byte) error {
+	maxBufferSize := 10 * 1024 * 1024 // 10MB
+	err := ScanLinesWithDynamicBufferSize(input, maxBufferSize, IsValidJSON)
+	if err != nil {
+		return err
 	}
-
-	reader := bytes.NewReader(input)
-	scanner := bufio.NewScanner(reader)
-	scanner.Split(bufio.ScanLines)
-	for scanner.Scan() {
-		if !IsValidJSON(scanner.Bytes()) {
-			return false
-		}
-	}
-	return true
+	return nil
 }
 
 func indentJSON(input *[]byte, output *bytes.Buffer) error {
-	if IsValidJSON(*input) {
-		err := json.Indent(output, []byte(*input), "", FourSpaces)
-		if err != nil {
-			return err
-		}
+	err := IsValidJSON(*input)
+	if err != nil {
+		return nil
+	}
+	err = json.Indent(output, []byte(*input), "", FourSpaces)
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -108,20 +110,24 @@ func Prettify(inputJSON []byte, chromaStyle *chroma.Style, isJSONLines bool) (*b
 	if !isJSONLines {
 		return prettifyJSON(inputJSON, chromaStyle)
 	}
+
 	var buf bytes.Buffer
-	reader := bytes.NewReader(inputJSON)
-	scanner := bufio.NewScanner(reader)
-	scanner.Split(bufio.ScanLines)
-	for scanner.Scan() {
-		line := scanner.Bytes()
+	processLine := func(line []byte) error {
 		hightlighedLine, err := prettifyJSON(line, chromaStyle)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		_, err = buf.WriteString(fmt.Sprintf("%v\n", hightlighedLine))
 		if err != nil {
-			return nil, err
+			return err
 		}
+		return nil
+	}
+
+	const maxBufferSize = 100 * 1024 * 1024 // 100MB max buffer size
+	err := ScanLinesWithDynamicBufferSize(inputJSON, maxBufferSize, processLine)
+	if err != nil {
+		return nil, err
 	}
 	return &buf, nil
 }
