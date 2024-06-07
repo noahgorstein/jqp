@@ -42,7 +42,7 @@ func (b *Bubble) SetSize(width, height int) {
 	b.width = width
 	b.height = height
 
-	b.Styles.containerStyle.
+	b.Styles.containerStyle = b.Styles.containerStyle.
 		Width(width - b.Styles.containerStyle.GetHorizontalFrameSize()/2).
 		Height(height - b.Styles.containerStyle.GetVerticalFrameSize())
 
