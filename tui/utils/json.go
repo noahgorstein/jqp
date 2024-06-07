@@ -65,7 +65,7 @@ func IsValidJSON(input []byte) error {
 }
 
 func IsValidJSONLines(input []byte) error {
-	maxBufferSize := 10 * 1024 * 1024 // 10MB
+	maxBufferSize := 100 * 1024 * 1024 // 100MB
 	err := ScanLinesWithDynamicBufferSize(input, maxBufferSize, IsValidJSON)
 	if err != nil {
 		return err
