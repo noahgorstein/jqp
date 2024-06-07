@@ -38,7 +38,7 @@ func New(jqtheme theme.Theme) Bubble {
 }
 
 func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
-	b.Styles.containerStyle.BorderForeground(color)
+	b.Styles.containerStyle = b.Styles.containerStyle.BorderForeground(color)
 }
 
 func (b Bubble) GetInputValue() string {
@@ -58,7 +58,7 @@ func (Bubble) Init() tea.Cmd {
 }
 
 func (b *Bubble) SetWidth(width int) {
-	b.Styles.containerStyle.Width(width - b.Styles.containerStyle.GetHorizontalFrameSize())
+	b.Styles.containerStyle = b.Styles.containerStyle.Width(width - b.Styles.containerStyle.GetHorizontalFrameSize())
 	b.textinput.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 1
 }
 
