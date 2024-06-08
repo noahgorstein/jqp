@@ -1,0 +1,552 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "override": {
+            "type": "string",
+            "examples": [
+                "#000000",
+                "#FF0000",
+                "#00FF00",
+                "#0000FF",
+                "#FFFF00",
+                "#FF00FF",
+                "#00FFFF",
+                "#FFFFFF",
+                "bold",
+                "underline",
+                "italic",
+                "bold #000000",
+                "bold #FF0000",
+                "bold #00FF00",
+                "bold #0000FF",
+                "bold #FFFF00",
+                "bold #FF00FF",
+                "bold #00FFFF",
+                "bold #FFFFFF",
+                "italic #000000",
+                "italic #FF0000",
+                "italic #00FF00",
+                "italic #0000FF",
+                "italic #FFFF00",
+                "italic #FF00FF",
+                "italic #00FFFF",
+                "italic #FFFFFF",
+                "underline #000000",
+                "underline #FF0000",
+                "underline #00FF00",
+                "underline #0000FF",
+                "underline #FFFF00",
+                "underline #FF00FF",
+                "underline #00FFFF",
+                "underline #FFFFFF"
+            ]
+        }
+    },
+    "title": "jqp settings",
+    "description": "jqp settings\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#configuration",
+    "type": "object",
+    "properties": {
+        "theme": {
+            "title": "theme",
+            "description": "A theme\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#themes",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "name",
+                    "description": "A theme name\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#themes",
+                    "type": "string",
+                    "minLength": 1,
+                    "enum": [
+                        "abap",
+                        "algol",
+                        "arduino",
+                        "autumn",
+                        "borland",
+                        "catppuccin-latte",
+                        "colorful",
+                        "emacs",
+                        "friendly",
+                        "github",
+                        "gruvbox-light",
+                        "hrdark",
+                        "igor",
+                        "lovelace",
+                        "manni",
+                        "monokai-light",
+                        "murphy",
+                        "onesenterprise",
+                        "paradaiso-light",
+                        "pastie",
+                        "perldoc",
+                        "pygments",
+                        "solarized-light",
+                        "tango",
+                        "trac",
+                        "visual_studio",
+                        "vulcan",
+                        "xcode",
+                        "average",
+                        "base16snazzy",
+                        "catppuccin-frappe",
+                        "catppuccin-macchiato",
+                        "catppuccin-mocha",
+                        "doom-one",
+                        "doom-one2",
+                        "dracula",
+                        "fruity",
+                        "github-dark",
+                        "gruvbox",
+                        "monokai",
+                        "native",
+                        "paradaiso-dark",
+                        "rrt",
+                        "solarized-dark",
+                        "solarized-dark256",
+                        "swapoff",
+                        "vim",
+                        "witchhazel",
+                        "xcode-dark"
+                    ]
+                },
+                "chromaStyleOverrides": {
+                    "title": "chroma style overrides",
+                    "description": "Chroma style overrides\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                    "type": "object",
+                    "properties": {
+                        "bg": {
+                            "title": "bg",
+                            "description": "A property which corresponds to Background\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "chroma": {
+                            "title": "chroma",
+                            "description": "A property which corresponds to PreWrapper\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "line": {
+                            "title": "line",
+                            "description": "A property which corresponds to Line\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ln": {
+                            "title": "ln",
+                            "description": "A property which corresponds to LineNumbers\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "lnt": {
+                            "title": "lnt",
+                            "description": "A property which corresponds to LineNumbersTable\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "hl": {
+                            "title": "hl",
+                            "description": "A property which corresponds to LineHighlight\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "lntable": {
+                            "title": "lntable",
+                            "description": "A property which corresponds to LineTable\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "lntd": {
+                            "title": "lntd",
+                            "description": "A property which corresponds to LineTableTD\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "cl": {
+                            "title": "cl",
+                            "description": "A property which corresponds to CodeLine\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "w": {
+                            "title": "w",
+                            "description": "A property which corresponds to Whitespace\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "err": {
+                            "title": "err",
+                            "description": "A property which corresponds to Error\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "x": {
+                            "title": "x",
+                            "description": "A property which corresponds to Other\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "k": {
+                            "title": "k",
+                            "description": "A property which corresponds to Keyword\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "kc": {
+                            "title": "kc",
+                            "description": "A property which corresponds to KeywordConstant\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "kd": {
+                            "title": "kd",
+                            "description": "A property which corresponds to KeywordDeclaration\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "kn": {
+                            "title": "kn",
+                            "description": "A property which corresponds to KeywordNamespace\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "kp": {
+                            "title": "kp",
+                            "description": "A property which corresponds to KeywordPseudo\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "kr": {
+                            "title": "kr",
+                            "description": "A property which corresponds to KeywordReserved\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "kt": {
+                            "title": "kt",
+                            "description": "A property which corresponds to KeywordType\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "n": {
+                            "title": "n",
+                            "description": "A property which corresponds to Name\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "na": {
+                            "title": "na",
+                            "description": "A property which corresponds to NameAttribute\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nb": {
+                            "title": "nb",
+                            "description": "A property which corresponds to NameBuiltin\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "bp": {
+                            "title": "bp",
+                            "description": "A property which corresponds to NameBuiltinPseudo\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nc": {
+                            "title": "nc",
+                            "description": "A property which corresponds to NameClass\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "no": {
+                            "title": "no",
+                            "description": "A property which corresponds to NameConstant\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nd": {
+                            "title": "nd",
+                            "description": "A property which corresponds to NameDecorator\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ni": {
+                            "title": "ni",
+                            "description": "A property which corresponds to NameEntity\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ne": {
+                            "title": "ne",
+                            "description": "A property which corresponds to NameException\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nf": {
+                            "title": "nf",
+                            "description": "A property which corresponds to NameFunction\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "fm": {
+                            "title": "fm",
+                            "description": "A property which corresponds to NameFunctionMagic\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "py": {
+                            "title": "py",
+                            "description": "A property which corresponds to NameProperty\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nl": {
+                            "title": "nl",
+                            "description": "A property which corresponds to NameLabel\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nn": {
+                            "title": "nn",
+                            "description": "A property which corresponds to NameNamespace\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nx": {
+                            "title": "nx",
+                            "description": "A property which corresponds to NameOther\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nt": {
+                            "title": "nt",
+                            "description": "A property which corresponds to NameTag\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "nv": {
+                            "title": "nv",
+                            "description": "A property which corresponds to NameVariable\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "vc": {
+                            "title": "vc",
+                            "description": "A property which corresponds to NameVariableClass\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "vg": {
+                            "title": "vg",
+                            "description": "A property which corresponds to NameVariableGlobal\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "vi": {
+                            "title": "vi",
+                            "description": "A property which corresponds to NameVariableInstance\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "vm": {
+                            "title": "vm",
+                            "description": "A property which corresponds to NameVariableMagic\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "l": {
+                            "title": "l",
+                            "description": "A property which corresponds to Literal\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ld": {
+                            "title": "ld",
+                            "description": "A property which corresponds to LiteralDate\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "s": {
+                            "title": "s",
+                            "description": "A property which corresponds to String\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "sa": {
+                            "title": "sa",
+                            "description": "A property which corresponds to StringAffix\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "sb": {
+                            "title": "sb",
+                            "description": "A property which corresponds to StringBacktick\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "sc": {
+                            "title": "sc",
+                            "description": "A property which corresponds to StringChar\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "dl": {
+                            "title": "dl",
+                            "description": "A property which corresponds to StringDelimiter\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "sd": {
+                            "title": "sd",
+                            "description": "A property which corresponds to StringDoc\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "s2": {
+                            "title": "s2",
+                            "description": "A property which corresponds to StringDouble\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "se": {
+                            "title": "se",
+                            "description": "A property which corresponds to StringEscape\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "sh": {
+                            "title": "sh",
+                            "description": "A property which corresponds to StringHeredoc\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "si": {
+                            "title": "si",
+                            "description": "A property which corresponds to StringInterpol\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "sx": {
+                            "title": "sx",
+                            "description": "A property which corresponds to StringOther\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "sr": {
+                            "title": "sr",
+                            "description": "A property which corresponds to StringRegex\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "s1": {
+                            "title": "s1",
+                            "description": "A property which corresponds to StringSingle\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ss": {
+                            "title": "ss",
+                            "description": "A property which corresponds to StringSymbol\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "m": {
+                            "title": "m",
+                            "description": "A property which corresponds to Number\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "mb": {
+                            "title": "mb",
+                            "description": "A property which corresponds to NumberBin\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "mf": {
+                            "title": "mf",
+                            "description": "A property which corresponds to NumberFloat\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "mh": {
+                            "title": "mh",
+                            "description": "A property which corresponds to NumberHex\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "mi": {
+                            "title": "mi",
+                            "description": "A property which corresponds to NumberInteger\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "il": {
+                            "title": "il",
+                            "description": "A property which corresponds to NumberIntegerLong\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "mo": {
+                            "title": "mo",
+                            "description": "A property which corresponds to NumberOct\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "o": {
+                            "title": "o",
+                            "description": "A property which corresponds to Operator\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ow": {
+                            "title": "ow",
+                            "description": "A property which corresponds to OperatorWord\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "p": {
+                            "title": "p",
+                            "description": "A property which corresponds to Punctuation\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "c": {
+                            "title": "c",
+                            "description": "A property which corresponds to Comment\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ch": {
+                            "title": "ch",
+                            "description": "A property which corresponds to CommentHashbang\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "cm": {
+                            "title": "cm",
+                            "description": "A property which corresponds to CommentMultiline\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "cp": {
+                            "title": "cp",
+                            "description": "A property which corresponds to CommentPreproc\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "cpf": {
+                            "title": "cpf",
+                            "description": "A property which corresponds to CommentPreprocFile\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "c1": {
+                            "title": "c1",
+                            "description": "A property which corresponds to CommentSingle\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "cs": {
+                            "title": "cs",
+                            "description": "A property which corresponds to CommentSpecial\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "g": {
+                            "title": "g",
+                            "description": "A property which corresponds to Generic\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gd": {
+                            "title": "gd",
+                            "description": "A property which corresponds to GenericDeleted\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "ge": {
+                            "title": "ge",
+                            "description": "A property which corresponds to GenericEmph\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gr": {
+                            "title": "gr",
+                            "description": "A property which corresponds to GenericError\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gh": {
+                            "title": "gh",
+                            "description": "A property which corresponds to GenericHeading\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gi": {
+                            "title": "gi",
+                            "description": "A property which corresponds to GenericInserted\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "go": {
+                            "title": "go",
+                            "description": "A property which corresponds to GenericOutput\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gp": {
+                            "title": "gp",
+                            "description": "A property which corresponds to GenericPrompt\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gs": {
+                            "title": "gs",
+                            "description": "A property which corresponds to GenericStrong\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gu": {
+                            "title": "gu",
+                            "description": "A property which corresponds to GenericSubheading\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gt": {
+                            "title": "gt",
+                            "description": "A property which corresponds to GenericTraceback\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        },
+                        "gl": {
+                            "title": "gl",
+                            "description": "A property which corresponds to GenericUnderline\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#chroma-style-overrides",
+                            "$ref": "#/definitions/override"
+                        }
+                    },
+                    "minProperties": 1,
+                    "additionalProperties": false
+                }
+            },
+            "minProperties": 1,
+            "additionalProperties": false
+        }
+    },
+    "minProperties": 1,
+    "additionalProperties": false
+}
