@@ -59,6 +59,5 @@ func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
 }
 
 func (b Bubble) SetSize(width int) {
-	b.Styles.containerStyle.
-		Width(width - b.Styles.containerStyle.GetHorizontalFrameSize())
+	b.Styles.containerStyle = b.Styles.containerStyle.Width(width - b.Styles.containerStyle.GetHorizontalFrameSize())
 }

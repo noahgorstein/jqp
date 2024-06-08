@@ -24,7 +24,7 @@ func (b Bubble) View() string {
 }
 
 func (b *Bubble) SetSize(width int) {
-	b.styles.containerStyle.Width(width)
+	b.styles.containerStyle = b.styles.containerStyle.Width(width)
 }
 
 func (b *Bubble) hideStatusMessage() {

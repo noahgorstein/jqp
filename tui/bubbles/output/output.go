@@ -34,19 +34,19 @@ func New(jqtheme theme.Theme) Bubble {
 }
 
 func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
-	b.Styles.containerStyle.BorderForeground(color)
-	b.Styles.infoStyle.BorderForeground(color)
+	b.Styles.containerStyle = b.Styles.containerStyle.BorderForeground(color)
+	b.Styles.infoStyle = b.Styles.infoStyle.BorderForeground(color)
 }
 
 func (b *Bubble) SetSize(width, height int) {
 	b.width = width
 	b.height = height
 
-	b.Styles.containerStyle.
+	b.Styles.containerStyle = b.Styles.containerStyle.
 		Width(width - b.Styles.containerStyle.GetHorizontalFrameSize()/2).
 		Height(height - b.Styles.containerStyle.GetVerticalFrameSize())
 
-	b.viewport.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 3
+	b.viewport.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize()
 	b.viewport.Height = height - b.Styles.containerStyle.GetVerticalFrameSize() - 3
 }
 

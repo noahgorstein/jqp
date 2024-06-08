@@ -49,7 +49,7 @@ func (b Bubble) collectHelpBindings() []key.Binding {
 }
 
 func (b *Bubble) SetWidth(width int) {
-	b.Styles.helpbarStyle.Width(width - 1)
+	b.Styles.helpbarStyle = b.Styles.helpbarStyle.Width(width - 1)
 }
 
 func (Bubble) Init() tea.Cmd {

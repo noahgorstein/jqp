@@ -45,8 +45,8 @@ func New(inputJSON []byte, filename string, jqtheme theme.Theme) (Bubble, error)
 }
 
 func (b *Bubble) SetBorderColor(color lipgloss.TerminalColor) {
-	b.styles.containerStyle.BorderForeground(color)
-	b.styles.infoStyle.BorderForeground(color)
+	b.styles.containerStyle = b.styles.containerStyle.BorderForeground(color)
+	b.styles.infoStyle = b.styles.infoStyle.BorderForeground(color)
 }
 
 func (b Bubble) GetInputJSON() []byte {
@@ -61,11 +61,11 @@ func (b *Bubble) SetSize(width, height int) {
 	b.width = width
 	b.height = height
 
-	b.styles.containerStyle.
+	b.styles.containerStyle = b.styles.containerStyle.
 		Width(width - b.styles.containerStyle.GetHorizontalFrameSize()/2).
 		Height(height - b.styles.containerStyle.GetVerticalFrameSize())
 
-	b.viewport.Width = width - b.styles.containerStyle.GetHorizontalFrameSize() - 3
+	b.viewport.Width = width - b.styles.containerStyle.GetHorizontalFrameSize()
 	b.viewport.Height = height - b.styles.containerStyle.GetVerticalFrameSize() - 3
 }
 
