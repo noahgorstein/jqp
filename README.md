@@ -38,23 +38,28 @@ Clone this repository, build from source with `cd jqp && go build`, then move th
 
 ```
 ➜ jqp --help
-jqp is a TUI to explore the jq command line utility
+jqp is a terminal user interface (TUI) for exploring the jq command line utility.
+
+You can use it to run jq queries interactively. If no query is provided, the interface will prompt you for one.
+
+The command accepts an optional query argument which will be executed against the input JSON or newline-delimited JSON (NDJSON).
+You can provide the input JSON or NDJSON either through a file or via standard input (stdin).
 
 Usage:
-  jqp [flags]
+  jqp [query] [flags]
 
 Flags:
-      --config string   config file (default is $HOME/.jqp.yaml)
+      --config string   path to config file (default is $HOME/.jqp.yaml)
   -f, --file string     path to the input JSON file
   -h, --help            help for jqp
   -t, --theme string    jqp theme
   -v, --version         version for jqp
 ```
 
-`jqp` also supports input from STDIN. STDIN takes precedence over the command-line flag.
+`jqp` also supports input from STDIN. STDIN takes precedence over the command-line flag. Additionally, you can pass an optional query argument to jqp that it will execute upon loading.
 
 ```
-➜ curl "https://api.github.com/repos/stedolan/jq/issues?per_page=2" | jqp
+➜ curl "https://api.github.com/repos/jqlang/jq/issues" | jqp '.[] | {"title": .title, "url": .url}'
 ```
 
 > [!NOTE]
@@ -170,7 +175,7 @@ Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes
 - `monokai-light`
 - `murphy`
 - `onesenterprise`
-- `paradaiso-light`
+- `paraiso-light`
 - `pastie`
 - `perldoc`
 - `pygments`
@@ -196,7 +201,7 @@ Themes are broken up into [light](#light-themes) and [dark](#dark-themes) themes
 - `gruvbox`
 - `monokai`
 - `native`
-- `paradaiso-dark`
+- `paraiso-dark`
 - `rrt`
 - `solarized-dark`
 - `solarized-dark256`
