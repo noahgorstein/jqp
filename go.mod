@@ -10,7 +10,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.11.0
 	github.com/itchyny/gojq v0.12.16
 	github.com/muesli/termenv v0.15.2
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 )
 
