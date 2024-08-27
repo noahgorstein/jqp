@@ -1,0 +1,48 @@
+name: jqp
+adopt-info: jqp
+summary: jqp is a TUI for exploring the jq command line utility
+description: |
+  jqp is a terminal user interface (TUI) for exploring the jq command line utility.
+
+  You can use it to run jq queries interactively. If no query is provided, the interface will prompt
+  you for one.
+
+  The command accepts an optional query argument which will be executed against the input JSON or
+  newline-delimited JSON (NDJSON).
+  
+  You can provide the input JSON or NDJSON either through a file or via standard input (stdin).
+
+  Usage:
+    jqp [query] [flags]
+
+  Flags:
+    --config string   path to config file (default is $HOME/.jqp.yaml)
+    -f, --file string     path to the input JSON file
+    -h, --help            help for jqp
+    -t, --theme string    jqp theme
+    -v, --version         version for jqp
+    
+license: MIT
+
+base: core24
+grade: stable 
+confinement: strict
+compression: lzo
+
+apps:
+  jqp:
+    command: bin/jqp
+    plugs:
+      - home
+
+parts:
+  jqp:
+    source: https://github.com/noahgorstein/jqp
+    source-type: git
+    plugin: go
+    build-snaps:
+      - go
+      
+    override-pull: |
+      craftctl default
+      craftctl set version="$(git describe --tags | sed 's/^v//' | cut -d "-" -f1)" 
