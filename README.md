@@ -26,7 +26,7 @@ Available through the Arch User Repository as [jqp-bin](https://aur.archlinux.or
 yay -S jqp-bin
 ```
 
-### Snap intall
+### Snap install
 <a href="https://snapcraft.io/jqp"><img src="https://snapcraft.io/jqp/badge.svg" alt="Snap Status"></a>
 
 ```
