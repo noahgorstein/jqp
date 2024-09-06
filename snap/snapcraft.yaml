@@ -26,12 +26,30 @@ license: MIT
 issues: https://github.com/kz6fittycent/jqp
 contact: https://github.com/kz6fittycent/jqp
 source-code: https://github.com/noahgorstein/jqp
+category: utility
 
 base: core24
 grade: stable 
 confinement: strict
 compression: lzo
 
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
+  armhf:
+    build-on: [armhf]
+    build-for: [armhf]
+  ppc64el:
+    build-on: [ppc64el]
+    build-for: [ppc64el]
+  s390x:
+    build-on: [s390x]
+    build-for: [s390x]
+    
 apps:
   jqp:
     command: bin/jqp
