@@ -23,6 +23,9 @@ description: |
     -v, --version         version for jqp
     
 license: MIT
+website: https://github.com/noahgorstein/jqp
+issues: https://github.com/kz6fittycent/jqp
+contact: https://github.com/kz6fittycent/jqp
 
 base: core24
 grade: stable 
