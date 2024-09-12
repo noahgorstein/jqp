@@ -26,6 +26,13 @@ Available through the Arch User Repository as [jqp-bin](https://aur.archlinux.or
 yay -S jqp-bin
 ```
 
+### Snap install
+<a href="https://snapcraft.io/jqp"><img src="https://snapcraft.io/jqp/badge.svg" alt="Snap Status"></a>
+
+```
+sudo snap install jqp
+```
+
 ### GitHub releases
 
 Download the relevant asset for your operating system from the latest GitHub release. Unpack it, then move the binary to somewhere accessible in your `PATH`, e.g. `mv ./jqp /usr/local/bin`.
