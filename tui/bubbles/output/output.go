@@ -61,13 +61,6 @@ func (b *Bubble) SetContent(content string) {
 	b.viewport.SetContent(wrappedContent)
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func (b *Bubble) ScrollToTop() {
 	b.viewport.GotoTop()
 }
