@@ -1,6 +1,7 @@
 package jqplayground
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -52,7 +53,9 @@ func processQueryResults(ctx context.Context, results *strings.Builder, query *g
 
 func processJSONWithQuery(ctx context.Context, results *strings.Builder, query *gojq.Query, data []byte) error {
 	var obj any
-	if err := json.Unmarshal(data, &obj); err != nil {
+	d := json.NewDecoder(bytes.NewReader(data))
+	d.UseNumber()
+	if err := d.Decode(&obj); err != nil {
 		return err
 	}
 	err := processQueryResults(ctx, results, query, obj)
