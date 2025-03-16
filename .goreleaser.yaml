@@ -1,3 +1,4 @@
+version: 2
 project_name: "jqp"
 
 before:
@@ -22,7 +23,7 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
@@ -32,7 +33,7 @@ changelog:
 brews:
   - homepage: https://github.com/noahgorstein/jqp
     description: "a TUI playground to experiment and play with jq"
-    folder: Formula
+    directory: Formula
     repository:
       owner: noahgorstein
       name: homebrew-tap
