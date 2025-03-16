@@ -69,13 +69,6 @@ func (b *Bubble) SetSize(width, height int) {
 	b.viewport.Height = height - b.styles.containerStyle.GetVerticalFrameSize() - 3
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func (b Bubble) View() string {
 	scrollPercent := fmt.Sprintf("%3.f%%", b.viewport.ScrollPercent()*100)
 
