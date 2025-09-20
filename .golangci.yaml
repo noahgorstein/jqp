@@ -90,6 +90,8 @@ linters:
           disabled: true
         - name: empty-lines
           disabled: true
+        - name: var-naming
+          disabled: true
     staticcheck:
       checks:
         - all
