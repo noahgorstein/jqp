@@ -45,7 +45,7 @@ func processQueryResults(ctx context.Context, results *strings.Builder, query *g
 		}
 
 		if r, err := gojq.Marshal(v); err == nil {
-			results.WriteString(fmt.Sprintf("%s\n", string(r)))
+			fmt.Fprintf(results, "%s\n", string(r))
 		}
 	}
 	return nil

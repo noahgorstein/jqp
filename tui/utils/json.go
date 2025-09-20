@@ -21,7 +21,7 @@ const FourSpaces = "    "
 // if the data is not valid in either format.
 func IsValidInput(data []byte) (isValidJSON bool, isValidJSONLines bool, err error) {
 	if len(data) == 0 {
-		err = errors.New("Data is not valid JSON or NDJSON")
+		err = errors.New("data is not valid JSON or NDJSON")
 		return false, false, err
 	}
 
@@ -29,7 +29,7 @@ func IsValidInput(data []byte) (isValidJSON bool, isValidJSONLines bool, err err
 	isValidJSONLines = IsValidJSONLines(data) == nil
 
 	if !isValidJSON && !isValidJSONLines {
-		err = errors.New("Data is not valid JSON or NDJSON")
+		err = errors.New("data is not valid JSON or NDJSON")
 		return false, false, err
 	}
 

@@ -31,6 +31,7 @@ func New(jqtheme theme.Theme) Bubble {
 	}
 }
 
+//nolint:revive // switch statement complexity is acceptable here
 func (b Bubble) collectHelpBindings() []key.Binding {
 	k := b.keys
 	bindings := []key.Binding{}
@@ -43,6 +44,8 @@ func (b Bubble) collectHelpBindings() []key.Binding {
 		bindings = append(bindings, k.section, k.navigate, k.page, k.copyQuery, k.save)
 	case state.Save:
 		bindings = append(bindings, k.back)
+	default:
+		// No additional bindings for unknown states
 	}
 
 	return bindings
