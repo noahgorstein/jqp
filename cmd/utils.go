@@ -32,7 +32,7 @@ func getFile() (*os.File, error) {
 	}
 	file, e := os.Open(flags.filepath)
 	if e != nil {
-		return nil, fmt.Errorf("Unable to open file: %w", e)
+		return nil, fmt.Errorf("unable to open file: %w", e)
 	}
 	return file, nil
 }

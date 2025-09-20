@@ -141,6 +141,7 @@ func (b *Bubble) handleCtrlC(cmds *[]tea.Cmd) {
 	b.state = state.Query
 }
 
+//nolint:revive // switch statement complexity is acceptable here
 func (b *Bubble) handleTab() {
 	if b.state != state.Save {
 		switch b.state {
@@ -150,10 +151,13 @@ func (b *Bubble) handleTab() {
 			b.state = state.Output
 		case state.Output:
 			b.state = state.Query
+		default:
+			// No state change for unknown states
 		}
 	}
 }
 
+//nolint:revive // switch statement complexity is acceptable here
 func (b *Bubble) handleShiftTab() {
 	if b.state != state.Save {
 		switch b.state {
@@ -163,6 +167,8 @@ func (b *Bubble) handleShiftTab() {
 			b.state = state.Query
 		case state.Output:
 			b.state = state.Input
+		default:
+			// No state change for unknown states
 		}
 	}
 }
@@ -212,6 +218,7 @@ func (b *Bubble) updateState(prevState state.State, cmds *[]tea.Cmd) {
 	}
 }
 
+//nolint:revive // switch statement complexity is acceptable here
 func (b *Bubble) updateActiveComponent(cmds *[]tea.Cmd) {
 	switch b.state {
 	case state.Query:
@@ -223,6 +230,8 @@ func (b *Bubble) updateActiveComponent(cmds *[]tea.Cmd) {
 		b.setComponentBorderColors(b.theme.Inactive, b.theme.Inactive, b.theme.Primary)
 	case state.Save:
 		b.setComponentBorderColors(b.theme.Inactive, b.theme.Inactive, b.theme.Inactive)
+	default:
+		// No component border changes for unknown states
 	}
 }
 
