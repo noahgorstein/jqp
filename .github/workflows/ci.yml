@@ -11,12 +11,12 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: ["1.22.x"]
+        go-version: ["1.23.x"]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Install Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
 
