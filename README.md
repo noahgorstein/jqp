@@ -11,7 +11,7 @@ This application utilizes [itchyny's](https://github.com/itchyny) implementation
 ### homebrew
 
 ```bash
-brew install noahgorstein/tap/jqp
+brew install jqp
 ```
 
 ### macports
