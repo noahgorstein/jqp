@@ -30,18 +30,3 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
-brews:
-  - homepage: https://github.com/noahgorstein/jqp
-    description: "a TUI playground to experiment and play with jq"
-    directory: Formula
-    repository:
-      owner: noahgorstein
-      name: homebrew-tap
-      branch: main
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    commit_author:
-      name: goreleaserbot
-      email: bot@goreleaser.com
-    license: "MIT"
-    install: |
-      bin.install "jqp"
