@@ -49,9 +49,6 @@ func (b *Bubble) resizeBubbles() {
 	} else {
 		b.output.SetSize(b.width, height)
 	}
-
-	// Re-render the output content to reflow text for the new dimensions
-	b.output.SetContent(b.output.GetContent())
 }
 
 //nolint:revive // don't see a more elegant way to reduce complexity here since types can't be keys in a map
@@ -116,6 +113,8 @@ func (b *Bubble) handleWindowSizeMsg(msg tea.WindowSizeMsg) {
 	b.width = msg.Width
 	b.height = msg.Height
 	b.resizeBubbles()
+	// Re-render the output content to reflow text for the new window dimensions
+	b.output.SetContent(b.output.GetContent())
 }
 
 func (b *Bubble) handleKeyMsg(msg tea.KeyMsg, cmds *[]tea.Cmd) {
@@ -253,6 +252,8 @@ func (b *Bubble) handleCtrlT() {
 	}
 	b.help.SetInputPanelVisibility(b.showInputPanel)
 	b.resizeBubbles()
+	// Re-render the output content to reflow text for the new panel width
+	b.output.SetContent(b.output.GetContent())
 }
 
 func (b *Bubble) updateState(prevState state.State, cmds *[]tea.Cmd) {
