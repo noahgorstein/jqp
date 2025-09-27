@@ -34,6 +34,7 @@ type Bubble struct {
 	theme            theme.Theme
 	ExitMessage      string
 	isJSONLines      bool
+	showInputPanel   bool
 }
 
 func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme) (Bubble, error) {
@@ -67,6 +68,7 @@ func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme) (
 		statusbar:        sb,
 		fileselector:     fs,
 		theme:            jqtheme,
+		showInputPanel:   true,
 	}
 	return b, nil
 }

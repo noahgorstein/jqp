@@ -42,8 +42,13 @@ func (b *Bubble) resizeBubbles() {
 	} else {
 		height -= totalHeight(b.help, b.queryinput, b.statusbar)
 	}
-	b.inputdata.SetSize(b.width/2, height)
-	b.output.SetSize(b.width/2, height)
+
+	if b.showInputPanel {
+		b.inputdata.SetSize(b.width/2, height)
+		b.output.SetSize(b.width/2, height)
+	} else {
+		b.output.SetSize(b.width, height)
+	}
 }
 
 //nolint:revive // don't see a more elegant way to reduce complexity here since types can't be keys in a map
@@ -108,6 +113,8 @@ func (b *Bubble) handleWindowSizeMsg(msg tea.WindowSizeMsg) {
 	b.width = msg.Width
 	b.height = msg.Height
 	b.resizeBubbles()
+	// Re-render the output content to reflow text for the new window dimensions
+	b.output.SetContent(b.output.GetContent())
 }
 
 func (b *Bubble) handleKeyMsg(msg tea.KeyMsg, cmds *[]tea.Cmd) {
@@ -119,6 +126,7 @@ func (b *Bubble) handleKeyMsg(msg tea.KeyMsg, cmds *[]tea.Cmd) {
 		tea.KeyEnter:    func() { b.handleEnter(cmds) },
 		tea.KeyCtrlS:    b.handleCtrlS,
 		tea.KeyCtrlY:    func() { b.handleCtrlY(cmds) },
+		tea.KeyCtrlT:    b.handleCtrlT,
 	}
 	if handler, ok := keyHandlers[msg.Type]; ok {
 		handler()
@@ -144,15 +152,30 @@ func (b *Bubble) handleCtrlC(cmds *[]tea.Cmd) {
 //nolint:revive // switch statement complexity is acceptable here
 func (b *Bubble) handleTab() {
 	if b.state != state.Save {
-		switch b.state {
-		case state.Query:
-			b.state = state.Input
-		case state.Input:
-			b.state = state.Output
-		case state.Output:
-			b.state = state.Query
-		default:
-			// No state change for unknown states
+		if b.showInputPanel {
+			switch b.state {
+			case state.Query:
+				b.state = state.Input
+			case state.Input:
+				b.state = state.Output
+			case state.Output:
+				b.state = state.Query
+			default:
+				// No state change for unknown states
+			}
+		} else {
+			// When input panel is hidden, only toggle between Query and Output
+			switch b.state {
+			case state.Query:
+				b.state = state.Output
+			case state.Output:
+				b.state = state.Query
+			case state.Input:
+				// If somehow we're in Input state with panel hidden, go to Output
+				b.state = state.Output
+			default:
+				// No state change for unknown states
+			}
 		}
 	}
 }
@@ -160,15 +183,30 @@ func (b *Bubble) handleTab() {
 //nolint:revive // switch statement complexity is acceptable here
 func (b *Bubble) handleShiftTab() {
 	if b.state != state.Save {
-		switch b.state {
-		case state.Query:
-			b.state = state.Output
-		case state.Input:
-			b.state = state.Query
-		case state.Output:
-			b.state = state.Input
-		default:
-			// No state change for unknown states
+		if b.showInputPanel {
+			switch b.state {
+			case state.Query:
+				b.state = state.Output
+			case state.Input:
+				b.state = state.Query
+			case state.Output:
+				b.state = state.Input
+			default:
+				// No state change for unknown states
+			}
+		} else {
+			// When input panel is hidden, only toggle between Query and Output
+			switch b.state {
+			case state.Query:
+				b.state = state.Output
+			case state.Output:
+				b.state = state.Query
+			case state.Input:
+				// If somehow we're in Input state with panel hidden, go to Query
+				b.state = state.Query
+			default:
+				// No state change for unknown states
+			}
 		}
 	}
 }
@@ -204,6 +242,18 @@ func (b *Bubble) handleCtrlY(cmds *[]tea.Cmd) {
 	if b.state != state.Save {
 		*cmds = append(*cmds, b.copyQueryToClipboard())
 	}
+}
+
+func (b *Bubble) handleCtrlT() {
+	b.showInputPanel = !b.showInputPanel
+	// If we're hiding the input panel while in Input state, switch to Query state
+	if !b.showInputPanel && b.state == state.Input {
+		b.state = state.Query
+	}
+	b.help.SetInputPanelVisibility(b.showInputPanel)
+	b.resizeBubbles()
+	// Re-render the output content to reflow text for the new panel width
+	b.output.SetContent(b.output.GetContent())
 }
 
 func (b *Bubble) updateState(prevState state.State, cmds *[]tea.Cmd) {

@@ -7,11 +7,17 @@ import (
 )
 
 func (b Bubble) View() string {
-	inputoutput := []string{b.inputdata.View()}
-	if b.width%2 != 0 {
-		inputoutput = append(inputoutput, " ")
+	var inputoutput []string
+
+	if b.showInputPanel {
+		inputoutput = []string{b.inputdata.View()}
+		if b.width%2 != 0 {
+			inputoutput = append(inputoutput, " ")
+		}
+		inputoutput = append(inputoutput, b.output.View())
+	} else {
+		inputoutput = []string{b.output.View()}
 	}
-	inputoutput = append(inputoutput, b.output.View())
 
 	if b.state == state.Save {
 		return lipgloss.JoinVertical(
