@@ -10,10 +10,11 @@ import (
 )
 
 type Bubble struct {
-	state  state.State
-	help   help.Model
-	keys   keyMap
-	Styles Styles
+	state          state.State
+	help           help.Model
+	keys           keyMap
+	Styles         Styles
+	showInputPanel bool
 }
 
 func New(jqtheme theme.Theme) Bubble {
@@ -24,10 +25,11 @@ func New(jqtheme theme.Theme) Bubble {
 	model.Styles.ShortSeparator = styles.helpSeparatorStyle.Foreground(jqtheme.Inactive)
 
 	return Bubble{
-		state:  state.Query,
-		Styles: styles,
-		help:   model,
-		keys:   keys,
+		state:          state.Query,
+		Styles:         styles,
+		help:           model,
+		keys:           keys,
+		showInputPanel: true, // Default to showing input panel
 	}
 }
 
@@ -35,13 +37,24 @@ func New(jqtheme theme.Theme) Bubble {
 func (b Bubble) collectHelpBindings() []key.Binding {
 	k := b.keys
 	bindings := []key.Binding{}
+
+	// Create dynamic toggle binding based on panel visibility
+	toggleText := "show input panel"
+	if b.showInputPanel {
+		toggleText = "hide input panel"
+	}
+	toggleBinding := key.NewBinding(
+		key.WithKeys("ctrl+t"),
+		key.WithHelp("ctrl+t", toggleText),
+	)
+
 	switch b.state {
 	case state.Query:
-		bindings = append(bindings, k.submit, k.section, k.copyQuery, k.save)
+		bindings = append(bindings, k.submit, k.section, k.copyQuery, toggleBinding, k.save)
 	case state.Running:
 		bindings = append(bindings, k.abort)
 	case state.Input, state.Output:
-		bindings = append(bindings, k.section, k.navigate, k.page, k.copyQuery, k.save)
+		bindings = append(bindings, k.section, k.navigate, k.page, k.copyQuery, toggleBinding, k.save)
 	case state.Save:
 		bindings = append(bindings, k.back)
 	default:
@@ -65,6 +78,10 @@ func (b Bubble) View() string {
 
 func (b *Bubble) SetState(mode state.State) {
 	b.state = mode
+}
+
+func (b *Bubble) SetInputPanelVisibility(visible bool) {
+	b.showInputPanel = visible
 }
 
 func (b Bubble) Update(msg tea.Msg) (Bubble, tea.Cmd) {
