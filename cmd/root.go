@@ -16,7 +16,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Version: "0.7.0",
+	Version: "0.8.0",
 	Use:     "jqp [query]",
 	Short:   "jqp is a TUI to explore jq",
 	Long: `jqp is a terminal user interface (TUI) for exploring the jq command line utility.
