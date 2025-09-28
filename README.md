@@ -80,6 +80,7 @@ Flags:
 | `shift-tab` | cycle through sections in reverse |
 | `ctrl-y` | copy query to system clipboard[^1] |
 | `ctrl-s` | save output to file (copy to clipboard if file not specified) |
+| `ctrl-t` | toggle showing/hiding input panel |
 | `ctrl-c` | quit program / kill long-running query |
 
 ### Query Mode
