@@ -37,7 +37,7 @@ type Bubble struct {
 	showInputPanel   bool
 }
 
-func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme) (Bubble, error) {
+func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme, showInputPanel bool) (Bubble, error) {
 	workingDirectory, err := os.Getwd()
 	if err != nil {
 		return Bubble{}, err
@@ -64,11 +64,11 @@ func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme) (
 		queryinput:       queryInput,
 		inputdata:        inputData,
 		output:           output.New(jqtheme),
-		help:             help.New(jqtheme),
+		help:             help.New(jqtheme, showInputPanel),
 		statusbar:        sb,
 		fileselector:     fs,
 		theme:            jqtheme,
-		showInputPanel:   true,
+		showInputPanel:   showInputPanel,
 	}
 	return b, nil
 }

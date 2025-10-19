@@ -68,7 +68,7 @@ You can provide the input JSON or NDJSON either through a file or via standard i
 			if err != nil {
 				return err
 			}
-			bubble, err := jqplayground.New(stdin, "STDIN", query, jqtheme)
+			bubble, err := jqplayground.New(stdin, "STDIN", query, jqtheme, flags.showInputPanel)
 			if err != nil {
 				return err
 			}
@@ -102,7 +102,7 @@ You can provide the input JSON or NDJSON either through a file or via standard i
 			return err
 		}
 
-		bubble, err := jqplayground.New(data, fi.Name(), query, jqtheme)
+		bubble, err := jqplayground.New(data, fi.Name(), query, jqtheme, flags.showInputPanel)
 		if err != nil {
 			return err
 		}
@@ -154,15 +154,18 @@ func initConfig() {
 
 var flags struct {
 	filepath, theme string
+	showInputPanel  bool
 }
 
 var flagsName = struct {
-	file, fileShort, theme, themeShort string
+	file, fileShort, theme, themeShort, showInputPanel, showInputPanelShort string
 }{
-	file:       "file",
-	fileShort:  "f",
-	theme:      "theme",
-	themeShort: "t",
+	file:                "file",
+	fileShort:           "f",
+	theme:               "theme",
+	themeShort:          "t",
+	showInputPanel:      "show-input-panel",
+	showInputPanelShort: "i",
 }
 
 var configKeysName = struct {
@@ -193,6 +196,8 @@ func Execute() error {
 		flagsName.theme,
 		flagsName.themeShort,
 		"", "jqp theme")
+
+	rootCmd.Flags().BoolVarP(&flags.showInputPanel, flagsName.showInputPanel, flagsName.showInputPanelShort, true, "show input panel")
 
 	return rootCmd.Execute()
 }

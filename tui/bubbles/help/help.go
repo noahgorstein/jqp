@@ -17,7 +17,7 @@ type Bubble struct {
 	showInputPanel bool
 }
 
-func New(jqtheme theme.Theme) Bubble {
+func New(jqtheme theme.Theme, showInputPanel bool) Bubble {
 	styles := DefaultStyles()
 	model := help.New()
 	model.Styles.ShortKey = styles.helpKeyStyle.Foreground(jqtheme.Primary)
@@ -29,7 +29,7 @@ func New(jqtheme theme.Theme) Bubble {
 		Styles:         styles,
 		help:           model,
 		keys:           keys,
-		showInputPanel: true, // Default to showing input panel
+		showInputPanel: showInputPanel,
 	}
 }
 

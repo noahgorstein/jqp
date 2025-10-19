@@ -16,12 +16,13 @@ description: |
     jqp [query] [flags]
 
   Flags:
-    --config string   path to config file (default is $HOME/.jqp.yaml)
-    -f, --file string     path to the input JSON file
-    -h, --help            help for jqp
-    -t, --theme string    jqp theme
-    -v, --version         version for jqp
-    
+    --config string      path to config file (default is $HOME/.jqp.yaml)
+    -f, --file string        path to the input JSON file
+    -h, --help               help for jqp
+    -i, --show-input-panel   show input panel (default true)
+    -t, --theme string       jqp theme
+    -v, --version            version for jqp
+
 license: MIT
 issues: https://github.com/kz6fittycent/jqp
 contact: https://github.com/kz6fittycent/jqp
