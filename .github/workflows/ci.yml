@@ -27,6 +27,6 @@ jobs:
         run: go test -count=1 -race ./...
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v8
+        uses: golangci/golangci-lint-action@v9
         with:
           version: latest
