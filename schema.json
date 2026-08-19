@@ -545,6 +545,12 @@
             },
             "minProperties": 1,
             "additionalProperties": false
+        },
+        "indent": {
+            "title": "indent",
+            "description": "Number of spaces used to indent prettified JSON output (defaults to 4)\nhttps://github.com/noahgorstein/jqp?tab=readme-ov-file#indentation",
+            "type": "integer",
+            "minimum": 1
         }
     },
     "minProperties": 1,

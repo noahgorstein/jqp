@@ -124,6 +124,15 @@ theme:
   name: "nord" # controls the color scheme
   chromaStyleOverrides: # override parts of the chroma style
     kc: "#009900 underline" # keys use the chroma short names
+indent: 2 # number of spaces used to indent JSON (defaults to 4)
+```
+
+## Indentation
+
+By default, `jqp` indents the input data and query results with 4 spaces. You can change the number of spaces used per indentation level with the `indent` option in your [configuration file](#configuration). This can make deeply nested JSON easier to read by fitting more data on screen.
+
+```yaml
+indent: 2
 ```
 
 ## Themes

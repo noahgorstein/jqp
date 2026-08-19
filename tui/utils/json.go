@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
@@ -14,6 +15,20 @@ import (
 )
 
 const FourSpaces = "    "
+
+// DefaultIndent is the number of spaces used to indent prettified JSON when the
+// configured indent is unset or invalid.
+const DefaultIndent = 4
+
+// indentUnit returns the string used to indent one level of prettified JSON for
+// the given number of spaces, falling back to FourSpaces when spaces is not a
+// positive number.
+func indentUnit(spaces int) string {
+	if spaces < 1 {
+		return FourSpaces
+	}
+	return strings.Repeat(" ", spaces)
+}
 
 // IsValidInput checks the validity of input data as JSON or JSON lines.
 // It takes a byte slice 'data' and returns two boolean values indicating
@@ -73,21 +88,21 @@ func IsValidJSONLines(input []byte) error {
 	return nil
 }
 
-func indentJSON(input *[]byte, output *bytes.Buffer) error {
+func indentJSON(input *[]byte, output *bytes.Buffer, indent string) error {
 	err := IsValidJSON(*input)
 	if err != nil {
 		return nil
 	}
-	err = json.Indent(output, []byte(*input), "", FourSpaces)
+	err = json.Indent(output, []byte(*input), "", indent)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func prettifyJSON(input []byte, chromaStyle *chroma.Style) (*bytes.Buffer, error) {
+func prettifyJSON(input []byte, chromaStyle *chroma.Style, indent string) (*bytes.Buffer, error) {
 	var indentedBuf bytes.Buffer
-	err := indentJSON(&input, &indentedBuf)
+	err := indentJSON(&input, &indentedBuf, indent)
 	if err != nil {
 		return nil, err
 	}
@@ -106,14 +121,18 @@ func prettifyJSON(input []byte, chromaStyle *chroma.Style) (*bytes.Buffer, error
 	return &highlightedBuf, nil
 }
 
-func Prettify(inputJSON []byte, chromaStyle *chroma.Style, isJSONLines bool) (*bytes.Buffer, error) {
+// Prettify indents and syntax-highlights the input JSON (or NDJSON when
+// isJSONLines is true). The indent argument is the number of spaces used for
+// each indentation level; values below 1 fall back to DefaultIndent.
+func Prettify(inputJSON []byte, chromaStyle *chroma.Style, isJSONLines bool, indent int) (*bytes.Buffer, error) {
+	unit := indentUnit(indent)
 	if !isJSONLines {
-		return prettifyJSON(inputJSON, chromaStyle)
+		return prettifyJSON(inputJSON, chromaStyle, unit)
 	}
 
 	var buf bytes.Buffer
 	processLine := func(line []byte) error {
-		hightlighedLine, err := prettifyJSON(line, chromaStyle)
+		hightlighedLine, err := prettifyJSON(line, chromaStyle, unit)
 		if err != nil {
 			return err
 		}

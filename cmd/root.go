@@ -63,12 +63,16 @@ You can provide the input JSON or NDJSON either through a file or via standard i
 			}
 		}
 
+		// indent controls how many spaces are used per level when prettifying
+		// JSON output. An unset or non-positive value falls back to the default.
+		indent := viper.GetInt(configKeysName.indent)
+
 		if isInputFromPipe() {
 			stdin, err := streamToBytes(os.Stdin)
 			if err != nil {
 				return err
 			}
-			bubble, err := jqplayground.New(stdin, "STDIN", query, jqtheme)
+			bubble, err := jqplayground.New(stdin, "STDIN", query, jqtheme, indent)
 			if err != nil {
 				return err
 			}
@@ -102,7 +106,7 @@ You can provide the input JSON or NDJSON either through a file or via standard i
 			return err
 		}
 
-		bubble, err := jqplayground.New(data, fi.Name(), query, jqtheme)
+		bubble, err := jqplayground.New(data, fi.Name(), query, jqtheme, indent)
 		if err != nil {
 			return err
 		}
@@ -169,10 +173,12 @@ var configKeysName = struct {
 	themeName      string
 	themeOverrides string
 	styleOverrides string
+	indent         string
 }{
 	themeName:      "theme.name",
 	themeOverrides: "theme.chromaStyleOverrides",
 	styleOverrides: "theme.styleOverrides",
+	indent:         "indent",
 }
 
 var cfgFile string
