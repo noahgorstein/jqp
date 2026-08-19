@@ -22,10 +22,11 @@ type Bubble struct {
 	highlightedJSON      *bytes.Buffer
 	filename             string
 	theme                theme.Theme
+	indent               int
 	setInitialContentSub chan setPrettifiedContentMsg
 }
 
-func New(inputJSON []byte, filename string, jqtheme theme.Theme) (Bubble, error) {
+func New(inputJSON []byte, filename string, jqtheme theme.Theme, indent int) (Bubble, error) {
 	styles := DefaultStyles()
 	styles.containerStyle = styles.containerStyle.BorderForeground(jqtheme.Inactive)
 	styles.infoStyle = styles.infoStyle.BorderForeground(jqtheme.Inactive)
@@ -39,6 +40,7 @@ func New(inputJSON []byte, filename string, jqtheme theme.Theme) (Bubble, error)
 		inputJSON:            inputJSON,
 		filename:             filename,
 		theme:                jqtheme,
+		indent:               indent,
 		setInitialContentSub: make(chan setPrettifiedContentMsg),
 	}
 	return b, nil
@@ -101,7 +103,7 @@ type setPrettifiedContentMsg struct {
 // sent through the channel to ensure the prettified data is available without blocking other operations.
 func (b Bubble) prettifyContentCmd(sub chan setPrettifiedContentMsg, isJSONLines bool) tea.Cmd {
 	return func() tea.Msg {
-		prettifiedData, _ := utils.Prettify(b.inputJSON, b.theme.ChromaStyle, isJSONLines)
+		prettifiedData, _ := utils.Prettify(b.inputJSON, b.theme.ChromaStyle, isJSONLines, b.indent)
 		sub <- setPrettifiedContentMsg{Content: prettifiedData}
 		return nil
 	}

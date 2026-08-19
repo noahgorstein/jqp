@@ -32,12 +32,13 @@ type Bubble struct {
 	results          string
 	cancel           func()
 	theme            theme.Theme
+	indent           int
 	ExitMessage      string
 	isJSONLines      bool
 	showInputPanel   bool
 }
 
-func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme) (Bubble, error) {
+func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme, indent int) (Bubble, error) {
 	workingDirectory, err := os.Getwd()
 	if err != nil {
 		return Bubble{}, err
@@ -49,7 +50,7 @@ func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme) (
 
 	fs.SetInput(workingDirectory)
 
-	inputData, err := inputdata.New(inputJSON, filename, jqtheme)
+	inputData, err := inputdata.New(inputJSON, filename, jqtheme, indent)
 	if err != nil {
 		return Bubble{}, err
 	}
@@ -68,6 +69,7 @@ func New(inputJSON []byte, filename string, query string, jqtheme theme.Theme) (
 		statusbar:        sb,
 		fileselector:     fs,
 		theme:            jqtheme,
+		indent:           indent,
 		showInputPanel:   true,
 	}
 	return b, nil

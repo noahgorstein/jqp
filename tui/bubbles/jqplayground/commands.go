@@ -100,7 +100,7 @@ func (b *Bubble) executeQueryCommand(ctx context.Context) tea.Cmd {
 		if err != nil {
 			return errorMsg{error: err}
 		}
-		highlightedOutput, err := utils.Prettify([]byte(results), b.theme.ChromaStyle, true)
+		highlightedOutput, err := utils.Prettify([]byte(results), b.theme.ChromaStyle, true, b.indent)
 		if err != nil {
 			return errorMsg{error: err}
 		}
