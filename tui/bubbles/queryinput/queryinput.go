@@ -58,8 +58,20 @@ func (Bubble) Init() tea.Cmd {
 }
 
 func (b *Bubble) SetWidth(width int) {
-	b.Styles.containerStyle = b.Styles.containerStyle.Width(width - b.Styles.containerStyle.GetHorizontalFrameSize())
-	b.textinput.Width = width - b.Styles.containerStyle.GetHorizontalFrameSize() - 1
+	innerWidth := width - b.Styles.containerStyle.GetHorizontalFrameSize()
+	b.Styles.containerStyle = b.Styles.containerStyle.Width(innerWidth)
+
+	// Text input adds the prompt and one cursor cell to its viewport width.
+	inputWidth := max(1, innerWidth-lipgloss.Width(b.textinput.Prompt)-1)
+	if b.textinput.Width == inputWidth {
+		return
+	}
+	b.textinput.Width = inputWidth
+
+	// Rebuild the scroll window at the new width without moving the cursor.
+	position := b.textinput.Position()
+	b.textinput.CursorEnd()
+	b.textinput.SetCursor(position)
 }
 
 func (b Bubble) View() string {
